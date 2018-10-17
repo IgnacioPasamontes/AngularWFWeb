@@ -1,7 +1,7 @@
  <!-- Tab panes {Fade}  -->       
  <div class="tab-content shadow p-4 bg-white rounded" id="pills-tabContent">
 
-    <div *ngFor="let project of this.globals.projects;" class="tab-pane fade" id="pills-{{project}}" role="tabpanel">
+    <div *ngFor="let project of this.globals.active_projects;" class="tab-pane fade" id="pills-{{project}}" role="tabpanel">
         <h4>{{project}}</h4>
         <div class="demo" id="example"></div>
     </div> 

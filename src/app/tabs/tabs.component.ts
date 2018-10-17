@@ -16,13 +16,16 @@ export class TabsComponent implements OnInit {
   }
 
   deleteProject(project:string) {
-
-  alert(project)
-    const index = this.globals.projects.indexOf(project, 0);
-    alert(index)
+    const index = this.globals.active_projects.indexOf(project, 0);
     if (index > -1) {
-      this.globals.projects.splice(index, 1);
+      this.globals.active_projects.splice(index, 1);
     }
   }
 
+  openProject(project:string){
+   
+    if (this.globals.active_projects.indexOf(project, 0)==-1){
+      this.globals.active_projects.push(project);
+    }
+  }
 }

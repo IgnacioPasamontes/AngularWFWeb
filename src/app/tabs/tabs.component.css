@@ -2,3 +2,22 @@
     margin: -2px 0 0 10px;
     font-size: 18px;
 }
+
+a:hover{
+    cursor: pointer;
+}
+div {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+ul li {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+ul li a {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

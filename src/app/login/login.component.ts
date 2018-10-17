@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import { Globals } from '../globals';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,34 @@ export class LoginComponent implements OnInit {
 
   user_mail:string;
   user_password:string;
-  constructor(private router: Router) { }
+  success:boolean=false;
+  error:boolean=false;
+  constructor(private router: Router,public globals: Globals) { }
 
   ngOnInit() {
   }
 
   login(){
-    alert("Checking user");
-    this.router.navigate(['/main']);
+    this.error=false;
+    this.success=false;
+    //alert("Checking user");
+    if (this.user_mail in this.globals.users){
+      if (this.globals.users[this.user_mail].password==this.user_password){
+        this.success=true;
+        this.globals.actual_user=this.globals.users[this.user_mail];
+        setTimeout(() => {
+          this.router.navigate(['/main']);
+        },
+        2000);
+      }
+      else{
+        this.error=true;
+      }
+    }
+    else{
+      this.error=true;
+    }
+    
   }
 
 }

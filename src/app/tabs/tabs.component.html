@@ -17,13 +17,13 @@
                 Projects
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" (click)="newProject()">
                 <!--<svg-icon class="iconplus">
                     <src href="assets/icons/si-glyph-circle-plus.svg" />
                 </svg-icon> -->
                 &nbsp;New</a>
                 <div class="dropdown-divider"></div>
-                <a *ngFor="let project of this.globals.projects;" class="dropdown-item"  (click)="openProject(project)"> {{project}} </a>
+                <a *ngFor="let project of this.globals.actual_user.projects;" class="dropdown-item"  (click)="openProject(project)"> {{project}} </a>
             </div>
         </div>
     </div>

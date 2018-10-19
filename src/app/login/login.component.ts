@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         setTimeout(() => {
           this.router.navigate(['/main']);
         },
-        2000);
+        1000);
       }
       else{
         this.error=true;

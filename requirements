@@ -1,1 +1,2 @@
-npm i bootstrap-material-design jquery popper.js --save
+npm i bootstrap-material-designq popper.js --save
+npm install jquery jquery-ui

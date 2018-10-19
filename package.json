@@ -23,6 +23,7 @@
     "bootstrap-material-design": "^4.1.1",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
+    "jquery-ui": "^1.12.1",
     "popper.js": "^1.14.4",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"

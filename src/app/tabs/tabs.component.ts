@@ -8,7 +8,7 @@ import { Globals } from '../globals';
 })
 export class TabsComponent implements OnInit {
 
-
+  projectsName:string ="New Project"
   constructor( public globals: Globals) { }
 
   ngOnInit() {
@@ -27,5 +27,27 @@ export class TabsComponent implements OnInit {
     if (this.globals.active_projects.indexOf(project, 0)==-1){
       this.globals.active_projects.push(project);
     }
+  }
+
+  newProject(){
+    
+    var project =this.projectsName;
+    var inserted:boolean=false
+    var num:number=1
+    while (!inserted){
+
+      if (this.globals.active_projects.indexOf(project, 0)==-1 && 
+          this.globals.actual_user.projects.indexOf(project, 0)==-1){
+            this.globals.active_projects.push(project);
+            inserted=true;
+      }
+      else{
+        project=this.projectsName+" "+num;
+        num++
+      }
+
+    }
+    
+
   }
 }

@@ -24,13 +24,17 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css"
+              "node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css",
+              "src/assets/css/jquery.flowchart.min.css"
               
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js"]
+              "node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js",
+              "src/assets/js/jquery-ui.min.js",
+              "src/assets/js/jquery.flowchart.min.js"
+            ]
           },
           "configurations": {
             "production": {

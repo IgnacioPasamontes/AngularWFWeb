@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { Globals } from '../globals';
+import {} from 'jq'
 
 @Component({
   selector: 'app-workflows',
@@ -7,7 +8,7 @@ import { Globals } from '../globals';
   styleUrls: ['./workflows.component.css']
 })
 export class WorkflowsComponent implements AfterViewInit {
-  @ViewChild('workflow') wf:any;
+  @ViewChild('workflow') wf: ElementRef;
 
   constructor( public globals: Globals) { }
 
@@ -49,8 +50,9 @@ export class WorkflowsComponent implements AfterViewInit {
 
     setTimeout(() => {
       // Apply the plugin on a standard, empty div...
-      alert(this.wf)
+      
       console.log(this.wf)
+      alert(this.wf.nativeElement)
       this.wf.nativeElement.flowchart({
         data: data,
         // allows multiple links on the same output line34

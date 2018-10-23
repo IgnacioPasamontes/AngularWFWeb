@@ -10,4 +10,8 @@ body {
     right:0; 
     left:0;
 }
-  
+
+.container-fluid {
+  height: 100%;
+}
+

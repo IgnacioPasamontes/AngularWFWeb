@@ -10,6 +10,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { WorkflowsComponent } from './workflows/workflows.component';
 import { Globals } from './globals';
+import { EachWorkflowComponent } from './each-workflow/each-workflow.component';
+import { NodeInfoComponent } from './node-info/node-info.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { Globals } from './globals';
     NavbarComponent,
     SidebarComponent,
     TabsComponent,
-    WorkflowsComponent
+    WorkflowsComponent,
+    EachWorkflowComponent,
+    NodeInfoComponent
   ],
   imports: [
     BrowserModule,

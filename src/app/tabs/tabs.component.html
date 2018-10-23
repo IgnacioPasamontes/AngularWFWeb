@@ -1,9 +1,10 @@
 <div class="d-flex flex-row">
     <div class="p-1">
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
-            <li *ngFor="let project of this.globals.active_projects;" class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#pills-{{project}}" role="tab" aria-controls="pills-Project1" aria-selected="true">
-                    {{project}}<button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
+            <li *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="nav-item">
+
+                <a class="nav-link" [ngClass]="{'active show': i==0}" data-toggle="pill" href="#pills-{{project}}" role="tab" aria-controls="pills-Project1" aria-selected="true">
+                    {{project}}  {{i==0}}<button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                 </a>   

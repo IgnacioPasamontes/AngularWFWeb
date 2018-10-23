@@ -5,7 +5,7 @@ export class Globals {
   projects: Array<string> = ["Project1","Project2","Project3"];
   users:{ [id: string] : User } = {
     "ignacio.pasamontes@gmail.com":{
-    name: "Nacho",
+    name: "Ignacio Pasamontes Fúnez",
     password: "nacho",
     projects: ["ProjectNacho1","ProjectNacho2","ProjectNacho3"]
     },
@@ -17,4 +17,6 @@ export class Globals {
   }
   actual_user:User;
   active_projects : Array<string>=[]
+  node_visible:boolean=true;
+  
 }

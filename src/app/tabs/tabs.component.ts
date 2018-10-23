@@ -15,8 +15,9 @@ export class TabsComponent implements OnInit {
 
   }
 
-  deleteProject(project:string) {
+  deleteProject(project) {
     const index = this.globals.active_projects.indexOf(project, 0);
+    alert("Holaaa")
     if (index > -1) {
       this.globals.active_projects.splice(index, 1);
     }

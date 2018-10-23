@@ -1,16 +1,22 @@
 <app-navbar></app-navbar>
 <div class="container-fluid">
     <div class="d-flex flex-row">
-      <app-sidebar></app-sidebar>
-      <div class="d-flex flex-column col-lg">
-          <div class="d-flex flex-row">
-              <button type="button" id="sidebarCollapse" class="btn btn-primary">
-                  <i class="fas fa-align-left"></i>
-                  <span>&#9776;Sidebar</span>
-              </button>
-          </div>
-          <app-tabs></app-tabs>
-          <app-workflows></app-workflows>        
-      </div>
-  </div>      
-</div>  
+        <div id="sidebar" class="d-flex flex-column col-lg-2 bg-light active">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="d-flex flex-column col-lg">
+            <div class="d-flex flex-row">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fas fa-align-left"></i>
+                    <span>&#9776;Sidebar</span>
+                </button>
+            </div>
+            <app-tabs></app-tabs>
+            <app-workflows></app-workflows>        
+        </div>
+        <div id="node-info" class="d-flex flex-column col-lg-2 bg-light" [ngClass]="{'active':this.globals.node_visible}">
+            <app-node-info></app-node-info>       
+        </div>
+    </div>      
+</div> 
+

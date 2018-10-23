@@ -1,0 +1,31 @@
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#node-info {
+   
+    min-width:250px;
+    max-width: 250px;
+    transition: all 0.3s;
+}
+
+#node-info.active {
+    visibility:hidden;
+    overflow:hidden;
+    margin-left: -250px;
+    transition: all 0.3s;
+}

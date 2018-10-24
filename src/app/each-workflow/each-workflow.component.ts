@@ -61,7 +61,7 @@ export class EachWorkflowComponent implements OnInit {
         // allows multiple links on the same input line
         multipleLinksOnOutput: true,
         onOperatorSelect: function(operatorId) {
-          component.nodeInfo_change()
+          component.nodeInfo_change(operatorId)
           return true;
         },
         
@@ -72,8 +72,18 @@ export class EachWorkflowComponent implements OnInit {
 
   }
 
-  nodeInfo_change(){
-    this.globals.node_visible= this.globals.node_visible ? false : true;
+  nodeInfo_change(operatorId){
+    if (this.globals.operatorId==operatorId){
+      this.globals.node_visible=true;
+      this.globals.operatorId = ""
+      
+    }
+    else{
+      this.globals.node_visible = false;
+      this.globals.operatorId = operatorId
+    }
+    
+    //this.globals.node_visible= this.globals.node_visible ? false : true;
 
 
   }

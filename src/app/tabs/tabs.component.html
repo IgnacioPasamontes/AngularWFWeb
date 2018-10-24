@@ -4,7 +4,7 @@
             <li *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="nav-item">
 
                 <a class="nav-link" [ngClass]="{'active show': i==0}" data-toggle="pill" href="#pills-{{project}}" role="tab" aria-controls="pills-Project1" aria-selected="true">
-                    {{project}}  {{i==0}}<button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
+                    {{project}} <button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                 </a>   

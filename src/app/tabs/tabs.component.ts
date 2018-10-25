@@ -17,7 +17,6 @@ export class TabsComponent implements OnInit {
 
   deleteProject(project) {
     const index = this.globals.active_projects.indexOf(project, 0);
-    alert("Holaaa")
     if (index > -1) {
       this.globals.active_projects.splice(index, 1);
     }
@@ -27,6 +26,7 @@ export class TabsComponent implements OnInit {
    
     if (this.globals.active_projects.indexOf(project, 0)==-1){
       this.globals.active_projects.push(project);
+     
     }
   }
 
@@ -35,6 +35,7 @@ export class TabsComponent implements OnInit {
     var project =this.projectsName;
     var inserted:boolean=false
     var num:number=1
+
     while (!inserted){
 
       if (this.globals.active_projects.indexOf(project, 0)==-1 && 

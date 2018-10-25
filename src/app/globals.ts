@@ -18,5 +18,6 @@ export class Globals {
   actual_user:User;
   active_projects : Array<string>=[]
   node_visible:boolean=true;
+  operatorId:string="";
   
 }

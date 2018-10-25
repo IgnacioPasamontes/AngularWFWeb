@@ -1,18 +1,18 @@
 <div class="d-flex flex-row">
-    <div class="p-1">
+    <div>
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
             <li *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="nav-item">
 
                 <a class="nav-link" [ngClass]="{'active show': i==0}" data-toggle="pill" href="#pills-{{project}}" role="tab" aria-controls="pills-Project1" aria-selected="true">
-                    {{project}}  {{i==0}} <button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                </a>   
+                        {{project}} {{i==0}} <button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </a>
             </li>        
         </ul>
     </div>
-    
-    <div class="ml-auto p-1">
+    [className]="condition ? 'example-class' : 'other-class'"
+    <div class="ml-auto">
         <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 Projects

@@ -106,21 +106,14 @@
 
 .flowchart-operator {
     position: absolute;
-    width: 140px;
     border: 1px solid #CCCCCC;
     background: #FAFAFA;
     pointer-events: initial;
 }
 
-.flowchart-operator.hover {
-    border-color: #999;
-}
-
 .flowchart-operator.selected {
     border-color: #555;
 }
-
-
 
 .flowchart-operator .flowchart-operator-title {
     width: 100%;
@@ -129,11 +122,12 @@
     box-sizing: border-box;
     border-bottom: 1px solid #DDDDDD;
     background: #F0F0F0;
-    height: auto;
+    height: 30px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: move;
+    display:inline;
 }
 
 .flowchart-operator .flowchart-operator-inputs-outputs {

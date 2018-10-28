@@ -1,17 +1,119 @@
 <nav class="node-info">
-   <h4>SDF Reader</h4>
+  <div class="row align-items-center justify-content-start">
+    <div class="col">
+        <h4>{{this.globals.actual_node.title}}</h4>
+    </div>
+    <div class="col-3">
+        <button *ngIf="this.globals.actual_node.executed" type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm">
+            <i class="mdi mdi-done"></i>
+          </button>
+          <button *ngIf="!this.globals.actual_node.executed" type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm">
+              <i class="mdi mdi-clear"></i>
+            </button>
+         
+    </div>
+    </div>
     <div class="card">
       <h5 class="card-header">INFO</h5>
       <div class="card-body">
-        
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+          {{this.globals.actual_node.info}}
       </div>
+    </div>
+    <div class="card">
+        <h5 class="card-header">Input</h5>
+        <div class="card-body input">
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Smile</th>
+                    <th scope="col">InChI</th>
+                    <th scope="col">CAS-RN</th>
+                    <th scope="col">PubMed ID</th>
+                    <th scope="col">ChEMBL ID</th>
+                    <th scope="col">ChEMBL ID2</th>
+                    <th scope="col">ChEMBL ID3</th>
+                    <th scope="col">ChEMBL ID4</th>
+
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                      <th scope="row">3</th>
+                      <td>Larry</td>
+                      <td>the Bird</td>
+                      <td>@twitter</td>
+                      <td>@mdo</td>
+                      <td>@mdo</td>
+                      <td>@mdo</td>
+                      <td>@mdo</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="card">
         <h5 class="card-header">Parameters</h5>
         <div class="card-body">
           
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          
         </div>
     </div>
     <div class="card">
@@ -19,6 +121,14 @@
         <div class="card-body">
           
           <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-3">
+          <button type="button" class="btn btn-raised btn-lg">Run</button>
+      </div>
+      <div class="col-3">
+          <button type="button" class="btn btn-raised btn-lg">Reset</button>
         </div>
     </div>
 </nav>

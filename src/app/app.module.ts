@@ -12,6 +12,7 @@ import { WorkflowsComponent } from './workflows/workflows.component';
 import { Globals } from './globals';
 import { EachWorkflowComponent } from './each-workflow/each-workflow.component';
 import { NodeInfoComponent } from './node-info/node-info.component';
+import { NodeComponent } from './node/node.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NodeInfoComponent } from './node-info/node-info.component';
     TabsComponent,
     WorkflowsComponent,
     EachWorkflowComponent,
-    NodeInfoComponent
+    NodeInfoComponent,
+    NodeComponent
   ],
   imports: [
     BrowserModule,

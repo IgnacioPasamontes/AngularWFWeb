@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Globals} from '../globals';
 
 @Component({
   selector: 'app-node-info',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NodeInfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(public globals: Globals) { }
 
   ngOnInit() {
+    
   }
 
 }

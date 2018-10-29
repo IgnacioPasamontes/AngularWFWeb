@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from './user'
+import { INode } from './node'
 @Injectable()
 export class Globals {
   projects: Array<string> = ["Project1","Project2","Project3"];
@@ -19,5 +20,12 @@ export class Globals {
   active_projects : Array<string>=[]
   node_visible:boolean=true;
   operatorId:string="";
-  
+  actual_node: {
+    "title": "title",
+    "info": "Problem formulation INFO",
+    "parameters": "info",
+    "inputs": {},
+    "outputs": {},
+    "executed":true;
+  }
 }

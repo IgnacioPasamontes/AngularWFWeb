@@ -18,14 +18,14 @@
 
 #node-info {
    
-    min-width:250px;
-    max-width: 250px;
+    min-width:500px;
+    max-width: 500px;
     transition: all 0.3s;
 }
 
 #node-info.active {
     visibility:hidden;
     overflow:hidden;
-    margin-left: -250px;
-    transition: all 0.3s;
+    margin-left: -500px;
+    transition: all 0.1s;
 }

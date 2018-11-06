@@ -15,7 +15,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
 
     for (let i in Nodes){
-      console.log(i)
+      console.log(Nodes[i].properties.title)
       alert("Nodes")
     }
   }

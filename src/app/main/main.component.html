@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="container-fluid">
     <div class="d-flex flex-row">
-        <div id="sidebar" class="d-flex flex-column col-lg-2 bg-light active">
+        <div id="sidebar" class="d-flex flex-column col-lg-2 bg-light">
             <app-sidebar></app-sidebar>
         </div>
         <div class="d-flex flex-column col-lg">
@@ -15,7 +15,7 @@
             <app-workflows></app-workflows>   
                
         </div>
-        <div id="node-info" class="d-flex flex-column col-lg-4 bg-light" [ngClass]="{'active':this.globals.node_visible}">
+        <div id="node-info" class="d-flex flex-column col-lg-6 bg-light" [ngClass]="{'active':this.globals.node_visible}">
             <app-node-info></app-node-info>       
         </div>
     </div>      

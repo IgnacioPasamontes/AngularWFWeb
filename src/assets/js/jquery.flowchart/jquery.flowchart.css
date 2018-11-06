@@ -113,7 +113,6 @@
 
 .flowchart-operator.selected {
     border-color: #555;
-    border:solid;
 }
 
 .flowchart-operator .flowchart-operator-title {
@@ -141,5 +140,4 @@
 .flowchart-operator .flowchart-operator-inputs, .flowchart-default-operator .flowchart-operator-outputs {
     display: table-cell;
     width: 50%;
-    vertical-align: middle;
 }

@@ -26,85 +26,14 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Smile</th>
-                    <th scope="col">InChI</th>
-                    <th scope="col">CAS-RN</th>
-                    <th scope="col">PubMed ID</th>
-                    <th scope="col">ChEMBL ID</th>
-                    <th scope="col">ChEMBL ID2</th>
-                    <th scope="col">ChEMBL ID3</th>
-                    <th scope="col">ChEMBL ID4</th>
-
-                    
+                    <th scope="col">Smile</th>           
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
+                    <th scope="row">Aspirin</th>
+                    <td>CC(=O)OC1=CC=CC=C1C(=O)O</td>
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                      </tr>
                 </tbody>
             </table>
         </div>
@@ -112,23 +41,44 @@
     <div class="card">
         <h5 class="card-header">Parameters</h5>
         <div class="card-body">
-          
-          
+            <a href="#" class="btn btn-primary">ACTIONS TO APPLY</a>
         </div>
     </div>
     <div class="card">
         <h5 class="card-header">OutPut</h5>
         <div class="card-body">
-          
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+            <div class="card-body input">
+                <!--<table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Smile</th>
+                        <th scope="col">InChI Key</th>
+                        <th scope="col">CAS-RN</th>
+                        <th scope="col">PubMed ID</th>
+                        <th scope="col">ChEMBL ID</th>                  
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Aspirin</th>
+                        <td>CC(=O)OC1=CC=CC=C1C(=O)O</td>
+                        <td>BSYNRYMUTXBXSQ-UHFFFAOYSA-N</td>
+                        <td>50-78-2</td>
+                        <td>2244</td>
+                        <td>CHEMBL25</td>      
+                      </tr>
+                    </tbody>
+                </table>-->
+            </div>
         </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg">Run</button>
+          <button type="button" class="btn btn-raised btn-lg" (click)="NodeCompleted(this.globals.actual_node.id)">Run</button>
       </div>
       <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg">Reset</button>
+          <button type="button" class="btn btn-raised btn-lg" (click)="NodeReset(this.globals.actual_node.id)">Reset</button>
         </div>
     </div>
 </nav>

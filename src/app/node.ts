@@ -1,8 +1,19 @@
+class ILink{
+  label:string;
+  data:string;
+}
 export class INode {
-    Title: string;
-    info: string;//html code at this moment
-    input: string;//html code at this moment
-    output: string;//html code at this moment
-    source_input: string;// source node id
-    executed:boolean;
+  top: number;
+  left:number;
+  properties:{
+    id:string;
+    title: string;
+    info: string;
+    parameters:string;
+    //html code at this moment
+    inputs: {  }
+    //html code at this moment
+    outputs:{  } 
   }
+  executed:boolean;
+}

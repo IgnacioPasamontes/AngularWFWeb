@@ -454,9 +454,9 @@ $(function() {
            
             
             var $operator_title = $('<div class="flowchart-operator-title"></div>');
-           
+            
             //var $icon_title=$('<button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm"><i class="mdi mdi-done mdi-2x"></i></button>');
-            var $icon_title=$('<i id="icon_status_'+infos.id+'" class="mdi mdi-stars" style="font-size:25px;color:red"></i>')
+            var $icon_title=$('<i id="icon_status" class="mdi mdi-stars" style="font-size:25px;color:red"></i>')
             $operator_title.text(infos.title);
             $operator_title.append($icon_title);
 
@@ -757,7 +757,7 @@ $(function() {
                 if (!this.options.onLinkUnselect()) {
                     return;
                 }
-                this.uncoloperatorIdorizeLink(this.selectedLinkId, this.options.defaultSelectedLinkColor);
+                this.uncolorizeLink(this.selectedLinkId, this.options.defaultSelectedLinkColor);
                 this.selectedLinkId = null;
             }
         },

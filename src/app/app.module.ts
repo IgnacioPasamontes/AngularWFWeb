@@ -13,6 +13,7 @@ import { Globals } from './globals';
 import { EachWorkflowComponent } from './each-workflow/each-workflow.component';
 import { NodeInfoComponent } from './node-info/node-info.component';
 import { NodeComponent } from './node/node.component';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { NodeComponent } from './node/node.component';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgDragDropModule.forRoot()
   ],
   providers: [ Globals ],
   bootstrap: [AppComponent]

@@ -14,6 +14,7 @@ import { EachWorkflowComponent } from './each-workflow/each-workflow.component';
 import { NodeInfoComponent } from './node-info/node-info.component';
 import { NodeComponent } from './node/node.component';
 import { NgDragDropModule } from 'ng-drag-drop';
+import { CytoscapeModule } from 'ngx-cytoscape';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgDragDropModule } from 'ng-drag-drop';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    NgDragDropModule.forRoot()
+    NgDragDropModule.forRoot(),
+    CytoscapeModule
   ],
   providers: [ Globals ],
   bootstrap: [AppComponent]

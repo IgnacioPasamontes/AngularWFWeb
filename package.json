@@ -23,10 +23,13 @@
     "bootstrap-material-design": "^4.1.1",
     "bootstrap-material-design-icons": "^2.2.0",
     "core-js": "^2.5.4",
+    "cytoscape": "^3.2.21",
+    "cytoscape-canvas": "^3.0.1",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jquery.flowchart": "^1.1.0",
     "ng-drag-drop": "^5.0.0",
+    "ngx-cytoscape": "^0.5.24",
     "popper.js": "^1.14.4",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"

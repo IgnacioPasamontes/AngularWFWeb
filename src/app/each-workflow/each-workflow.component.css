@@ -1,5 +1,10 @@
-.demo {
-    height:700px;
+.cytograph {
+    /*height:700px;
     margin-bottom: 10px;
-    overflow-y: scroll;
+    overflow-y: scroll;*/
+    height: 50vh;
+    float: left;
+    position: relative;
+    border: solid #21c0c0;
+    width: 50em;
 }

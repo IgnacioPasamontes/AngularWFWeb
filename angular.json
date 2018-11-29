@@ -25,7 +25,6 @@
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css",
-              "src/assets/css/jquery.flowchart.css",
               "node_modules/bootstrap-material-design-icons/css/material-icons.min.css",
               "node_modules/ng-drag-drop/style.css"
               
@@ -35,7 +34,7 @@
               "node_modules/popper.js/dist/umd/popper.min.js",
               "node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js",
               "src/assets/js/jquery-ui.min.js",
-              "src/assets/js/jquery.flowchart.js"
+              "node_modules/cytoscape/dist/cytoscape.js"
             ]
           },
           "configurations": {

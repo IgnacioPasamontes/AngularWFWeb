@@ -80,10 +80,10 @@
           <div class="collapse multi-collapse" id="nodes">
             <div class="card card-body">
                 <ul class="nav flex-column">
-                    <li *ngFor="let node of Nodes; let i = index" draggable class="nav-item">
+                    <li *ngFor="let node of this.nodes; let i = index" draggable class="nav-item">
                         <a href="#" class="badge badge-light">
                         <i class="mdi mdi-send" ></i>
-                        {{Nodes[i].properties.title}}
+                        {{this.nodes[i].left}}
                       </a>
                     </li>
                     <li draggable class="nav-item">

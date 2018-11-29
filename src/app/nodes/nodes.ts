@@ -27,9 +27,9 @@ const Descriptors: INode = {
     left: 20,
     properties: {
         id:'',
-        title: 'Molecules',
-        info: 'Molecules INFO',
-        parameters:'Molecules PARAMETERS',
+        title: 'Descrptors',
+        info: 'Descrptors INFO',
+        parameters:'Descrptors PARAMETERS',
         inputs: {
             input_1: {
                 label: 'IN',
@@ -69,7 +69,7 @@ const Prediction: INode = {
     executed:false
 }
 
-export const Nodes:Array<INode>=[
+export const Nodes =[
     Molecule,
     Descriptors,
     Prediction

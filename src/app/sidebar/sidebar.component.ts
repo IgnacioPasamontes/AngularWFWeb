@@ -10,14 +10,11 @@ import { Nodes } from '../nodes/nodes'
 export class SidebarComponent implements OnInit {
 
   projectsName:string ="New Project"
+  nodes:Array<any>;
   constructor( public globals: Globals) { }
 
   ngOnInit() {
-
-    for (let i in Nodes){
-      console.log(Nodes[i].properties.title)
-      alert("Nodes")
-    }
+    this.nodes=Nodes;
   }
 
   newProject(){

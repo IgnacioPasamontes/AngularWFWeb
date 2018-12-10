@@ -1,2 +1,8 @@
 npm i bootstrap-material-designq popper.js --save
 npm install jquery jquery-ui
+npm install jquery --save
+npm install datatables.net --save
+npm install datatables.net-dt --save
+npm install angular-datatables --save
+npm install @types/jquery --save-dev
+npm install @types/datatables.net --save-dev

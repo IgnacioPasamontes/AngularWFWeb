@@ -16,35 +16,47 @@ export class EachWorkflowComponent implements OnInit {
   cy:any =null;
   private _graphData: any = {
     nodes: [
-      {data: {id: 'j', name: 'Jerry', faveColor: '#6FB1FC', faveShape: 'triangle'}},
-      {data: {id: 'e', name: 'Elaine', faveColor: '#EDA1ED', faveShape: 'ellipse'}},
-      {data: {id: 'k', name: 'Kramer', faveColor: '#86B342', faveShape: 'octagon'}},
-      {data: {id: 'g', name: 'George', faveColor: '#F5A45D', faveShape: 'rectangle'}}
+      {data: {id: '1', name: 'Problem formulation', weight: 300, faveColor: '#6FB1FC', faveShape: 'rectangle'}},
+      {data: {id: '2', name: 'TC Characterization', weight: 300, faveColor: '#EDA1ED', faveShape: 'rectangle'}},
+      {data: {id: '3', name: 'Metabolism data', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}},
+      {data: {id: '4', name: 'SCs identification', weight: 300, faveColor: '#F5A45D', faveShape: 'rectangle'}},
+      {data: {id: '5', name: 'SCs evaluation', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}},
+      {data: {id: '6', name: 'Enough information', weight: 300, faveColor: '#86B342', faveShape: 'rectangle'}},
+      {data: {id: '7', name: 'RA hypothesis', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}}
     ],
     edges: [
-      {data: {source: 'j', target: 'e', faveColor: '#6FB1FC'}},
-      {data: {source: 'j', target: 'k', faveColor: '#6FB1FC'}},
-      {data: {source: 'j', target: 'g', faveColor: '#6FB1FC'}},
+      {data: {source: '1', target: '2', faveColor: '#6FB1FC'}},
+      {data: {source: '2', target: '3', faveColor: '#6FB1FC'}},
+      {data: {source: '3', target: '4', faveColor: '#6FB1FC'}},
 
-      {data: {source: 'e', target: 'j', faveColor: '#EDA1ED'}},
-      {data: {source: 'e', target: 'k', faveColor: '#EDA1ED'}},
+      {data: {source: '4', target: '5', faveColor: '#EDA1ED'}},
+      {data: {source: '5', target: '6', faveColor: '#EDA1ED'}},
 
-      {data: {source: 'k', target: 'j', faveColor: '#86B342'}},
-      {data: {source: 'k', target: 'e', faveColor: '#86B342'}},
-      {data: {source: 'k', target: 'g', faveColor: '#86B342'}},
-
-      {data: {source: 'g', target: 'j', faveColor: '#F5A45D'}}
+      {data: {source: '6', target: '7', faveColor: '#86B342'}},
+      {data: {source: '6', target: '2', faveColor: '#86B342'}}
     ]
   };
 
-  constructor() {
+  constructor(public globals: Globals) {
+  }
+
+  nodeInfo_selected(operatorId){
+    this.globals.node_visible = false;
+
+  }
+
+  nodeInfo_unselected(){
+   
+  }
+ 
+  onItemDrop2(e: any) {
+   
+  }
+  onItemDrop(e: any) {
+   
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    
 
     this.cy = cytoscape({
       container: document.getElementById('cy'),
@@ -56,7 +68,8 @@ export class EachWorkflowComponent implements OnInit {
         selector: 'node',
         style: {
         'shape': 'data(faveShape)',
-        'width': 'mapData(weight, 40, 80, 20, 60)',
+        'width': 'data(weight)',
+        'height': 40,
         'content': 'data(name)',
         'text-valign': 'center',
         'text-outline-width': 2,
@@ -108,40 +121,21 @@ export class EachWorkflowComponent implements OnInit {
           edges: this._graphData.edges                
       },
       layout: {
-          name: 'cose',
+          name: 'grid',
           directed: true,
-          padding: 10
+          padding: 10,
+          cols:1
       },
       zoom: 1,
       selectionType: 'single', 
 
-    }); 
-  }
+    });
+    
+    this.cy.on('click', 'node', (evt)=>{
+      var node = evt.target; 
+      this.nodeInfo_selected(node.id())
+    });
 
-  get graphData(): any {
-    console.log(this._graphData);
-    alert("Hola")
-    return this._graphData;
-  }
-
-  set graphData(value: any) {
-    this._graphData = value;
-  }
-  
-  
-  nodeInfo_selected(operatorId){
-
-  }
-
-  nodeInfo_unselected(){
-   
-  }
- 
-  onItemDrop2(e: any) {
-   
-  }
-  onItemDrop(e: any) {
-   
   }
 }
   

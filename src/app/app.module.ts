@@ -15,6 +15,8 @@ import { NodeInfoComponent } from './node-info/node-info.component';
 import { NodeComponent } from './node/node.component';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { CytoscapeModule } from 'ngx-cytoscape';
+import { KeysPipe } from './keys.pipe';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -27,14 +29,16 @@ import { CytoscapeModule } from 'ngx-cytoscape';
     WorkflowsComponent,
     EachWorkflowComponent,
     NodeInfoComponent,
-    NodeComponent
+    NodeComponent,
+    KeysPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     NgDragDropModule.forRoot(),
-    CytoscapeModule
+    CytoscapeModule,
+    DataTablesModule
   ],
   providers: [ Globals ],
   bootstrap: [AppComponent]

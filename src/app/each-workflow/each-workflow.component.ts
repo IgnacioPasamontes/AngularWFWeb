@@ -33,7 +33,7 @@ export class EachWorkflowComponent implements OnInit {
       {data: {source: '5', target: '6', faveColor: '#EDA1ED'}},
 
       {data: {source: '6', target: '7', faveColor: '#86B342'}},
-      {data: {source: '6', target: '2', faveColor: '#86B342'}}
+     // {data: {source: '6', target: '2', faveColor: '#86B342'}}
     ]
   };
 

@@ -34,25 +34,6 @@ export class NodeInfoComponent implements OnInit {
 
     this.out_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
     this.out_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[2]={"Name":"AA2","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[3]={"Name":"AA3","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[4]={"Name":"AA4","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[5]={"Name":"AA5","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[6]={"Name":"AA6","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[7]={"Name":"AA7","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[8]={"Name":"AA8","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[9]={"Name":"AA9","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[10]={"Name":"AA10","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[11]={"Name":"AA11","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[12]={"Name":"AA12","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[13]={"Name":"AA13","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[14]={"Name":"AA14","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[15]={"Name":"AA15","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[16]={"Name":"AA16","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[17]={"Name":"AA17","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[18]={"Name":"AA18","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[19]={"Name":"AA19","Smiles":"CN(C)C(=N)NC(=N)N"}
-    this.out_table[20]={"Name":"AA20","Smiles":"CN(C)C(=N)NC(=N)N"}
     
     this.new_rows= [];
     this.new_columns= [];

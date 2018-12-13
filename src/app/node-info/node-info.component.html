@@ -58,34 +58,41 @@
                         <th *ngFor="let key of objectKeys(out_table[0])">{{key}}</th>                      
                     </tr>
                     <tr *ngIf="new_columns.length != 0">
-                        <th *ngFor="let key of objectKeys(out_table[0]).concat(objectKeys(new_columns[0]))">{{key}}</th>
+                        <th *ngFor="let key of objectKeys(out_table[0]).concat(objectKeys(new_columns[0]));let i = index">     
+                            <ng-container *ngIf= "objectKeys(out_table[0]).length > i">
+                                {{key}}
+                            </ng-container>
+                            <ng-container *ngIf= "objectKeys(out_table[0]).length <= i">
+                                <input type="text" class="form-control" id="{{key}}" value="{{key}}"> 
+                                <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm">
+                                    <i class="mdi mdi-done"></i>
+                                </button>        
+                            </ng-container>
+                        
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <!--Input table-->
                     <tr *ngFor="let row of out_table;let i=index">
-                       <td *ngFor="let key of objectKeys(row)">{{out_table[i][key]}}</td>
+                       <td *ngFor="let key of objectKeys(row)">{{out_table[i][key]}} {{i}}</td>
                         <!-- New rows for input table-->
                        <ng-container *ngIf="new_columns.length > 0">
                             <td *ngFor="let key2 of objectKeys(new_columns[i])">
-                                <div class="form-group">
-                                    <label for="key2" class="bmd-label-floating">{{key2}}</label>
-                                    <input type="text" class="form-control" id="key2">
-                                </div>
+                                <input type="text" class="form-control" id="key2">                       
                             </td>
-                            <!--<td>
+                            <td>
                                 <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm">
                                     <i class="mdi mdi-done"></i>
                                 </button>
-                            </td>-->
+                            </td>
                         </ng-container>
                     </tr>
                     <!-- New rows -->
-                    <tr *ngFor="let row of new_rows">
-                        <td *ngFor="let key of objectKeys(new_rows[0])">
+                    <tr *ngFor="let row of new_rows;let i=index">
+                        <td *ngFor="let key of objectKeys(new_rows[i])">
                             <div class="form-group">
-                                <label for="key" class="bmd-label-floating">{{key}}</label>
-                                <input type="text" class="form-control" id="key">
+                                <input type="text" class="form-control" id="key" >
                             </div>
                         </td> 
                         <td>

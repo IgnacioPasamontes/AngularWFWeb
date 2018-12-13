@@ -66,10 +66,10 @@ export class NodeInfoComponent implements OnInit {
   }
   Add_column(){
 
-    var columnName = "Column"+this.columnid
+    var columnName = "ColumnName"+this.columnid
     for (let i in this.out_table) {
       if (this.new_columns[i]===undefined){  
-        this.new_columns[i]={"Column":""}
+        this.new_columns[i]={"ColumnName":""}
       }
       else{
         this.new_columns[i][columnName]=""

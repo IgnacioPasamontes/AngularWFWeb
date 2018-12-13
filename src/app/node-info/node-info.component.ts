@@ -16,7 +16,8 @@ export class NodeInfoComponent implements OnInit {
   new_columns: Array<any>;
   new_columns_name: Array<any>;
   objectKeys = Object.keys;
-  columnid:number = 1
+  columnid:number = 1;
+  confirmed_columns:any;
 
   constructor(private el: ElementRef,public globals: Globals) { }
 
@@ -28,6 +29,8 @@ export class NodeInfoComponent implements OnInit {
     this.globals.actual_node.inputs = {}
     this.globals.actual_node.outputs = {}
     this.globals.actual_node.executed = true*/
+    
+    this.confirmed_columns = {}
     this.input_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
     this.input_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
     
@@ -51,6 +54,7 @@ export class NodeInfoComponent implements OnInit {
     jQuery("#icon_status_"+id).css({'color': 'red'})
   }
 
+  /*Add new row to the table*/
   Add_row(){
 
     var dict={}
@@ -64,6 +68,8 @@ export class NodeInfoComponent implements OnInit {
     }
     this.new_rows.push(dict)   
   }
+
+  /*Add New column to the table*/
   Add_column(){
 
     var columnName = "ColumnName"+this.columnid
@@ -82,4 +88,32 @@ export class NodeInfoComponent implements OnInit {
     this.columnid++
   }
 
+  saveNameColumn(oldName,e){
+
+    let new_name = e.srcElement.parentElement.parentElement.firstChild.value
+    for (let i in this.new_rows){
+        this.new_rows[i][new_name] =  this.new_rows[i][oldName]
+        delete this.new_rows[i][oldName]
+    }
+    this.confirmed_columns[oldName]=new_name
+
+  }
+  existConfirmedColumn(columnName){
+    return this.confirmed_columns.has(columnName)
+  }
+
+  editColumn(columnName){
+   delete this.confirmed_columns[columnName]
+  }
+
+  deleteNameColumn(columnName){
+
+    delete this.confirmed_columns[columnName]
+    for (let i in this.new_columns) {    
+      delete this.new_columns[i][columnName]  
+    }
+    for (let i in this.new_rows) {
+      delete this.new_rows[i][columnName]
+    }
+  }
 }

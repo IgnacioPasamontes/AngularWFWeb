@@ -20,3 +20,19 @@
     margin-right: 0px;
     font-size: 15px;
 }
+
+.form-inline{
+  margin:0px;  
+}
+.btn-column{
+    width: 1.3rem;
+    min-width: 1.3rem;
+    height: 1.3rem;
+}
+i { cursor: pointer; 
+}
+.btn-column{
+    width: 1.3rem;
+    min-width: 1.3rem;
+    height: 1.3rem;
+}

@@ -62,11 +62,24 @@
                             <ng-container *ngIf= "objectKeys(out_table[0]).length > i">
                                 {{key}}
                             </ng-container>
-                            <ng-container *ngIf= "objectKeys(out_table[0]).length <= i">
-                                <input type="text" class="form-control" id="{{key}}" value="{{key}}"> 
-                                <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm">
-                                    <i class="mdi mdi-done"></i>
-                                </button>        
+                            <ng-container *ngIf= "objectKeys(out_table[0]).length <= i && !confirmed_columns[key]">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm btn-column" (click)="saveNameColumn(key,$event)">
+                                            <i class="material-icons">done</i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm btn-column" (click)="deleteNameColumn(key)">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </ng-container>
+                            <ng-container *ngIf="confirmed_columns[key]">
+                                {{confirmed_columns[key]}}
+                                <i class="material-icons" (click)=editColumn(key)>edit</i>
+                                <i class="material-icons">delete</i>
                             </ng-container>
                         
                         </th>

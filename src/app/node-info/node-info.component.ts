@@ -12,23 +12,16 @@ export class NodeInfoComponent implements OnInit {
 
   out_table = []
   input_table = []
-  new_rows: Array<any>;
-  new_columns: Array<any>;
-  new_columns_name: Array<any>;
+  newRows: Array<any>;
   objectKeys = Object.keys;
   columnid:number = 1;
   confirmed_columns:any;
+  editInfoOut:Array<any>;
+  editInfoNew:Array<any>;
 
   constructor(private el: ElementRef,public globals: Globals) { }
 
   ngOnInit() {
-
-    /*this.globals.actual_node.title = "title"
-    this.globals.actual_node.info = "Problem formulation INFO",
-    this.globals.actual_node.parameters = "info"
-    this.globals.actual_node.inputs = {}
-    this.globals.actual_node.outputs = {}
-    this.globals.actual_node.executed = true*/
     
     this.confirmed_columns = {}
     this.input_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
@@ -37,10 +30,17 @@ export class NodeInfoComponent implements OnInit {
 
     this.out_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
     this.out_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
+    this.editInfoOut=[]
+    for (let i in this.out_table){
+        for (let key of this.objectKeys(this.out_table[i])){
+          this.editInfoOut[i] = {}
+          this.editInfoOut[i][key]=false
+          this.confirmed_columns[key]=key
+        }
+    }
     
-    this.new_rows= [];
-    this.new_columns= [];
-    this.new_columns_name = [];
+    this.newRows = [];
+    this.editInfoNew = [];
     
   }
 
@@ -57,16 +57,16 @@ export class NodeInfoComponent implements OnInit {
   /*Add new row to the table*/
   Add_row(){
 
-    var dict={}
+    var dict = {}
+    var dictEdit = {}
     for ( let key of this.objectKeys(this.out_table[0])){
       dict[key]=""
+      dictEdit[key]=true
     }
-    if (this.new_columns.length > 0){
-      for (let key of this.objectKeys(this.new_columns[0])){
-        dict[key]=""
-      }
-    }
-    this.new_rows.push(dict)   
+    this.newRows.push(dict)
+    this.editInfoNew.push(dictEdit)
+   
+
   }
 
   /*Add New column to the table*/
@@ -74,46 +74,46 @@ export class NodeInfoComponent implements OnInit {
 
     var columnName = "ColumnName"+this.columnid
     for (let i in this.out_table) {
-      if (this.new_columns[i]===undefined){  
-        this.new_columns[i]={"ColumnName":""}
-      }
-      else{
-        this.new_columns[i][columnName]=""
-      }
+      this.out_table[i][columnName]=""
+      this.editInfoOut[i][columnName]=true
     }
-    for (let i in this.new_rows) {
-      this.new_rows[i][columnName]=""
+    for (let i in this.newRows) {
+      this.newRows[i][columnName]=""
+      this.editInfoNew[i][columnName]=true
     }
-    
     this.columnid++
   }
 
   saveNameColumn(oldName,e){
-
     let new_name = e.srcElement.parentElement.parentElement.firstChild.value
-    for (let i in this.new_rows){
-        this.new_rows[i][new_name] =  this.new_rows[i][oldName]
-        delete this.new_rows[i][oldName]
-    }
     this.confirmed_columns[oldName]=new_name
-
   }
   existConfirmedColumn(columnName){
     return this.confirmed_columns.has(columnName)
   }
 
   editColumn(columnName){
-   delete this.confirmed_columns[columnName]
+    delete this.confirmed_columns[columnName]
   }
 
   deleteNameColumn(columnName){
 
+    
+    for (let i in this.out_table) {    
+      delete this.out_table[i][columnName]  
+      delete this.out_table[i][this.confirmed_columns[columnName]]
+    }
+    for (let i in this.newRows) {
+      delete this.newRows[i][columnName]
+      delete this.newRows[i][this.confirmed_columns[columnName]]
+    }
     delete this.confirmed_columns[columnName]
-    for (let i in this.new_columns) {    
-      delete this.new_columns[i][columnName]  
-    }
-    for (let i in this.new_rows) {
-      delete this.new_rows[i][columnName]
-    }
   }
+
+  confirmNewRow(i:number){
+    alert(i);
+
+  }
+
+
 }

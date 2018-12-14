@@ -84,7 +84,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2" value="{{out_table[i][key]}}">
                                     <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveNameColumn(key,$event)">done</i>   
+                                        <i class="material-icons" (click)="saveCellOut(i,key)">done</i>   
                                     </div>
                                 </div>     
                             </ng-container>
@@ -100,7 +100,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2" value="{{newRows[i][key]}}">
                                     <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveNameColumn(key,$event)">done</i>   
+                                        <i class="material-icons" (click)="saveCellNew(i,key)">done</i>   
                                     </div>
                                 </div>    
                             </ng-container>

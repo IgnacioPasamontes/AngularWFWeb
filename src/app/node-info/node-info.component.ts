@@ -97,8 +97,6 @@ export class NodeInfoComponent implements OnInit {
   }
 
   deleteNameColumn(columnName){
-
-    
     for (let i in this.out_table) {    
       delete this.out_table[i][columnName]  
       delete this.out_table[i][this.confirmed_columns[columnName]]
@@ -110,6 +108,14 @@ export class NodeInfoComponent implements OnInit {
     delete this.confirmed_columns[columnName]
   }
 
+  saveCellOut(i,key){
+    alert("Save Cell old")
+    this.editInfoOut[i][key]=true
+  }
+  saveCellNew(i,key){
+    alert("Save Cell new")
+    this.editInfoNew[i][key]=true
+  }
   confirmNewRow(i:number){
     alert(i);
 

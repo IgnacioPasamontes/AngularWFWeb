@@ -33,6 +33,7 @@
     "jquery.flowchart": "^1.1.0",
     "ng-drag-drop": "^5.0.0",
     "ngx-cytoscape": "^0.5.24",
+    "ngx-modal-dialog": "^3.0.0",
     "popper.js": "^1.14.4",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"

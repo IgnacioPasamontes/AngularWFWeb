@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ElementRef, ViewContainerRef } from '@angular/core';
 declare var jQuery: any;
 import { Globals } from '../globals';
 import { INode } from '../node';
 import * as cytoscape from 'cytoscape';
+import { ModalDialogService } from 'ngx-modal-dialog';
+import { NodeInfoComponent } from '../node-info/node-info.component';
 
 
 @Component({
@@ -14,36 +16,12 @@ export class EachWorkflowComponent implements OnInit {
 
   @Input() projectName;
   cy:any =null;
-  private _graphData: any = {
-    nodes: [
-      {data: {id: '1', name: 'Problem formulation', weight: 300, faveColor: '#6FB1FC', faveShape: 'rectangle'}},
-      {data: {id: '2', name: 'TC Characterization', weight: 300, faveColor: '#EDA1ED', faveShape: 'rectangle'}},
-      {data: {id: '3', name: 'Metabolism data', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}},
-      {data: {id: '4', name: 'SCs identification', weight: 300, faveColor: '#F5A45D', faveShape: 'rectangle'}},
-      {data: {id: '5', name: 'SCs evaluation', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}},
-      {data: {id: '6', name: 'Enough information', weight: 300, faveColor: '#86B342', faveShape: 'rectangle'}},
-      {data: {id: '7', name: 'RA hypothesis', weight: 250, faveColor: '#86B342', faveShape: 'rectangle'}}
-    ],
-    edges: [
-      {data: {source: '1', target: '2', faveColor: '#6FB1FC'}},
-      {data: {source: '2', target: '3', faveColor: '#6FB1FC'}},
-      {data: {source: '3', target: '4', faveColor: '#6FB1FC'}},
+ 
 
-      {data: {source: '4', target: '5', faveColor: '#EDA1ED'}},
-      {data: {source: '5', target: '6', faveColor: '#EDA1ED'}},
-
-      {data: {source: '6', target: '7', faveColor: '#86B342'}},
-     // {data: {source: '6', target: '2', faveColor: '#86B342'}}
-    ]
-  };
-
-  constructor(public globals: Globals) {
+  constructor(public globals: Globals,private  modalService: ModalDialogService, private viewRef: ViewContainerRef) {
   }
 
-  nodeInfo_selected(operatorId){
-    this.globals.node_visible = false;
-
-  }
+ 
 
   nodeInfo_unselected(){
    
@@ -117,8 +95,8 @@ export class EachWorkflowComponent implements OnInit {
       }
       ],
       elements: {
-          nodes:this._graphData.nodes,
-          edges: this._graphData.edges                
+          nodes:this.globals._graphData.nodes,
+          edges: this.globals._graphData.edges                
       },
       layout: {
           name: 'grid',
@@ -133,7 +111,21 @@ export class EachWorkflowComponent implements OnInit {
     
     this.cy.on('click', 'node', (evt)=>{
       var node = evt.target; 
-      this.nodeInfo_selected(node.id())
+      this.nodeInfo_selected(node.json().data)
+    });
+
+  }
+
+  nodeInfo_selected(node){
+    //this.globals.node_visible = false;
+    this.modalService.openDialog(this.viewRef, {
+      title: node.name,
+      childComponent: NodeInfoComponent,
+      settings: {
+        closeButtonClass: 'close theme-icon-close',
+        modalDialogClass: "modal-dialog"
+      },
+      data: node
     });
 
   }

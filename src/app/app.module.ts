@@ -17,6 +17,7 @@ import { NgDragDropModule } from 'ng-drag-drop';
 import { CytoscapeModule } from 'ngx-cytoscape';
 import { KeysPipe } from './keys.pipe';
 import { DataTablesModule } from 'angular-datatables';
+import { ModalDialogModule } from 'ngx-modal-dialog';
 
 @NgModule({
   declarations: [
@@ -38,9 +39,11 @@ import { DataTablesModule } from 'angular-datatables';
     AppRoutingModule,
     NgDragDropModule.forRoot(),
     CytoscapeModule,
-    DataTablesModule
+    DataTablesModule,
+    ModalDialogModule.forRoot()
   ],
   providers: [ Globals ],
+  entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

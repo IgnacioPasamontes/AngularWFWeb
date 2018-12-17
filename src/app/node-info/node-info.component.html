@@ -1,25 +1,11 @@
 <nav class="node-info">
-  <div class="row align-items-center justify-content-start">
-    <div class="col">
-        <h4>TC Characterization</h4>
-    </div>
-    <div class="col-3">
-        <button  type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm">
-            <i class="mdi mdi-done"></i>
-          </button>
-          <!--<button *ngIf="!this.globals.actual_node.executed" type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm">
-              <i class="mdi mdi-clear"></i>
-            </button>-->
-         
-    </div>
-    </div>
     <div class="card">
       <h5 class="card-header">INFO</h5>
       <div class="card-body">
          TC Characterization INFO
       </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="input_table.length>0">
         <h5 class="card-header">Input</h5>
         <div class="card-body input">
            
@@ -52,10 +38,10 @@
         <h5 class="card-header">OutPut</h5>
         <div class="card-body">
             <div class="card-body input">
-             <table datatable class="table table-hover">
+             <table class="table table-hover" *ngIf="out_table.length>0 || newRows.length>0">
                 <thead>
                     <tr>
-                        <th *ngFor="let key of objectKeys(out_table[0])">
+                        <th *ngFor="let key of columnsAvailable(out_table,newRows)">
                             <ng-container *ngIf= "!confirmed_columns[key]">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2">
@@ -77,12 +63,12 @@
                     <!--Input table-->
                     <tr *ngFor="let row of out_table;let i=index">
                        <td *ngFor="let key of objectKeys(row)">
-                            <ng-container *ngIf="!editInfoOut[i][key]">
+                            <p *ngIf="!editInfoOut[i][key]" (click)="editOldCell(i,key)">
                             {{out_table[i][key]}}
-                            </ng-container>
+                            </p>
                             <ng-container *ngIf="editInfoOut[i][key]">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2" value="{{out_table[i][key]}}">
+                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="out_table[i][key]">
                                     <div class="input-group-append">
                                         <i class="material-icons" (click)="saveCellOut(i,key)">done</i>   
                                     </div>
@@ -93,12 +79,12 @@
                     <!-- New rows -->
                     <tr *ngFor="let row of newRows;let i=index">
                         <td *ngFor="let key of objectKeys(newRows[i])">   
-                            <ng-container *ngIf="!editInfoNew[i][key]">
+                            <p *ngIf="!editInfoNew[i][key]" (click)="editNewCell(i,key)">
                                 {{newRows[i][key]}}
-                            </ng-container>
+                            </p>
                             <ng-container *ngIf="editInfoNew[i][key]">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2" value="{{newRows[i][key]}}">
+                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="newRows[i][key]">
                                     <div class="input-group-append">
                                         <i class="material-icons" (click)="saveCellNew(i,key)">done</i>   
                                     </div>
@@ -112,7 +98,7 @@
                             </button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm">
+                            <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm" (click)="deleteNewRow(i)">
                                 <i class="mdi mdi-clear"></i>
                             </button>
                         </td>
@@ -120,6 +106,8 @@
                    
                 </tbody>
               </table>
+            </div>
+            <div>
               <button type="button" class="btn btn-raised btn-primary" (click)="Add_row()">Add Row</button>
               <button type="button" class="btn btn-raised btn-primary" (click)="Add_column()">Add Column</button>
             </div>
@@ -127,10 +115,10 @@
     </div>
     <div class="row justify-content-center">
       <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg" (click)="NodeCompleted(this.globals.actual_node.id)">Completed</button>
+          <button type="button" class="btn btn-raised btn-lg" (click)="NodeCompleted(this.nodeId)">Completed</button>
       </div>
       <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg" (click)="NodeReset(this.globals.actual_node.id)">Reset</button>
+          <button type="button" class="btn btn-raised btn-lg" (click)="NodeReset(this.nodeId)">Reset</button>
         </div>
     </div>
 </nav>

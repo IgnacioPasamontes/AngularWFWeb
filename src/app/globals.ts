@@ -21,4 +21,26 @@ export class Globals {
   node_visible:boolean=true;
   operatorId:string="";
   actual_node: INode;
+  _graphData: any = {
+    nodes: [
+      {data: {id: '1', name: 'Problem formulation', weight: 300, faveColor: '#6FB1FC', faveShape: 'rectangle', input:[], output:[] }},
+      {data: {id: '2', name: 'TC Characterization', weight: 300, faveColor: '#EDA1ED', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '3', name: 'Metabolism data', weight: 250, faveColor: '#86B342', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '4', name: 'SCs identification', weight: 300, faveColor: '#F5A45D', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '5', name: 'SCs evaluation', weight: 250, faveColor: '#86B342', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '6', name: 'Enough information', weight: 300, faveColor: '#86B342', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '7', name: 'RA hypothesis', weight: 250, faveColor: '#86B342', faveShape: 'rectangle', input:[], output:[]}}
+    ],
+    edges: [
+      {data: {source: '1', target: '2', faveColor: '#6FB1FC'}},
+      {data: {source: '2', target: '3', faveColor: '#6FB1FC'}},
+      {data: {source: '3', target: '4', faveColor: '#6FB1FC'}},
+
+      {data: {source: '4', target: '5', faveColor: '#EDA1ED'}},
+      {data: {source: '5', target: '6', faveColor: '#EDA1ED'}},
+
+      {data: {source: '6', target: '7', faveColor: '#86B342'}},
+     // {data: {source: '6', target: '2', faveColor: '#86B342'}}
+    ]
+  };
 }

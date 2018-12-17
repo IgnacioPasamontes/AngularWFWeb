@@ -1,4 +1,5 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ComponentRef } from '@angular/core';
+import { IModalDialog, IModalDialogOptions } from 'ngx-modal-dialog';
 import {Globals} from '../globals';
 
 declare var jQuery: any;
@@ -8,7 +9,7 @@ declare var jQuery: any;
   templateUrl: './node-info.component.html',
   styleUrls: ['./node-info.component.css']
 })
-export class NodeInfoComponent implements OnInit {
+export class NodeInfoComponent implements OnInit, IModalDialog {
 
   out_table = []
   input_table = []
@@ -18,18 +19,26 @@ export class NodeInfoComponent implements OnInit {
   confirmed_columns:any;
   editInfoOut:Array<any>;
   editInfoNew:Array<any>;
+  nodeId:number;
 
   constructor(private el: ElementRef,public globals: Globals) { }
 
+  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
+    // no processing needed
+    this.out_table =  options.data.input
+    this.input_table = options.data.input
+    this.nodeId = options.data.id
+    alert("Node Id "+this.nodeId)
+  }
   ngOnInit() {
     
     this.confirmed_columns = {}
-    this.input_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
-    this.input_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
+    //this.input_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
+    //this.input_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
     
 
-    this.out_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
-    this.out_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}
+    /*this.out_table[0]={"Name":"Acetylsalicylic Acid (ASA)","Smiles":"O=C(C)Oc1ccccc1C(=O)O"}
+    this.out_table[1]={"Name":"Metformin","Smiles":"CN(C)C(=N)NC(=N)N"}*/
     this.editInfoOut=[]
     for (let i in this.out_table){
         for (let key of this.objectKeys(this.out_table[i])){
@@ -45,13 +54,44 @@ export class NodeInfoComponent implements OnInit {
   }
 
   NodeCompleted(id){
-    this.globals.actual_node.executed=true;
-    jQuery("#icon_status_"+id).css({'color': 'green'})
+
+    for (let i in this.out_table){
+      for (let key of this.objectKeys(this.out_table[i])){
+        if (this.confirmed_columns[key]){
+          this.out_table[i][this.confirmed_columns[key]]=this.out_table[i][key]
+          delete this.out_table[i][key]
+        }
+      }
+    }
+    for (let i in this.newRows){
+      for (let key of this.objectKeys(this.newRows[i])){
+        if (this.confirmed_columns[key]){
+          this.newRows[i][this.confirmed_columns[key]]=this.newRows[i][key]
+          delete this.newRows[i][key]
+        }
+      }
+    }
+
+    for (let i in this.globals._graphData.edges ){
+      if (this.globals._graphData.edges[i].data.source==id){
+        var target_id=this.globals._graphData.edges[i].data.target
+        for (let j in this.globals._graphData.nodes) {
+            if (this.globals._graphData.nodes[j].data.id==target_id){
+              console.log(this.out_table.concat(this.newRows))
+              this.globals._graphData.nodes[j].data.input = this.newRows.concat(this.out_table);
+              alert("Change")
+            }
+        }
+      }
+    }
+   
+    /*this.globals.actual_node.executed=true;
+    jQuery("#icon_status_"+id).css({'color': 'green'})*/
   }
 
   NodeReset(id){
-    this.globals.actual_node.executed=false;
-    jQuery("#icon_status_"+id).css({'color': 'red'})
+   /* this.globals.actual_node.executed=false;
+    jQuery("#icon_status_"+id).css({'color': 'red'})*/
   }
 
   /*Add new row to the table*/
@@ -59,27 +99,46 @@ export class NodeInfoComponent implements OnInit {
 
     var dict = {}
     var dictEdit = {}
-    for ( let key of this.objectKeys(this.out_table[0])){
-      dict[key]=""
-      dictEdit[key]=true
+    if (this.out_table.length > 0){
+      for ( let key of this.objectKeys(this.out_table[0])){
+        dict[key]=""
+        dictEdit[key]=true
+      }
+    }
+    else{
+      if (this.newRows.length > 0){
+        for ( let key of this.objectKeys(this.newRows[0])){
+          dict[key]=""
+          dictEdit[key]=true
+        }
+      }
+      else{
+        var columnName = "ColumnName"+this.columnid
+        dict[columnName] = ""
+        dictEdit[columnName]=true
+        this.columnid++
+      }
     }
     this.newRows.push(dict)
     this.editInfoNew.push(dictEdit)
-   
-
   }
 
   /*Add New column to the table*/
   Add_column(){
-
     var columnName = "ColumnName"+this.columnid
     for (let i in this.out_table) {
       this.out_table[i][columnName]=""
       this.editInfoOut[i][columnName]=true
     }
-    for (let i in this.newRows) {
-      this.newRows[i][columnName]=""
-      this.editInfoNew[i][columnName]=true
+    if (this.newRows.length>0) {
+      for (let i in this.newRows) {
+        this.newRows[i][columnName]=""
+        this.editInfoNew[i][columnName]=true
+      }
+    }
+    else{
+      this.newRows[0][columnName]=""
+      this.editInfoNew[0][columnName]=true
     }
     this.columnid++
   }
@@ -109,17 +168,50 @@ export class NodeInfoComponent implements OnInit {
   }
 
   saveCellOut(i,key){
-    alert("Save Cell old")
-    this.editInfoOut[i][key]=true
+    this.editInfoOut[i][key]=false
+    if (this.out_table[i][key]==""){
+      this.out_table[i][key]="-"
+    }
   }
   saveCellNew(i,key){
-    alert("Save Cell new")
-    this.editInfoNew[i][key]=true
+    this.editInfoNew[i][key]=false
+    if (this.newRows[i][key]==""){
+      this.newRows[i][key]="-"
+    }
   }
   confirmNewRow(i:number){
-    alert(i);
-
+    for (let key of this.objectKeys(this.editInfoNew[i])){
+      if (this.newRows[i][key]==""){
+        this.newRows[i][key]="-"
+      }
+      this.editInfoNew[i][key] =false
+    }
+  }
+  deleteNewRow(i:number){
+   this.editInfoNew.splice(i, 1)
+   this.newRows.splice(i, 1)
   }
 
+  editNewCell(i,key){
+    this.editInfoNew[i][key]=true
+  }
+  editOldCell(i,key){
+    this.editInfoOut[i][key]=true
+  }
 
+  columnsAvailable(arr1:Array<any>,arr2:Array<any>){
+
+    var outArray={}
+    if (arr1.length > 0){
+      for (let key of this.objectKeys(arr1[0])){
+        outArray[key]=""
+      }
+    }
+    if (arr2.length > 0){
+      for (let key of this.objectKeys(arr2[0])){
+        outArray[key]=""
+      }
+    }
+    return this.objectKeys(outArray)
+  }
 }

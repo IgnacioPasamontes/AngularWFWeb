@@ -15,3 +15,9 @@ body {
   height: 100%;
 }
 
+.modal-dialog{
+    max-width: 80% !important;
+    width:80% !important;
+    height: 95% !important;
+    overflow-y: auto;
+}

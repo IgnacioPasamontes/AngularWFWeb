@@ -16,15 +16,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of input_table">
-                        <td *ngFor="let key of objectKeys(input_table[0])">{{row[key]}}</td>
+                    <tr *ngFor="let row of input_table;let i =index">
+                        <td *ngFor="let key of objectKeys(input_table[i])">{{input_table[i][key]}}</td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th *ngFor="let key of objectKeys(input_table[0])">{{key}}</th>
-                    </tr>
-                </tfoot>
               </table>
         </div>
     </div>
@@ -38,21 +33,21 @@
         <h5 class="card-header">OutPut</h5>
         <div class="card-body">
             <div class="card-body input">
-             <table class="table table-hover" *ngIf="out_table.length>0 || newRows.length>0">
+             <table class="table table-hover" *ngIf="out_table.length>0">
                 <thead>
                     <tr>
-                        <th *ngFor="let key of columnsAvailable(out_table,newRows)">
+                        <th *ngFor="let key of objectKeys(out_table[0])">
                             <ng-container *ngIf= "!confirmed_columns[key]">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control" aria-describedby="basic-addon2" [(ngModel)]="columns[key]">
                                     <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveNameColumn(key,$event)">done</i>
-                                        <i class="material-icons" (click)="deleteNameColumn(key)">delete</i>
+                                        <i class="material-icons" (click)="saveNameColumn(key)">done</i>
+                                        <i class="material-icons" (click)="deleteColumn(key)">delete</i>
                                     </div>
                                 </div>     
                             </ng-container>
                             <ng-container *ngIf="confirmed_columns[key]">
-                                {{confirmed_columns[key]}}
+                                {{columns[key]}}
                                 <i class="material-icons" (click)=editColumn(key)>edit</i>
                                 <i class="material-icons" (click)=deleteNameColumn(key)>delete</i>
                             </ng-container>
@@ -75,35 +70,7 @@
                                 </div>     
                             </ng-container>
                         </td>
-                    </tr>
-                    <!-- New rows -->
-                    <tr *ngFor="let row of newRows;let i=index">
-                        <td *ngFor="let key of objectKeys(newRows[i])">   
-                            <p *ngIf="!editInfoNew[i][key]" (click)="editNewCell(i,key)">
-                                {{newRows[i][key]}}
-                            </p>
-                            <ng-container *ngIf="editInfoNew[i][key]">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="newRows[i][key]">
-                                    <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveCellNew(i,key)">done</i>   
-                                    </div>
-                                </div>    
-                            </ng-container>
-                        </td> 
-                        
-                        <td>
-                            <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm" (click)="confirmNewRow(i)">
-                                <i class="mdi mdi-done"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm" (click)="deleteNewRow(i)">
-                                <i class="mdi mdi-clear"></i>
-                            </button>
-                        </td>
-                    </tr>
-                   
+                    </tr>       
                 </tbody>
               </table>
             </div>

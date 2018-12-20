@@ -60,7 +60,6 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
         for (let j in this.globals._graphData.nodes) {
             if (this.globals._graphData.nodes[j].data.id==target_id){       
               this.globals._graphData.nodes[j].data.input=this.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
-              alert("Fin")
             }
     
         }
@@ -70,10 +69,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   }
 
   NodeReset(id){
-   /* this.globals.actual_node.executed=false;
-    jQuery("#icon_status_"+id).css({'color': 'red'})*/
     this.inline_output = false
-    this.inline_output = false
-  }
+    this.inline_comments = false
   }
 }

@@ -3,7 +3,7 @@ declare var jQuery: any;
 import { Globals } from '../globals';
 import { INode } from '../node';
 import * as cytoscape from 'cytoscape';
-import { ModalDialogService } from 'ngx-modal-dialog';
+import { ModalDialogService,IModalDialogButton } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 
 
@@ -122,7 +122,7 @@ export class EachWorkflowComponent implements OnInit {
       title: node.name,
       childComponent: NodeInfoComponent,
       settings: {
-        closeButtonClass: 'close theme-icon-close',
+        closeButtonClass: "close mdi mdi-close",
         modalDialogClass: "modal-dialog"
       },
       data: node

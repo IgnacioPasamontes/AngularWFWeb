@@ -1,124 +1,93 @@
-<nav class="node-info">
+<!--<nav class="node-info">-->
     <div class="card">
-      <h5 class="card-header">INFO</h5>
+      <h5 class="card-header bg-light">INFO</h5>
       <div class="card-body">
          TC Characterization INFO
       </div>
     </div>
     <div class="card" *ngIf="input_table.length>0">
-        <h5 class="card-header">Input</h5>
-        <div class="card-body input">
-           
-            <table datatable class="table table-striped">
-                <thead>
+        <h5 class="card-header bg-light">Input</h5>
+        <div class="card-body input">       
+            <table datatable class="table table-hover">
+                <thead class="thead-light">
                     <tr>
                         <th *ngFor="let key of objectKeys(input_table[0])">{{key}}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of input_table">
-                        <td *ngFor="let key of objectKeys(input_table[0])">{{row[key]}}</td>
+                    <tr *ngFor="let row of input_table;let i =index">
+                        <td *ngFor="let key of objectKeys(input_table[i])">{{input_table[i][key]}}</td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <th *ngFor="let key of objectKeys(input_table[0])">{{key}}</th>
-                    </tr>
-                </tfoot>
               </table>
         </div>
     </div>
     <div class="card">
-        <h5 class="card-header">Parameters</h5>
+        <h5 class="card-header bg-light">Parameters</h5>
         <div class="card-body">
             <a href="#" class="btn btn-primary">ACTIONS TO APPLY</a>
         </div>
     </div>
     <div class="card">
-        <h5 class="card-header">OutPut</h5>
+        <h5 class="card-header bg-light">OutPut</h5>
         <div class="card-body">
             <div class="card-body input">
-             <table class="table table-hover" *ngIf="out_table.length>0 || newRows.length>0">
-                <thead>
+             <table datatable class="table table-hover" [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger" *ngIf="out_table.length>0">
+                <thead class="thead-light">
                     <tr>
-                        <th *ngFor="let key of columnsAvailable(out_table,newRows)">
-                            <ng-container *ngIf= "!confirmed_columns[key]">
+                        <th *ngFor="let key of objectKeys(out_table[0])" >
+                           <ng-container *ngIf= "!confirmed_columns[key]">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{{key}}" aria-describedby="basic-addon2">
+                                    <input type="text" class="form-control" aria-describedby="basic-addon2" [(ngModel)]="columns[key]" size="250px">
                                     <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveNameColumn(key,$event)">done</i>
-                                        <i class="material-icons" (click)="deleteNameColumn(key)">delete</i>
+                                        <i class="material-icons" (click)="saveNameColumn(key)">done</i>
+                                        <i class="material-icons" (click)="deleteColumn(key)">delete</i>
                                     </div>
                                 </div>     
                             </ng-container>
                             <ng-container *ngIf="confirmed_columns[key]">
-                                {{confirmed_columns[key]}}
-                                <i class="material-icons" (click)=editColumn(key)>edit</i>
-                                <i class="material-icons" (click)=deleteNameColumn(key)>delete</i>
+                                {{columns[key]}}
+                                <i class="material-icons" (click)=editColumn(key) title="Edit column">edit</i>
+                                <i class="material-icons" (click)=deleteColumn(key) title="Delete column">delete</i>
                             </ng-container>
-                        </th>                      
+                        </th> 
+                        <th style="width:5px"></th>                     
                     </tr>
                 </thead>
                 <tbody>
                     <!--Input table-->
                     <tr *ngFor="let row of out_table;let i=index">
-                       <td *ngFor="let key of objectKeys(row)">
+                       <td *ngFor="let key of objectKeys(out_table[i])">
                             <p *ngIf="!editInfoOut[i][key]" (click)="editOldCell(i,key)">
                             {{out_table[i][key]}}
                             </p>
                             <ng-container *ngIf="editInfoOut[i][key]">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="out_table[i][key]">
+                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="out_table[i][key]" size="250">
                                     <div class="input-group-append">
                                         <i class="material-icons" (click)="saveCellOut(i,key)">done</i>   
                                     </div>
                                 </div>     
                             </ng-container>
                         </td>
-                    </tr>
-                    <!-- New rows -->
-                    <tr *ngFor="let row of newRows;let i=index">
-                        <td *ngFor="let key of objectKeys(newRows[i])">   
-                            <p *ngIf="!editInfoNew[i][key]" (click)="editNewCell(i,key)">
-                                {{newRows[i][key]}}
-                            </p>
-                            <ng-container *ngIf="editInfoNew[i][key]">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="newRows[i][key]">
-                                    <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveCellNew(i,key)">done</i>   
-                                    </div>
-                                </div>    
-                            </ng-container>
-                        </td> 
-                        
-                        <td>
-                            <button type="button" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm" (click)="confirmNewRow(i)">
-                                <i class="mdi mdi-done"></i>
-                            </button>
+                        <td>0      
+                            <i class="material-icons" (click)=deleteRow(key) title="Delete row">delete</i>
                         </td>
-                        <td>
-                            <button type="button" class="btn btn-danger bmd-btn-fab bmd-btn-fab-sm" (click)="deleteNewRow(i)">
-                                <i class="mdi mdi-clear"></i>
-                            </button>
-                        </td>
-                    </tr>
-                   
+                    </tr>       
                 </tbody>
               </table>
             </div>
             <div>
-              <button type="button" class="btn btn-raised btn-primary" (click)="Add_row()">Add Row</button>
-              <button type="button" class="btn btn-raised btn-primary" (click)="Add_column()">Add Column</button>
+              <button type="button" class="btn btn-raised btn-primary mr-2" (click)="Add_row()">Add Row</button>
+              <button type="button" class="btn btn-raised btn-primary mr-2" (click)="Add_column()">Add Column</button>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-      <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg" (click)="NodeCompleted(this.nodeId)">Completed</button>
-      </div>
-      <div class="col-3">
-          <button type="button" class="btn btn-raised btn-lg" (click)="NodeReset(this.nodeId)">Reset</button>
-        </div>
+    <div class="justify-content-end">
+        <div class="col-4">
+          <button type="button" class="btn btn-primary btn-lg active mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
+          <button type="button" class="btn btn-secondary btn-lg active mr-2" (click)="NodeReset(this.nodeId)">Reset</button>
+        </div>    
     </div>
-</nav>
+    <ck-editor name="editor1" [(ngModel)]="editorValue" skin="moono-lisa" language="en" [fullPage]="true"></ck-editor>
+<!--</nav>-->

@@ -1,86 +1,43 @@
 <!--<nav class="node-info">-->
     <div class="card">
-      <h5 class="card-header bg-light">INFO</h5>
       <div class="card-body">
-         TC Characterization INFO
+         {{description}}
       </div>
     </div>
-    <div class="card" *ngIf="input_table.length>0">
-        <h5 class="card-header bg-light">Input</h5>
-        <div class="card-body input">       
-            <table datatable class="table table-hover">
-                <thead class="thead-light">
-                    <tr>
-                        <th *ngFor="let key of objectKeys(input_table[0])">{{key}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of input_table;let i =index">
-                        <td *ngFor="let key of objectKeys(input_table[i])">{{input_table[i][key]}}</td>
-                    </tr>
-                </tbody>
-              </table>
+    <div class="card" *ngIf="input.length>0">
+        <h5 class="card-header bg-light p-1">Inputs</h5>
+        <div class="card-body p-0"> 
+       <!-- <p>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            {{input[0].name}}
+            </a> 
+        </p> 
+        <div class="collapse" id="collapseExample">
+        {{input[0].content}}
+            <div class="card card-body">-->
+        <ck-editor name="editor3" [(ngModel)]="input[0].content" skin="moono-lisa" language="en" [fullPage]="true" inline="true"></ck-editor>   
+       <!--     </div>
+        </div> -->
+
         </div>
     </div>
     <div class="card">
-        <h5 class="card-header bg-light">Parameters</h5>
+        <h5 class="card-header bg-light p-1">Resources</h5>
         <div class="card-body">
             <a href="#" class="btn btn-primary">ACTIONS TO APPLY</a>
         </div>
     </div>
     <div class="card">
-        <h5 class="card-header bg-light">OutPut</h5>
-        <div class="card-body">
-            <div class="card-body input">
-             <table datatable class="table table-hover" [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger" *ngIf="out_table.length>0">
-                <thead class="thead-light">
-                    <tr>
-                        <th *ngFor="let key of objectKeys(out_table[0])" >
-                           <ng-container *ngIf= "!confirmed_columns[key]">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" aria-describedby="basic-addon2" [(ngModel)]="columns[key]" size="250px">
-                                    <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveNameColumn(key)">done</i>
-                                        <i class="material-icons" (click)="deleteColumn(key)">delete</i>
-                                    </div>
-                                </div>     
-                            </ng-container>
-                            <ng-container *ngIf="confirmed_columns[key]">
-                                {{columns[key]}}
-                                <i class="material-icons" (click)=editColumn(key) title="Edit column">edit</i>
-                                <i class="material-icons" (click)=deleteColumn(key) title="Delete column">delete</i>
-                            </ng-container>
-                        </th> 
-                        <th style="width:5px"></th>                     
-                    </tr>
-                </thead>
-                <tbody>
-                    <!--Input table-->
-                    <tr *ngFor="let row of out_table;let i=index">
-                       <td *ngFor="let key of objectKeys(out_table[i])">
-                            <p *ngIf="!editInfoOut[i][key]" (click)="editOldCell(i,key)">
-                            {{out_table[i][key]}}
-                            </p>
-                            <ng-container *ngIf="editInfoOut[i][key]">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="-" aria-describedby="basic-addon2" [(ngModel)]="out_table[i][key]" size="250">
-                                    <div class="input-group-append">
-                                        <i class="material-icons" (click)="saveCellOut(i,key)">done</i>   
-                                    </div>
-                                </div>     
-                            </ng-container>
-                        </td>
-                        <td>0      
-                            <i class="material-icons" (click)=deleteRow(key) title="Delete row">delete</i>
-                        </td>
-                    </tr>       
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <button type="button" class="btn btn-raised btn-primary mr-2" (click)="Add_row()">Add Row</button>
-              <button type="button" class="btn btn-raised btn-primary mr-2" (click)="Add_column()">Add Column</button>
-            </div>
+        <h5 class="card-header bg-light p-1">Output</h5>
+        <div class="card-body p-0">
+            <ck-editor name="editor1" [(ngModel)]="output" skin="moono-lisa" language="en" [fullPage]="true" [inline]="inline_output"></ck-editor>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header bg-light p-1">Comments</h5>
+        <div class="card-body p-0">
+            <ck-editor name="editor2" [(ngModel)]="comments" skin="moono-lisa" language="en" [fullPage]="true" [inline]="inline_comments"></ck-editor>
         </div>
     </div>
     <div class="justify-content-end">
@@ -89,5 +46,5 @@
           <button type="button" class="btn btn-secondary btn-lg active mr-2" (click)="NodeReset(this.nodeId)">Reset</button>
         </div>    
     </div>
-    <ck-editor name="editor1" [(ngModel)]="editorValue" skin="moono-lisa" language="en" [fullPage]="true"></ck-editor>
+   
 <!--</nav>-->

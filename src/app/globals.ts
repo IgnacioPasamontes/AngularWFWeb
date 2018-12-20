@@ -23,14 +23,14 @@ export class Globals {
   actual_node: INode;
   _graphData: any = {
     nodes: [
-      {data: {id: '1', name: 'Problem formulation', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[{Dummy:'empty'}] }},
-      {data: {id: '2', name: 'TC Characterization', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '3', name: 'Metabolism data', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '4', name: 'SCs identification', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '5', name: 'SCs evaluation', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '6', name: 'Enough information', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '7', name: 'RA hypothesis', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
-      {data: {id: '8', name: 'RA hypothesis 2', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}}
+      {data: {id: '1', name: 'Problem formulation', description: 'Description problem formulation', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:'' }},
+      {data: {id: '2', name: 'TC Characterization', description: 'Description TC Characterization', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '3', name: 'Metabolism data', description: 'Description Metabolism data', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '4', name: 'SCs identification', description: 'Description Cs identification', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '5', name: 'SCs evaluation', description: 'Description SCs evaluation', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '6', name: 'Enough information', description: 'Description Enough information', weight: 300, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '7', name: 'RA hypothesis', description: 'Description RA hypothesis', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}},
+      {data: {id: '8', name: 'RA hypothesis 2', description: 'Description RA hypothesis 2', weight: 250, faveColor: '#FF0000', faveShape: 'rectangle', input:[], output:[]}}
     ],
     edges: [
       {data: {source: '1', target: '2', faveColor: '#6FB1FC'}},

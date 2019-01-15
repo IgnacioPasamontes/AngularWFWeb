@@ -18,6 +18,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   output:string = ''
   comments:string = ''
   input:Array<any> = []
+  input2:Array<any> = []
   description:string;
   objectKeys = Object.keys;
   columnid:number = 1;
@@ -26,8 +27,10 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   editInfoOut:Array<any>;
   nodeId:number;
   inline_comments:boolean = false
+  saveinput:boolean = false
   inline_output:boolean = false
   show_inline:boolean = false
+  
   
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
@@ -46,7 +49,14 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   }
 
   ngOnInit() {
-    
+ 
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    alert("Hola")
+    this.saveinput = true
   }
 
   NodeCompleted(id){
@@ -54,18 +64,19 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     this.inline_output = true
     this.inline_comments = true
    
+   
     for (let i in this.globals._graphData.edges ){
       if (this.globals._graphData.edges[i].data.source==id){
         let target_id=this.globals._graphData.edges[i].data.target
+        
         for (let j in this.globals._graphData.nodes) {
-            if (this.globals._graphData.nodes[j].data.id==target_id){       
-              this.globals._graphData.nodes[j].data.input=this.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
-            }
-    
+            if (this.globals._graphData.nodes[j].data.id==target_id){
+              this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
+              this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
+            }  
         }
       }
     }
-   
   }
 
   NodeReset(id){

@@ -4,21 +4,22 @@
          {{description}}
       </div>
     </div>
+    {{input.length}}
     <div class="card" *ngIf="input.length>0">
         <h5 class="card-header bg-light p-1">Inputs</h5>
         <div class="card-body p-0"> 
-       <!-- <p>
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-            {{input[0].name}}
-            </a> 
-        </p> 
-        <div class="collapse" id="collapseExample">
-        {{input[0].content}}
-            <div class="card card-body">-->
-        <ck-editor name="editor3" [(ngModel)]="input[0].content" skin="moono-lisa" language="en" [fullPage]="true" inline="true"></ck-editor>   
-       <!--     </div>
-        </div> -->
-
+            <p>
+                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                {{input[0].name}}
+                </a> 
+            </p> 
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                   <button type="button" class="btn btn-primary btn-lg active mr-2" (click)="Saveinput()">Save</button>
+                   <ck-editor name="editor1" [(ngModel)]="input[0].content" skin="moono-lisa" language="en"  [inline]="saveinput"></ck-editor>
+                   <ck-editor name="editor1" [(ngModel)]="input[0].comments" skin="moono-lisa" language="en"  [inline]="saveinput"></ck-editor>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card">
@@ -37,7 +38,8 @@
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div class="card-body p-0">
-            <ck-editor name="editor2" [(ngModel)]="comments" skin="moono-lisa" language="en" [fullPage]="true" [inline]="inline_comments"></ck-editor>
+            <ck-editor name="editor2" [(ngModel)]="comments" skin="moono-lisa" language="en" [fullPage]="true" [inline]="inline_comments"
+            [config]="editorConfig"></ck-editor>
         </div>
     </div>
     <div class="justify-content-end">

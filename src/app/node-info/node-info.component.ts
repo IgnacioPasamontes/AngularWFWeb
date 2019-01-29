@@ -84,6 +84,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
             
             this.globals._graphData.nodes[j].data.output = this.output
             this.globals._graphData.nodes[j].data.comments = this.comments
+            this.globals._graphData.nodes[j].data.faveColor = "#00FF00"
           }
         }
       }

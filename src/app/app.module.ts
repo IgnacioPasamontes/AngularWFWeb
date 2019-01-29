@@ -18,7 +18,9 @@ import { CytoscapeModule } from 'ngx-cytoscape';
 import { KeysPipe } from './keys.pipe';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
-import { CKEditorModule } from 'ngx-ckeditor';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
+
 
 @NgModule({
   declarations: [

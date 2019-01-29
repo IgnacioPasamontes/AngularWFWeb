@@ -4,6 +4,9 @@ import {Globals} from '../globals';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { KeyRegistry } from '@angular/core/src/di/reflective_key';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
 
 declare let jQuery: any;
 
@@ -27,12 +30,14 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   editInfoOut:Array<any>;
   nodeId:number;
   inline_comments:boolean = false
-  saveinput:boolean = false
+  savecomment:boolean = false
+  savecontent:boolean = false
   inline_output:boolean = false
   show_inline:boolean = false
   
   
   dtOptions: DataTables.Settings = {};
+  public Editor = ClassicEditor;
   dtTrigger: Subject<any> = new Subject();
   // We use this trigger because fetching the list of persons can be quite long,
   // thus we ensure the data is fetched before rendering
@@ -43,7 +48,8 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     
     // no processing needed
     this.input = options.data.input
-    this.output = ''
+    this.output = options.data.output
+    this.comments = options.data.comments
     this.nodeId = options.data.id
     this.description = options.data.description
   }
@@ -55,8 +61,8 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-    alert("Hola")
-    this.saveinput = true
+    this.savecomment = true
+    this.savecontent = true
   }
 
   NodeCompleted(id){
@@ -70,10 +76,15 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
         let target_id=this.globals._graphData.edges[i].data.target
         
         for (let j in this.globals._graphData.nodes) {
-            if (this.globals._graphData.nodes[j].data.id==target_id){
-              this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
-              this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
-            }  
+          if (this.globals._graphData.nodes[j].data.id==target_id){
+            this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
+            this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
+          }  
+          if (this.globals._graphData.nodes[j].data.id==id){
+            
+            this.globals._graphData.nodes[j].data.output = this.output
+            this.globals._graphData.nodes[j].data.comments = this.comments
+          }
         }
       }
     }

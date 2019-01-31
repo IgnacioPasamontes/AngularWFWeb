@@ -7,3 +7,5 @@ npm install angular-datatables --save
 npm install @types/jquery --save-dev
 npm install @types/datatables.net --save-dev
 npm install --save ngx-modal-dialog
+npm install --save @ckeditor/ckeditor5-build-balloon
+npm install --save @ckeditor/ckeditor5-angular

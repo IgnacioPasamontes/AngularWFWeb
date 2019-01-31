@@ -19,8 +19,8 @@ import { KeysPipe } from './keys.pipe';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,13 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     CytoscapeModule,
     DataTablesModule,
     ModalDialogModule.forRoot(),
-    CKEditorModule
+    CKEditorModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    }) // ToastrModule added
   ],
   providers: [ Globals ],
   entryComponents: [NodeInfoComponent],

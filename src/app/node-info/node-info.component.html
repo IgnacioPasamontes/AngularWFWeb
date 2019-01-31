@@ -6,24 +6,29 @@
     </div>
     <div class="card" *ngIf="input.length>0">
         <h5 class="card-header bg-light p-1">Inputs</h5>
-        <div class="card-body p-0" *ngFor="let node of this.input ; let i=index;"> 
-            <p>
-                <a class="btn btn-primary" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
-                {{node.name}}
-                </a> 
-            </p> 
-            <div class="collapse" id= "accordion_{{ i }}">
-                <div class="card card-body">
-                    <div class="row">
-                        <div class="col-6">
-                                <div [innerHTML]="node.content">
-                                </div>
-                            
-                        </div>
-                        <div class="col-6">
-                            <div [innerHTML]="node.comment">
+        <div class="card-body p-0">
+            <div class="card m-0" *ngFor="let node of this.input ; let i=index;"> 
+                <div class="card-header p-0">
+                    <h5 class="p-0">
+                    
+                        <a class="btn" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
+                        {{node.name}}
+                        </a> 
+                    </h5> 
+                </div>
+                <div class="collapse" id= "accordion_{{ i }}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                    <div [innerHTML]="node.content">
+                                    </div>
+                                
                             </div>
-                        </div>  
+                            <div class="col-6">
+                                <div [innerHTML]="node.comment">
+                                </div>
+                            </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,10 +53,11 @@
             <ckeditor [editor]="Editor" [(ngModel)]="comments" [disabled]="inline_comments"></ckeditor>
         </div>
     </div>
-    <div class="justify-content-end">
-        <div class="col-4">
-          <button type="button" class="btn btn-primary btn-lg active mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
-          <button type="button" class="btn btn-secondary btn-lg active mr-2" (click)="NodeReset(this.nodeId)">Edit</button>
+    <div class="row justify-content-end">
+        <div class="col-2">
+          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
+          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeReset(this.nodeId)">Edit</button>
+          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeReset(this.nodeId)">Reset</button>
         </div>    
     </div>
    

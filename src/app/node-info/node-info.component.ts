@@ -79,12 +79,13 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
           if (this.globals._graphData.nodes[j].data.id==target_id){
             this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
             this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
+            this.globals._graphData.nodes[j].data.faveColor = "#FFB266"
           }  
           if (this.globals._graphData.nodes[j].data.id==id){
             
             this.globals._graphData.nodes[j].data.output = this.output
             this.globals._graphData.nodes[j].data.comments = this.comments
-            this.globals._graphData.nodes[j].data.faveColor = "#00FF00"
+            this.globals._graphData.nodes[j].data.faveColor = "#008000"
           }
         }
       }

@@ -2,9 +2,8 @@
     /*height:700px;
     margin-bottom: 10px;
     overflow-y: scroll;*/
-    height: 80vh;
+    height: 200vh;
     float: left;
     position: relative;
-    border: solid #21c0c0;
-    width: 50em;
+    width: 90em;
 }

@@ -21,8 +21,9 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   output:string = ''
   comments:string = ''
   input:Array<any> = []
-  input2:Array<any> = []
+  resources:Array<any> = []
   description:string;
+  name:string;
   objectKeys = Object.keys;
   columnid:number = 1;
   columns:any;
@@ -57,8 +58,10 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     this.input = options.data.input
     this.output = options.data.output
     this.comments = options.data.comments
+    this.name = options.data.name
     this.nodeId = options.data.id
     this.description = options.data.description
+    this.resources = options.data.resources
   }
 
   ngOnInit() {
@@ -85,7 +88,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
           // Save Output to the next input node
           if (this.globals._graphData.nodes[j].data.id==target_id){
             this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
-            this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
+            this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.name,"content":this.output,"comment":this.comments})
             this.globals._graphData.nodes[j].data.faveColor = "#FFB266"
             this.globals._graphData.nodes[j].data.borderColor = "#FFB266"
           }  

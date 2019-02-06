@@ -71,10 +71,6 @@ export class EachWorkflowComponent implements OnInit {
      {
       selector: '$node > node',
       css: {
-        /*'padding-top': '20px',
-        'padding-left': '20px',
-        'padding-bottom': '20px',
-        'padding-right': '20px',*/
         'padding':'20px',
         'margin':'20px',
         'text-valign': 'top',
@@ -125,7 +121,7 @@ export class EachWorkflowComponent implements OnInit {
       },
       layout: {
         name: 'grid',
-        position: function(node) { 
+        position: function(node:any) { 
             return {
               row: node.data('row'),
               col: node.data('col')

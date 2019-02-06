@@ -38,3 +38,6 @@
 i { 
     cursor: pointer; 
 }
+.card-header .btn {
+    text-transform: capitalize;
+}

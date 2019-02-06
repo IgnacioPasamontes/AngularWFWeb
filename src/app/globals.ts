@@ -14,6 +14,11 @@ export class Globals {
       name: "Pepe",
       password: "pepe",
       projects: ["Project","ProjectPepe2","ProjectPepe3"]
+    },
+    "manuel.pastor@upf.edu":{
+      name: "Manuel Pastor",
+      password: "none",
+      projects: ["Read_Across","Prediction","Analytic"]
     }
   }
   actual_user:User;

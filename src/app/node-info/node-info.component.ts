@@ -17,7 +17,7 @@ declare let jQuery: any;
 })
 export class NodeInfoComponent implements OnInit, IModalDialog {
 
- 
+  actionButtons: IModalDialogButton[];
   output:string = ''
   comments:string = ''
   input:Array<any> = []
@@ -34,6 +34,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
   savecontent:boolean = false
   inline_output:boolean = false
   show_inline:boolean = false
+  reference: ComponentRef<IModalDialog>
   
   
   dtOptions: DataTables.Settings = {};
@@ -46,7 +47,13 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
 
   dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
     
-    // no processing needed
+    // no processing needed  
+    this.actionButtons = [
+      { text: 'Save', onAction: () => this.NodeCompleted(options.data.id) },
+      { text: 'Edit', onAction: () => this.NodeEdit() },
+      { text: 'Close' }, // no special processing here
+    ];
+    options.actionButtons=this.actionButtons
     this.input = options.data.input
     this.output = options.data.output
     this.comments = options.data.comments
@@ -70,30 +77,35 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     this.inline_output = true
     this.inline_comments = true
    
-   
     for (let i in this.globals._graphData.edges ){
       if (this.globals._graphData.edges[i].data.source==id){
         let target_id=this.globals._graphData.edges[i].data.target
         
         for (let j in this.globals._graphData.nodes) {
+          // Save Output to the next input node
           if (this.globals._graphData.nodes[j].data.id==target_id){
             this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
             this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.description,"content":this.output,"comment":this.comments})
             this.globals._graphData.nodes[j].data.faveColor = "#FFB266"
+            this.globals._graphData.nodes[j].data.borderColor = "#FFB266"
           }  
-          if (this.globals._graphData.nodes[j].data.id==id){
-            
+          // Save Output info
+          if (this.globals._graphData.nodes[j].data.id==id){ 
             this.globals._graphData.nodes[j].data.output = this.output
             this.globals._graphData.nodes[j].data.comments = this.comments
-            this.globals._graphData.nodes[j].data.faveColor = "#008000"
+            this.globals._graphData.nodes[j].data.faveColor = "#ED7D31"
+            this.globals._graphData.nodes[j].data.borderColor = "#ED7D31"
           }
         }
       }
     }
+    this.globals.cy.style().update()
+    return false
   }
 
-  NodeReset(id){
+  NodeEdit(){
     this.inline_output = false
     this.inline_comments = false
+    return false
   }
 }

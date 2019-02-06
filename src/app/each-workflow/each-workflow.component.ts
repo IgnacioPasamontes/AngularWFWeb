@@ -18,21 +18,13 @@ export class EachWorkflowComponent implements OnInit {
 
   @Input() projectName;
   @ViewChild('myModal') modal: any;
-  cy:any =null;
-  actionButtons: IModalDialogButton[];
- 
+  
+
 
   constructor(public globals: Globals,
     private  modalService: ModalDialogService, 
     private viewRef: ViewContainerRef,
-    private toastr: ToastrService) {
-
-
-    this.actionButtons = [
-      { text: 'Close' }, // no special processing here
-      { text: 'I will always close', onAction: () => true },
-      { text: 'I never close', onAction: () => false }
-    ];
+    private toastr: ToastrService) {    
   }
 
  
@@ -50,39 +42,57 @@ export class EachWorkflowComponent implements OnInit {
 
   ngOnInit() {
 
-    this.cy = cytoscape({
+    this.globals.cy = cytoscape({
       container: document.getElementById('cy'),
-     boxSelectionEnabled: true,
+
+     /* boxSelectionEnabled: true,
       autounselectify: true,
       autoungrabify:true,
-      userPanningEnabled :false,
+      userPanningEnabled :false,*/
+
      style: [{
         selector: 'node',
         style: {
         'shape': 'data(faveShape)',
-        'content': 'data(name)',
         'width': 'data(weight)',
-        'height': 60,
-        
+        'height': 'data(height)',
+        'content': 'data(name)',        
         'text-valign': 'center',
-        'text-outline-width': 2,
+        'font-size': '20%',
+        'text-outline-width': 5,
         'text-outline-color': 'data(faveColor)',
         'background-color': 'data(faveColor)',
-        'color': '#fff'
+        'color': 'white',
+        'border-color': 'data(borderColor)',
+        'border-width': 6,
+        
         }
-     }/*,
+     },
+     {
+      selector: '$node > node',
+      css: {
+        /*'padding-top': '20px',
+        'padding-left': '20px',
+        'padding-bottom': '20px',
+        'padding-right': '20px',*/
+        'padding':'20px',
+        'margin':'20px',
+        'text-valign': 'top',
+        'text-halign': 'center',
+        'background-color': 'data(faveColor)'
+      }
+    },
 
       {
+        
         selector: 'edge',
         style: {
-          'curve-style': 'haystack',
-          'opacity': 0.666,
+          'curve-style': 'bezier',
           //'width': 'mapData(strength, 70, 100, 2, 6)',
           'target-arrow-shape': 'triangle',
-         // 'source-arrow-shape': 'circle',
-          'line-color': 'data(faveColor)',
-          'source-arrow-color': 'data(faveColor)',
-          'target-arrow-color': 'data(faveColor)'
+          'line-color': 'data(edgeColor)',
+          'target-arrow-color': 'data(edgeColor)',
+          
         }
       },
 
@@ -108,28 +118,32 @@ export class EachWorkflowComponent implements OnInit {
           'text-opacity': 0
         }
       }
-     */ ],
+      ],
       elements: {
           nodes:this.globals._graphData.nodes,
           edges: this.globals._graphData.edges                
-      }/*,
-      layout: {
-          name: 'grid',
-          directed: true,
-          padding: 10,
-          cols:1
       },
-      zoom: 1,
-      selectionType: 'single', */
+      layout: {
+        name: 'grid',
+        position: function(node) { 
+            return {
+              row: node.data('row'),
+              col: node.data('col')
+          } 
+        },
+        cols:3
+      },
+      //zoom: 1,
+      //selectionType: 'single', 
 
     });
     
-    this.cy.on('click', 'node', (evt)=>{
+    this.globals.cy.on('click', 'node', (evt)=>{
       var node = evt.target; 
-      if (node.json().data.faveColor=="#FF3333"){
+      if (node.json().data.faveColor=="#A5A5A5"){
         this.toastr.warning('You must save previous step.','Warining!')
       }
-      else{
+      else if(node.json().data.name!="") {
         this.nodeInfo_selected(node.json().data)
       }
      
@@ -137,25 +151,25 @@ export class EachWorkflowComponent implements OnInit {
 
   }
 
+  
+
   nodeInfo_selected(node){
-    //this.globals.node_visible = false;
     this.modalService.openDialog(this.viewRef, {
       title: node.name,
       childComponent: NodeInfoComponent,
-      //actionButtons:this.actionButtons,
+      
       settings: {
         closeButtonClass: "close mdi mdi-close",
         modalDialogClass: "modal-dialog"
       },
-      data: node,
+      data: node/*,
       onClose: () => new Promise((resolve: any) => {
         this.cy.style().update()
 			  resolve();
           
-       })
+       })*/
     });
 
   }
-
 }
   

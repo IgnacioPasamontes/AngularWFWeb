@@ -53,12 +53,12 @@
             <ckeditor [editor]="Editor" [(ngModel)]="comments" [disabled]="inline_comments"></ckeditor>
         </div>
     </div>
-    <div class="row justify-content-end">
-        <div class="col-2">
-          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
-          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeReset(this.nodeId)">Edit</button>
-          <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeReset(this.nodeId)">Reset</button>
+    <!--<div class="row justify-content-end">
+        <div>
+            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeEdit()">Edit</button>
+            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
+            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="CloseDialog()">Close</button>
         </div>    
-    </div>
+    </div>-->
    
 <!--</nav>-->

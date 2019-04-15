@@ -11,7 +11,6 @@ export class NavbarComponent implements OnInit {
   constructor(public globals: Globals) { }
 
   ngOnInit() {
-    
   }
 
 }

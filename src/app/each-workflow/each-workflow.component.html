@@ -1,26 +1,41 @@
-<!--<h4>{{this.projectName}}</h4>-->
-<!--<div droppable class="demo" id="{{this.projectName}}" (onDrop)="onItemDrop($event)"></div>-->
-<!--<div class="cytograph">
-  <ngx-cytoscape [elements]="this._graphData"></ngx-cytoscape>
-</div>-->
-<div class="cytograph" id="cy" #myModal ></div> 
-<!--<h3>Transfer Data via Drag Drop</h3>
-<div class="row">
-    <div class="col-sm-3">
-        <ul class="list-group">
-            <li draggable *ngFor="let item of items" [dragData]="item" class="list-group-item">{{item.name}}</li>
-        </ul>
-    </div>
-    
-    <div class="col-sm-3">
-    <div class="panel panel-default" droppable (onDrop)="onItemDrop2($event)">
-        <div class="panel-heading">Drop Items here</div>
-            <div class="panel-body">
-                <li *ngFor="let item of droppedItems" class="list-group-item">{{item.name}}</li>
+<h4>{{this.projectName}}</h4>
+
+<div class="limit">
+    <div class="row">
+        <div class="card col-3"  id="id_1" cdkDragBoundary=".limit" cdkDrag>
+            <div class="card-body">
+                This is some text within a card body.
             </div>
         </div>
     </div>
-</div>-->
+    <div class="row">
+    <div class="card col-3" id="id_2"cdkDragBoundary=".limit" cdkDrag>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-body">
+                This is some text within a card body.
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="card col-3" cdkDragBoundary=".limit" cdkDrag>
+        <div class="card-body">
+        This is some text within a card body.
+        </div>
+    </div>
+    </div>
 
+<div id="Mary"></div>
+<p id="Tom"></p>
 
+<svg id="svg1" width="0" height="0" >
+        <path
+             id="myNewPath"
+             d="M0 0"             
+             stroke-width="0.3em"
+             style="stroke:#555; fill:none;  "/>
+ </svg>
 
+</div>

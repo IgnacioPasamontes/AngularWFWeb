@@ -21,6 +21,7 @@ import { ModalDialogModule } from 'ngx-modal-dialog';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ToastrModule } from 'ngx-toastr';
     ModalDialogModule.forRoot(),
     CKEditorModule,
     BrowserAnimationsModule, // required animations module
+    DragDropModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',

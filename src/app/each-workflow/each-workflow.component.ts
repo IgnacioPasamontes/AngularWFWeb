@@ -1,42 +1,79 @@
-import { Component, OnInit, Input, AfterViewInit, ElementRef, ViewContainerRef, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
 declare var jQuery: any;
 import { Globals } from '../globals';
 import { INode } from '../node';
-import * as cytoscape from 'cytoscape';
 import { ModalDialogService, IModalDialogButton } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 import { ToastrService } from 'ngx-toastr';
-import { jsPlumb } from 'jsplumb';
+import { Alert } from 'selenium-webdriver';
+declare var $: any;
 
 @Component({
   selector: 'app-each-workflow',
   templateUrl: './each-workflow.component.html',
   styleUrls: ['./each-workflow.component.css']
 })
-export class EachWorkflowComponent implements OnInit, AfterViewInit, OnChanges {
+export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() projectName;
-  jsPlumbInstance;
+  @Input() activated: boolean = false;
 
   constructor(public globals: Globals,
     private  modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     private toastr: ToastrService) { }
 
-  ngOnInit() {  }
-  ngOnChanges() {
-    console.log('changes');
+  ngOnInit() {
+    
+  }
+  ngOnDestroy() {
+    $('.' + this.projectName).connections('remove');
   }
 
   ngAfterViewInit() {
-    this.jsPlumbInstance = jsPlumb.getInstance();
-    this.jsPlumbInstance.connect({
-      connector: ['Flowchart', {stub: [212, 67], cornerRadius: 1, alwaysRespectStubs: true}],
-      source: 'id_1',
-      target: 'id_2',
-      anchor: ['Top', 'Bottom'],
-      paintStyle: {stroke: '#456', strokeWidth: 4},
+    $('.card').connections('remove');
+    
+    $('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2').connections({
+      class: 'fast'
     });
+    $('#' + this.projectName + '_id_2, #' + this.projectName + '_id_3').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_3, #' + this.projectName + '_id_4').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_4, #' + this.projectName + '_id_5').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_5, #' + this.projectName + '_id_6').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_6, #' + this.projectName + '_id_7').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_7, #' + this.projectName + '_id_8').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_9').connections({
+      from: '#' + this.projectName + '_id_8',
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_10').connections({
+      from: '#' + this.projectName + '_id_8',
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_11').connections({
+      from: '#' + this.projectName + '_id_9',
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_11').connections({
+      from: '#' + this.projectName + '_id_10',
+      class: 'fast'
+    });
+    $('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12').connections({
+      class: 'fast'
+    });
+    $('.' + this.projectName).connections('update');
   }
 
 
@@ -56,5 +93,9 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnChanges {
        })*/
     });
 
+  }
+
+  reDraw() {
+    $('.' + this.projectName).connections('update');
   }
 }

@@ -28,8 +28,7 @@
               "node_modules/bootstrap-material-design-icons/css/material-icons.min.css",
               "node_modules/ng-drag-drop/style.css",
               "node_modules/datatables.net-dt/css/jquery.dataTables.css",
-              "node_modules/ngx-toastr/toastr.css"
-              
+              "node_modules/ngx-toastr/toastr.css" 
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -37,7 +36,8 @@
               "node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.min.js",
               "src/assets/js/jquery-ui.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
-              "node_modules/jsplumb/dist/js/jsplumb.min.js"
+              "node_modules/jq-simple-connect/demos/js/jqSimpleConnect.min.js",
+              "src/assets/js/jquery-connections.js"
             ]
           },
           "configurations": {

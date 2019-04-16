@@ -1,8 +1,8 @@
-.cytograph {
-   /* margin-bottom: 10px;
-    overflow-y: scroll;*/
-    height: 80vh;
-    float: left;
-    position: relative;
-    width: 70em;
+
+.fast {
+    border: 3px solid #051;
+    opacity: 0.5;
+    z-index: 1;
+    border-radius: 100%;
+    pointer-events: none;
 }

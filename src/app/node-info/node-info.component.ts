@@ -80,7 +80,11 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     this.inline_output = true
     this.inline_comments = true
    
+<<<<<<< HEAD
  /*  for (let i in this.globals._graphData.edges ){
+=======
+   /* for (let i in this.globals._graphData.edges ){
+>>>>>>> 4fe7f011d0fbf894d5d0e8a08fc6fa909a8c6398
       if (this.globals._graphData.edges[i].data.source==id){
         let target_id=this.globals._graphData.edges[i].data.target
         

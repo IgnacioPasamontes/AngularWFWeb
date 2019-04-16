@@ -15,4 +15,7 @@ export class WorkflowsComponent implements OnInit {
     
   }
 
+  change() {
+    alert("chnage")
+  }
 }

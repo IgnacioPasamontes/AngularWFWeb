@@ -34,7 +34,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnChanges {
       connector: ['Flowchart', {stub: [212, 67], cornerRadius: 1, alwaysRespectStubs: true}],
       source: 'id_1',
       target: 'id_2',
-      anchor: ['Top', 'Bottom'],
+      anchor: ['Right', 'Right'],
       paintStyle: {stroke: '#456', strokeWidth: 4},
     });
   }
@@ -56,5 +56,18 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnChanges {
        })*/
     });
 
+  }
+
+  repaint () {
+    console.log(this.jsPlumbInstance);
+    this.jsPlumbInstance = jsPlumb.getInstance();
+    this.jsPlumbInstance.connect({
+      connector: ['Flowchart', {stub: [212, 67], cornerRadius: 1, alwaysRespectStubs: true}],
+      source: 'id_1',
+      target: 'id_2',
+      anchor: ['Right', 'Right'],
+      paintStyle: {stroke: '#456', strokeWidth: 4},
+    });
+    alert('repainted');
   }
 }

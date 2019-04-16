@@ -11,4 +11,5 @@ npm install --save @ckeditor/ckeditor5-build-balloon
 npm install --save @ckeditor/ckeditor5-angular
 npm install ngx-toastr --save
 npm install @angular/animations --save
+npm install @angular/cdk --save
 

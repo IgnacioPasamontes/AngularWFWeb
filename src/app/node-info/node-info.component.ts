@@ -80,7 +80,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
     this.inline_output = true
     this.inline_comments = true
    
-    for (let i in this.globals._graphData.edges ){
+ /*  for (let i in this.globals._graphData.edges ){
       if (this.globals._graphData.edges[i].data.source==id){
         let target_id=this.globals._graphData.edges[i].data.target
         
@@ -102,7 +102,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog {
         }
       }
     }
-    this.globals.cy.style().update()
+    this.globals.cy.style().update()*/
     return false
   }
 

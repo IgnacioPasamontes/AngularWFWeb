@@ -23,7 +23,7 @@ export class Globals {
   };
   actual_user: User;
   active_projects: Array<string> = ['New_Project'];
-  node_visible = true;
+  visible_project = 'New_Project';
   operatorId = '';
   actual_node: INode;
 }

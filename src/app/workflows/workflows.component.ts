@@ -12,10 +12,5 @@ export class WorkflowsComponent implements OnInit {
 
   ngOnInit() {
   
-    
-  }
-
-  change() {
-    alert("chnage")
   }
 }

@@ -6,3 +6,19 @@
     border-radius: 100%;
     pointer-events: none;
 }
+
+.card.node {
+    background-color: #A5A5A5;
+    cursor: pointer;
+    color: whitesmoke;
+}
+.card.node.checked {
+    background-color:#FFB266;
+   
+}
+.card.parent {
+    background-color: #D8D8D8;
+}
+.card.parent2 {
+    background-color:#7030A0;
+}

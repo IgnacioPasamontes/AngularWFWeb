@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy , OnChanges} from '@angular/core';
 declare var jQuery: any;
 import { Globals } from '../globals';
 import { INode } from '../node';
@@ -13,10 +13,10 @@ declare var $: any;
   templateUrl: './each-workflow.component.html',
   styleUrls: ['./each-workflow.component.css']
 })
-export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   @Input() projectName;
-  @Input() activated: boolean = false;
+  @Input() visibleProject: string;
 
   constructor(public globals: Globals,
     private  modalService: ModalDialogService,
@@ -26,13 +26,21 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     
   }
+  ngOnChanges () {
+    if (this.visibleProject !== '') {
+      if (this.projectName === this.visibleProject){
+        this.ngAfterViewInit();
+      }
+    }
+  }
   ngOnDestroy() {
     $('.' + this.projectName).connections('remove');
   }
 
   ngAfterViewInit() {
+   
     $('.card').connections('remove');
-    
+
     $('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2').connections({
       class: 'fast'
     });
@@ -73,7 +81,11 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy {
     $('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12').connections({
       class: 'fast'
     });
-    $('.' + this.projectName).connections('update');
+    let that = this;
+    setTimeout(function(){
+      that.reDraw();
+    },200);
+    
   }
 
 
@@ -96,6 +108,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   reDraw() {
+    console.log(this.projectName)
     $('.' + this.projectName).connections('update');
   }
 }

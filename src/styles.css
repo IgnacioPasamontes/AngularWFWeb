@@ -10,11 +10,9 @@ body {
     right:0; 
     left:0;
 }
-
 .container-fluid {
   height: 100%;
 }
-
 .modal-dialog{
     max-width: 80% !important;
     width:80% !important;
@@ -23,7 +21,7 @@ body {
 }
 .fast {
     border: 3px solid #051;
-    opacity: 0.5;
+    opacity: 1.0;
     z-index: 1;
     border-radius: 100%;
     pointer-events: none;

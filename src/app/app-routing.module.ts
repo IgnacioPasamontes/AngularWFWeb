@@ -4,12 +4,12 @@ import {LoginComponent} from "./login/login.component";
 import {MainComponent} from "./main/main.component";
 
 const routes: Routes = [
-  {
+  /*{
     path: '',
     redirectTo: '/main',
     pathMatch: 'full'
-  },
-  //{ path: '',component: LoginComponent },
+  },*/
+  { path: '',component: LoginComponent },
   { path: 'main', component: MainComponent}
 ];
 @NgModule({

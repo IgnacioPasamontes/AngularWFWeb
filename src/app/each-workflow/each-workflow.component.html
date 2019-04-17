@@ -1,26 +1,26 @@
-{{projectName}}
+
 <div class="limit">
     <div class="row p-5">
-        <div class="card {{projectName}}" id="{{projectName}}_id_1" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}" id="{{projectName}}_id_1" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(1)">
             <div class="card-body">
                 1.Problem formulation
             </div>
         </div>
     </div>
     <div class="row m-5">
-        <div class="card" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card parent" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
-                <div class="card m-5 {{projectName}}" id="{{projectName}}_id_2">
+                <div class="card node m-5 {{projectName}}" id="{{projectName}}_id_2">
                     <div class="card-body">
                     2.TC Characterization
                     </div>
                 </div>
-                <div class="card m-5 {{projectName}}" id="{{projectName}}_id_3">
+                <div class="card node m-5 {{projectName}}" id="{{projectName}}_id_3">
                     <div class="card-body">
                     Metabolism data gathering
                     </div>
                 </div>
-                <div class="card m-5 {{projectName}}" id="{{projectName}}_id_4">
+                <div class="card node m-5 {{projectName}}" id="{{projectName}}_id_4">
                     <div class="card-body">
                     Initial RAX hypothesis
                     </div>
@@ -29,43 +29,43 @@
         </div>
     </div>
     <div class="row m-5">
-        <div class="card {{projectName}}"  id="{{projectName}}_id_5" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}"  id="{{projectName}}_id_5" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 3.SCs identification
             </div>
         </div>
     </div>
     <div class="row m-5">
-        <div class="card {{projectName}}"  id="{{projectName}}_id_6" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}"  id="{{projectName}}_id_6" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 4.SCs evaluation
             </div>
         </div>
     </div>
     <div class="row m-5">
-        <div class="card {{projectName}}"  id="{{projectName}}_id_7" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}"  id="{{projectName}}_id_7" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 Overarching RAX hypothesis
             </div>
         </div>
     </div>
     <div class="row m-5">
-        <div class="card" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card parent2" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 <div class="row">
-                    <div class="card m-5 {{projectName}}" id="{{projectName}}_id_8" cdkDrag (cdkDragMoved)="reDraw()">
+                    <div class="card node m-5 {{projectName}}" id="{{projectName}}_id_8" cdkDrag (cdkDragMoved)="reDraw()">
                         <div class="card-body">
                         NAM testing and evaluation(in vitro & in silico)
                         </div>
                     </div>
                 </div>
                 <div class="row"> 
-                    <div class="card m-5 col-3 {{projectName}}" id="{{projectName}}_id_9" cdkDrag (cdkDragMoved)="reDraw()">
+                    <div class="card node m-5 col-3 {{projectName}}" id="{{projectName}}_id_9" cdkDrag (cdkDragMoved)="reDraw()">
                         <div class="card-body">
                         TK
                         </div>
                     </div>
-                    <div class="card m-5 col-3 {{projectName}}" id="{{projectName}}_id_10" cdkDrag (cdkDragMoved)="reDraw()">
+                    <div class="card node m-5 col-3 {{projectName}}" id="{{projectName}}_id_10" cdkDrag (cdkDragMoved)="reDraw()">
                         <div class="card-body">
                         TD
                         </div>
@@ -75,14 +75,14 @@
         </div>
     </div>
     <div class="row m-5">
-        <div class="card {{projectName}}"  id="{{projectName}}_id_11" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}"  id="{{projectName}}_id_11" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 5.Data gap filling
             </div>
         </div>
     </div>
     <div class="row m-5">
-        <div class="card {{projectName}}"  id="{{projectName}}_id_12" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
+        <div class="card node {{projectName}}"  id="{{projectName}}_id_12" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()">
             <div class="card-body">
                 6.Uncertainty assessment
             </div>

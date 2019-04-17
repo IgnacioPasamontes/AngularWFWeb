@@ -9,7 +9,7 @@ import { Nodes } from '../nodes/nodes'
 })
 export class SidebarComponent implements OnInit {
 
-  projectsName:string ="New Project"
+  projectsName:string ="New_Project"
   nodes:Array<any>;
   constructor( public globals: Globals) { }
 
@@ -18,21 +18,22 @@ export class SidebarComponent implements OnInit {
   }
 
   newProject(){
-    
-    var project =this.projectsName;
-    var inserted:boolean=false
-    var num:number=1
+
+    let project = this.projectsName;
+    let inserted = false;
+    let num = 1;
 
     while (!inserted){
 
-      if (this.globals.active_projects.indexOf(project, 0)==-1 && 
-          this.globals.actual_user.projects.indexOf(project, 0)==-1){
+      if (this.globals.active_projects.indexOf(project, 0) === -1 &&
+          this.globals.actual_user.projects.indexOf(project, 0) === -1 ) {
             this.globals.active_projects.push(project);
-            inserted=true;
+            this.globals.visible_project = project;
+            inserted = true;
       }
       else{
-        project=this.projectsName+" "+num;
-        num++
+        project = this.projectsName + '_' + num;
+        num ++;
       }
 
     }

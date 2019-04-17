@@ -6,3 +6,11 @@
     border-radius: 100%;
     pointer-events: none;
 }
+
+.card.node {
+    background-color: #D8D8D8;
+    cursor: pointer;
+}
+.card.node.checked{
+    background-color:#FFB266;
+}

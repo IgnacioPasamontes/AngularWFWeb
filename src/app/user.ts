@@ -1,5 +1,7 @@
 export class User {
-    name: string;
-    password: string;
-    projects: Array<string>;
-  }
+  id: number;
+  name: string;
+  mail: string;
+  password: string;
+  projects: {};
+}

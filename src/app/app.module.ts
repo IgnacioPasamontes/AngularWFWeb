@@ -12,7 +12,6 @@ import { WorkflowsComponent } from './workflows/workflows.component';
 import { Globals } from './globals';
 import { EachWorkflowComponent } from './each-workflow/each-workflow.component';
 import { NodeInfoComponent } from './node-info/node-info.component';
-import { NodeComponent } from './node/node.component';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { CytoscapeModule } from 'ngx-cytoscape';
 import { KeysPipe } from './keys.pipe';
@@ -22,6 +21,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { LoginService } from './login/login.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,12 +35,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     WorkflowsComponent,
     EachWorkflowComponent,
     NodeInfoComponent,
-    NodeComponent,
     KeysPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     AppRoutingModule,
     NgDragDropModule.forRoot(),
     CytoscapeModule,
@@ -54,7 +55,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
       preventDuplicates: true,
     }) // ToastrModule added
   ],
-  providers: [ Globals ],
+  providers: [ Globals, LoginService ],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]
 })

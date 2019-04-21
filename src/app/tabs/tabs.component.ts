@@ -10,6 +10,8 @@ export class TabsComponent implements OnInit {
 
   constructor( public globals: Globals) { }
 
+  objectKeys = Object.keys;
+
   ngOnInit() {
 
   }
@@ -24,9 +26,9 @@ export class TabsComponent implements OnInit {
 
   }
 
-  openProject(project:string){
-   
-    if (this.globals.active_projects.indexOf(project, 0)==-1){
+  openProject(project: string) {
+
+    if (this.globals.active_projects.indexOf(project, 0) === -1) {
       this.globals.active_projects.push(project);
       this.globals.visible_project = project;
     }

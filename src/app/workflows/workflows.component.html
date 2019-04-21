@@ -1,7 +1,13 @@
  <!-- Tab panes {Fade}  -->       
  <div class="container-fluid tab-content shadow bg-white rounded" id="pills-tabContent">
     <div *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="tab-pane fade" [ngClass]="{'active show': project===this.globals.visible_project}" id="pills-{{project}}" role="tabpanel">
-        <app-each-workflow [projectName]=project [visibleProject] = globals.visible_project></app-each-workflow>    
+        <app-each-workflow [projectName]=project [visibleProject] = globals.visible_project [change]= globals.change></app-each-workflow>    
     </div>  
-</div>        
+</div>   
+
+<div *ngIf="this.globals.active_projects.length==0">
+        <div class="row shadow bg-white  justify-content-center" id="pills-tabContent">
+            <p class="font-italic pb-5">--Open a project--</p>
+        </div>
+</div>
 <!---->

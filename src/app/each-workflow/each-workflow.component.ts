@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy , OnChanges} from '@angular/core';
 declare var jQuery: any;
 import { Globals } from '../globals';
-import { INode } from '../node';
+import { INode, ILink } from '../node';
 import { ModalDialogService, IModalDialogButton } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 import { ToastrService } from 'ngx-toastr';
 import { Alert } from 'selenium-webdriver';
+import { EachWorkflowService } from './each-workflow.service'
 declare var $: any;
 
 @Component({
@@ -17,18 +18,34 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   @Input() projectName;
   @Input() visibleProject: string;
+  @Input() change: boolean;
 
   constructor(public globals: Globals,
     private  modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private service: EachWorkflowService) { }
+
+    checked = {
+    'node1': false,
+    'node2': false,
+    'node3': false,
+    'node4': false,
+    'node5': false,
+    'node6': false,
+    'node7': false,
+    'node8': false,
+    'node9': false,
+    'node10': false,
+    'node11': false,
+    'node12': false
+  };
 
   ngOnInit() {
-    
   }
-  ngOnChanges () {
+   ngOnChanges () {
     if (this.visibleProject !== '') {
-      if (this.projectName === this.visibleProject){
+      if (this.projectName === this.visibleProject) {
         this.ngAfterViewInit();
       }
     }
@@ -37,8 +54,12 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     $('.' + this.projectName).connections('remove');
   }
 
-  ngAfterViewInit() {
-   
+  async ngAfterViewInit() {
+    let nodes_info;
+      nodes_info = await this.service.getProjectInfoSync(this.globals.actual_user.projects[this.projectName]);
+      for (const node of nodes_info) {
+        this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
+      }
     $('.card').connections('remove');
 
     $('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2').connections({
@@ -81,34 +102,63 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     $('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12').connections({
       class: 'fast'
     });
-    let that = this;
-    setTimeout(function(){
+    const that = this;
+    setTimeout(function() {
       that.reDraw();
-    },200);
-    
+    }, 200);
   }
 
 
 
-  nodeInfo_selected(node) {
-    this.modalService.openDialog(this.viewRef, {
-      title: node.name,
-      childComponent: NodeInfoComponent,
-      settings: {
-        closeButtonClass: 'close mdi mdi-close',
-        modalDialogClass: 'modal-dialog'
-      },
-      data: node/*,
-      onClose: () => new Promise((resolve: any) => {
-        this.cy.style().update()
-			  resolve();
-       })*/
-    });
+  async nodeInfo_selected(project: string, node_id: number) {
 
+    const project_id = this.globals.actual_user.projects[project];
+    // GET ID PROJECT
+    let node = new INode();
+    const inputs = [];
+    const inputs_comments = [];
+    let i = 1;
+    let res;
+
+    while (i < node_id) {
+      res = await this.service.getNodeInfoSync(project_id, i);
+      inputs.push({'name': res.name, 'content': res.outputs, 'comment': res.outputs_comments});
+      i++;
+    }
+    this.service.getNodeInfo(project_id, node_id).subscribe(
+      result => {
+       node = result;
+       node.inputs = inputs;
+       this.service.getResources(node_id).subscribe(
+        resources => {
+          node.resources = [];
+          for (const source of resources) {
+            console.log(source);
+            const link = new ILink();
+            link.label = source.resources_name;
+            link.link = source.resources_link;
+            node.resources.push(link);
+          }
+          this.modalService.openDialog(this.viewRef, {
+            title: node.name,
+            childComponent: NodeInfoComponent,
+            settings: {
+              closeButtonClass: 'close mdi mdi-close',
+              modalDialogClass: 'modal-dialog'
+            },
+            data: node
+          });
+
+
+        });
+      },
+      error => {
+        alert('Error getting node');
+      }
+    );
   }
 
   reDraw() {
-    console.log(this.projectName)
     $('.' + this.projectName).connections('update');
   }
 }

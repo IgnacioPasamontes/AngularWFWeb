@@ -7,11 +7,11 @@
     <div class="card" *ngIf="input.length>0">
         <h5 class="card-header bg-light p-1">Inputs</h5>
         <div class="card-body p-0">
-            <div class="card m-0" *ngFor="let node of this.input ; let i=index;"> 
+            <div class="card m-0" *ngFor="let info of this.input ; let i=index;"> 
                 <div class="card-header p-0">
                     
                     <a class="btn m-0" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
-                        {{node.name}}
+                        {{info.name}}
                     </a> 
                    
                 </div>
@@ -19,11 +19,11 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6">
-                                <div [innerHTML]="node.content">
+                                <div [innerHTML]="info.content">
                                 </div>       
                             </div>
                             <div class="col-6">
-                                <div [innerHTML]="node.comment">
+                                <div [innerHTML]="info.comment">
                                 </div>
                             </div>  
                         </div>

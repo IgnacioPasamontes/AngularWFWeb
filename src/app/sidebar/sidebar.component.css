@@ -15,7 +15,7 @@
   
 }
 .sidebar-sticky ul li a.nav-link:hover{
-  cursor: pointer;
+  /*cursor: pointer;*/
   
 }
 .card{
@@ -31,3 +31,14 @@
   .list-group-item i a{
     margin:0;
     } 
+.isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+  }
+.isDisabled:hover {
+
+  cursor: not-allowed;
+
+}

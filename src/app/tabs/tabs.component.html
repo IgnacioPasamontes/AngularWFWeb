@@ -20,7 +20,7 @@
             </button>
             <div class="dropdown-menu">
                 <!--<div class="dropdown-divider"></div>-->
-                <a *ngFor="let project of this.globals.actual_user.projects;" class="dropdown-item"  (click)="openProject(project)"> {{project}} </a>
+                <a *ngFor="let name of objectKeys(this.globals.actual_user.projects);" class="dropdown-item"  (click)="openProject(name)"> {{name}} </a>
             </div>
         </div>
     </div>

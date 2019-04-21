@@ -4,6 +4,7 @@ import {Globals} from '../globals';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { KeyRegistry } from '@angular/core/src/di/reflective_key';
+import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
@@ -15,100 +16,82 @@ declare let jQuery: any;
   templateUrl: './node-info.component.html',
   styleUrls: ['./node-info.component.css']
 })
-export class NodeInfoComponent implements OnInit, IModalDialog {
+export class NodeInfoComponent implements OnInit, IModalDialog, AfterViewInit {
 
   actionButtons: IModalDialogButton[];
-  output:string = ''
-  comments:string = ''
-  input:Array<any> = []
-  resources:Array<any> = []
-  description:string;
-  name:string;
+  node: number;
+  output = '';
+  comments = '';
+  input: Array<any> = [];
+  resources: Array<any> = [];
+  description: string;
+  name: string;
   objectKeys = Object.keys;
-  columnid:number = 1;
-  columns:any;
-  confirmed_columns:any;
-  editInfoOut:Array<any>;
-  nodeId:number;
-  inline_comments:boolean = false
-  savecomment:boolean = false
-  savecontent:boolean = false
-  inline_output:boolean = false
-  show_inline:boolean = false
-  reference: ComponentRef<IModalDialog>
-  
-  
+  columnid = 1;
+  columns: any;
+  confirmed_columns: any;
+  editInfoOut: Array<any>;
+  nodeId: number;
+  inline_comments = false;
+  savecomment = false;
+  savecontent = false;
+  inline_output = false;
+  show_inline = false;
+  reference: ComponentRef<IModalDialog>;
+
   dtOptions: DataTables.Settings = {};
   public Editor = ClassicEditor;
   dtTrigger: Subject<any> = new Subject();
   // We use this trigger because fetching the list of persons can be quite long,
   // thus we ensure the data is fetched before rendering
 
-  constructor(private el: ElementRef,public globals: Globals) {   }
+  constructor(private el: ElementRef, public globals: Globals,
+              private service: NodeInfoService) {   }
 
   dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    
-    // no processing needed  
+    // no processing needed
     this.actionButtons = [
-      { text: 'Save', onAction: () => this.NodeCompleted(options.data.id) },
+      { text: 'Save', onAction: () => this.NodeCompleted( options.data.project, options.data.node_seq) },
       { text: 'Edit', onAction: () => this.NodeEdit() },
       { text: 'Close' }, // no special processing here
     ];
-    options.actionButtons=this.actionButtons
-    this.input = options.data.input
-    this.output = options.data.output
-    this.comments = options.data.comments
-    this.name = options.data.name
-    this.nodeId = options.data.id
-    this.description = options.data.description
-    this.resources = options.data.resources
+    options.actionButtons = this.actionButtons;
+    this.input = options.data.inputs;
+    this.output = options.data.outputs;
+    this.comments = options.data.outputs_comments;
+    this.name = options.data.name;
+    this.nodeId = options.data.id;
+    this.description = options.data.description;
+    this.resources = options.data.resources;
   }
 
   ngOnInit() {
- 
   }
 
   ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    this.savecomment = true
-    this.savecontent = true
+    // Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    // Add 'implements AfterViewInit' to the class.
+    this.savecomment = true;
+    this.savecontent = true;
   }
 
-  NodeCompleted(id){
+  NodeCompleted( project_id: number, node_id: number) {
 
-    this.inline_output = true
-    this.inline_comments = true
-   
-   /* for (let i in this.globals._graphData.edges ){
-      if (this.globals._graphData.edges[i].data.source==id){
-        let target_id=this.globals._graphData.edges[i].data.target
-        
-        for (let j in this.globals._graphData.nodes) {
-          // Save Output to the next input node
-          if (this.globals._graphData.nodes[j].data.id==target_id){
-            this.globals._graphData.nodes[j].data.input = Object.assign([], this.input);
-            this.globals._graphData.nodes[j].data.input.push({"id":this.nodeId,"name":this.name,"content":this.output,"comment":this.comments})
-            this.globals._graphData.nodes[j].data.faveColor = "#FFB266"
-            this.globals._graphData.nodes[j].data.borderColor = "#FFB266"
-          }  
-          // Save Output info
-          if (this.globals._graphData.nodes[j].data.id==id){ 
-            this.globals._graphData.nodes[j].data.output = this.output
-            this.globals._graphData.nodes[j].data.comments = this.comments
-            this.globals._graphData.nodes[j].data.faveColor = "#ED7D31"
-            this.globals._graphData.nodes[j].data.borderColor = "#ED7D31"
-          }
-        }
+    this.service.saveNode (project_id, node_id, this.output, this.comments).subscribe(
+      result => {
+        console.log(result);
       }
-    }
-    this.globals.cy.style().update()*/
-    return false
+    );
+    this.globals.change =  !this.globals.change;
+    this.inline_output = true;
+    this.inline_comments = true;
+
+    return false;
   }
 
-  NodeEdit(){
-    this.inline_output = false
-    this.inline_comments = false
-    return false
+  NodeEdit() {
+    this.inline_output = false;
+    this.inline_comments = false;
+    return false;
   }
 }

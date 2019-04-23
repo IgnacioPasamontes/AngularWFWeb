@@ -39,4 +39,15 @@ export class EachWorkflowService {
     this.token = await this.http.get<any>(url).toPromise();
     return this.token;
   }
+
+  saveNode(project: number, node: number, output: string, comments: string): Observable<any> {
+
+    const formData = new FormData();
+    formData.append('output', output);
+    formData.append('output_comments', comments);
+    // formData.append('parameters',  this.model.parameters);
+    const url: string = environment.baseUrl  + 'project/' + project + '/node/' + node;
+    return this.http.post(url, formData);
+
+  }
 }

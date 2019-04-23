@@ -1,7 +1,7 @@
 
 <div class="limit">
     <div class="row p-5 justify-content-center">
-        <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node1}" id="{{projectName}}_id_1" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,1)">
+        <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node1}" id="{{projectName}}_id_1" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,1,'1.Problem formulation')">
             <div class="card-body">
                 1.Problem formulation
             </div>
@@ -85,6 +85,84 @@
         <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node12}" id="{{projectName}}_id_12" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,12)">
             <div class="card-body">
                 6.Uncertainty assessment
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title">{{ this?.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseHandled()">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        {{this?.description}}
+                    </div>
+                </div>
+                <div class="card" *ngIf="this?.input.length>0">
+                    <h5 class="card-header bg-light p-1">Inputs</h5>
+                    <div class="card-body p-0">
+                        <div class="card m-0" *ngFor="let info of this?.input ; let i=index;"> 
+                            <div class="card-header p-0">
+                                <a class="btn m-0" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
+                                    {{info.name}}
+                                </a>   
+                            </div>
+                            <div class="collapse" id= "accordion_{{ i }}">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div [innerHTML]="info.content">
+                                            </div>       
+                                        </div>
+                                        <div class="col-6">
+                                            <div [innerHTML]="info.comment">
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header bg-light p-1">Resources</h5>
+                    <div class="card-body p-2">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item p-1" *ngFor="let info of this?.resources ;">
+                            {{info.resources_name}}  <a target="_blank" rel="noopener noreferrer" href="{{info.resources_link}}"> ( {{info.resources_link}} )</a>
+                            </li>
+                        
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header bg-light p-1">Output</h5>
+                    <div class="card-body p-0">   
+                        <ckeditor [editor]="Editor" [(ngModel)]="this.output"></ckeditor>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h5 class="card-header bg-light p-1">Comments</h5>
+                    <div class="card-body p-0">
+                        <ckeditor [editor]="Editor" [(ngModel)]="this.comments"></ckeditor>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="NodeCompleted(this?.project, this?.node_seq)">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseHandled()">Close</button>
             </div>
         </div>
     </div>

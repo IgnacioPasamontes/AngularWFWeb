@@ -56,6 +56,7 @@ export class NodeInfoComponent implements OnInit, IModalDialog, AfterViewInit {
       { text: 'Close' }, // no special processing here
     ];
     options.actionButtons = this.actionButtons;
+    console.log(options.data);
     this.input = options.data.inputs;
     this.output = options.data.outputs;
     this.comments = options.data.outputs_comments;

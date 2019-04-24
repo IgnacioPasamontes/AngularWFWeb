@@ -6,7 +6,8 @@ import { ModalDialogService, IModalDialogButton } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 import { ToastrService } from 'ngx-toastr';
 import { Alert } from 'selenium-webdriver';
-import { EachWorkflowService } from './each-workflow.service'
+import { EachWorkflowService } from './each-workflow.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 declare var $: any;
 
 @Component({
@@ -19,6 +20,19 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   @Input() projectName;
   @Input() visibleProject: string;
   @Input() change: boolean;
+  actual_node = undefined;
+  display = 'none';
+
+  output = '';
+  comments = '';
+  input: Array<any> = [];
+  resources: Array<any> = [];
+  description: string;
+  name: string;
+  project: number;
+  node_seq: number;
+
+  public Editor = ClassicEditor;
 
   constructor(public globals: Globals,
     private  modalService: ModalDialogService,
@@ -110,47 +124,33 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
 
-  async nodeInfo_selected(project: string, node_id: number) {
+  nodeInfo_selected(project: string, node_id: number) {
 
     const project_id = this.globals.actual_user.projects[project];
     // GET ID PROJECT
-    let node = new INode();
-    const inputs = [];
-    const inputs_comments = [];
-    let i = 1;
-    let res;
 
-    while (i < node_id) {
-      res = await this.service.getNodeInfoSync(project_id, i);
-      inputs.push({'name': res.name, 'content': res.outputs, 'comment': res.outputs_comments});
-      i++;
-    }
     this.service.getNodeInfo(project_id, node_id).subscribe(
       result => {
-       node = result;
-       node.inputs = inputs;
-       this.service.getResources(node_id).subscribe(
-        resources => {
-          node.resources = [];
-          for (const source of resources) {
-            console.log(source);
-            const link = new ILink();
-            link.label = source.resources_name;
-            link.link = source.resources_link;
-            node.resources.push(link);
-          }
-          this.modalService.openDialog(this.viewRef, {
-            title: node.name,
-            childComponent: NodeInfoComponent,
-            settings: {
-              closeButtonClass: 'close mdi mdi-close',
-              modalDialogClass: 'modal-dialog'
-            },
-            data: node
-          });
-
-
-        });
+        // this.actual_node = result;
+        console.log(result);
+        this.input = result.inputs;
+        this.output = result.outputs;
+        this.comments = result.outputs_comments;
+        this.name = result.name;
+        this.project = result.project;
+        this.description = result.description;
+        this.resources = result.resources;
+        this.node_seq = result.node_seq;
+        this.display = 'block';
+        /*this.modalService.openDialog(this.viewRef, {
+          title: result.name,
+          childComponent: NodeInfoComponent,
+          settings: {
+            closeButtonClass: 'close mdi mdi-close',
+            modalDialogClass: 'modal-dialog'
+          },
+          data: result
+        });*/
       },
       error => {
         alert('Error getting node');
@@ -160,5 +160,20 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   reDraw() {
     $('.' + this.projectName).connections('update');
+  }
+
+  NodeCompleted( project_id: number, node_id: number) {
+
+    this.service.saveNode (project_id, node_id, this.output, this.comments).subscribe(
+      result => {
+        console.log(result);
+      }
+    );
+    this.globals.change =  !this.globals.change;
+    this.display = 'none';
+  }
+
+  onCloseHandled() {
+    this.display = 'none';
   }
 }

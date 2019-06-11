@@ -23,6 +23,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoginService } from './login/login.service';
 import { HttpClientModule } from '@angular/common/http';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { HttpClientModule } from '@angular/common/http';
     CKEditorModule,
     BrowserAnimationsModule, // required animations module
     DragDropModule,
+    MatTableModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',

@@ -3,7 +3,6 @@ import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal
 import {Globals} from '../globals';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { KeyRegistry } from '@angular/core/src/di/reflective_key';
 import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 

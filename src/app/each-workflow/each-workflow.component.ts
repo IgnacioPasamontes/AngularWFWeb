@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy , OnChanges} from '@angular/core';
-declare var jQuery: any;
+import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy , OnChanges, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import { Globals } from '../globals';
-import { INode, ILink } from '../node';
-import { ModalDialogService, IModalDialogButton } from 'ngx-modal-dialog';
+import { ModalDialogService } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
-import { ToastrService } from 'ngx-toastr';
-import { Alert } from 'selenium-webdriver';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 declare var $: any;
 
 export interface PeriodicElement {
@@ -28,6 +29,16 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
   {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
+  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
+  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
+  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
+  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
+  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
+  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
+  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
+  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
+  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
 ];
 
 @Component({
@@ -54,16 +65,13 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   public Editor = ClassicEditor;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  columnsToDisplay: string[] = this.displayedColumns.slice();
 
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(public globals: Globals,
-    private  modalService: ModalDialogService,
-    private viewRef: ViewContainerRef,
-    private toastr: ToastrService,
-    private service: EachWorkflowService) { }
-
-    checked = {
+  checked = {
     'node1': false,
     'node2': false,
     'node3': false,
@@ -78,7 +86,15 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     'node12': false
   };
 
+
+  constructor(public globals: Globals,
+    public dialog: MatDialog,
+    private service: EachWorkflowService) { }
+
+
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
    ngOnChanges () {
     if (this.visibleProject !== '') {
@@ -154,26 +170,16 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
     this.service.getNodeInfo(project_id, node_id).subscribe(
       result => {
-        // this.actual_node = result;
-        console.log(result);
-        this.input = result.inputs;
-        this.output = result.outputs;
-        this.comments = result.outputs_comments;
-        this.name = result.name;
-        this.project = result.project;
-        this.description = result.description;
-        this.resources = result.resources;
-        this.node_seq = result.node_seq;
-        this.display = 'block';
-        /*this.modalService.openDialog(this.viewRef, {
-          title: result.name,
-          childComponent: NodeInfoComponent,
-          settings: {
-            closeButtonClass: 'close mdi mdi-close',
-            modalDialogClass: 'modal-dialog'
-          },
+        result['outputs'] = ELEMENT_DATA;
+        const dialogRef = this.dialog.open( NodeInfoComponent, {
+          width: '100%',
           data: result
-        });*/
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(result);
+          alert('The dialog was closed');
+          //this.animal = result;
+        });
       },
       error => {
         alert('Error getting node');
@@ -198,5 +204,34 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   onCloseHandled() {
     this.display = 'none';
+  }
+
+  addColumn() {
+    const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
+    this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
+  }
+
+  removeColumn() {
+    if (this.columnsToDisplay.length) {
+      this.columnsToDisplay.pop();
+    }
+  }
+
+  shuffle() {
+    let currentIndex = this.columnsToDisplay.length;
+    while (0 !== currentIndex) {
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // Swap
+      let temp = this.columnsToDisplay[currentIndex];
+      this.columnsToDisplay[currentIndex] = this.columnsToDisplay[randomIndex];
+      this.columnsToDisplay[randomIndex] = temp;
+    }
+  }
+
+  getControl(index, fieldName) {
+
+    alert(index + " -- " + fieldName);
   }
 }

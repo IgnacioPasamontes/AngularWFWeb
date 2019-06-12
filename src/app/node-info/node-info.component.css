@@ -41,3 +41,6 @@ i {
 .card-header .btn {
     text-transform: capitalize;
 }
+table {
+ width: 100%;   
+}

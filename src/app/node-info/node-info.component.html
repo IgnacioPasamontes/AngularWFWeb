@@ -1,13 +1,14 @@
-<!--<nav class="node-info">-->
+<h1 mat-dialog-title> {{this.info.name}}</h1>
+<div mat-dialog-content>
     <div class="card">
       <div class="card-body">
-         {{description}}
+         {{this.info.description}}
       </div>
     </div>
-    <div class="card" *ngIf="input.length>0">
+    <div class="card" *ngIf="this.info.inputs.length>0">
         <h5 class="card-header bg-light p-1">Inputs</h5>
         <div class="card-body p-0">
-            <div class="card m-0" *ngFor="let info of this.input ; let i=index;"> 
+            <div class="card m-0" *ngFor="let info of this.info.inputs ; let i=index;"> 
                 <div class="card-header p-0">
                     
                     <a class="btn m-0" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
@@ -36,8 +37,8 @@
         <h5 class="card-header bg-light p-1">Resources</h5>
         <div class="card-body p-2">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item p-1" *ngFor="let info of this.resources ;">
-                   {{info.resources_name}}  <a target="_blank" rel="noopener noreferrer" href="{{info.resources_link}}"> ( {{info.resources_link}} )</a>
+                <li class="list-group-item p-1" *ngFor="let info of this.info.resources ;">
+                   {{this.info.resources_name}}  <a target="_blank" rel="noopener noreferrer" href="{{this.info.resources_link}}"> ( {{this.info.resources_link}} )</a>
                 </li>
             
             </ul>
@@ -45,26 +46,48 @@
     </div>
     <div class="card">
         <h5 class="card-header bg-light p-1">Output</h5>
-        <div class="card-body p-0">   
-            <ckeditor [editor]="Editor" [(ngModel)]="output" [disabled]="inline_output"></ckeditor>
+        <div class="card-body p-0">
+            <div class="mat-elevation-z8">
+                <button mat-raised-button (click)="addColumn()"> Add column </button>
+                <button mat-raised-button (click)="removeColumn()"> Remove column </button>
+                <button mat-raised-button (click)="shuffle()"> Shuffle </button>
+
+                <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" matSort>
+                <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+                    <th mat-header-cell *matHeaderCellDef  mat-sort-header> {{column}} </th>
+                    <td mat-cell *matCellDef="let element;let index = index"> 
+                        <editable>
+                            <ng-template viewMode>
+                                {{element[column]}}
+                            </ng-template>
+                            <ng-template editMode>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [formControl]="getControl(index, column)">
+                                </mat-form-field>
+                                <!-- <input  [formControl]="getControl(index, 'name')" focusable editableOnEnter> -->
+                            </ng-template>
+                        </editable>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div> 
+           <!-- <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>-->
         </div>
     </div>
 
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div class="card-body p-0">
-            <ckeditor [editor]="Editor" [(ngModel)]="comments" [disabled]="inline_comments"></ckeditor>
+           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+            <!--<ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>-->
         </div>
     </div>
-    
+</div>      
       
-      
-    <!--<div class="row justify-content-end">
-        <div>
-            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeEdit()">Edit</button>
-            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="NodeCompleted(this.nodeId)">Save</button>
-            <button type="button" class="btn btn-primary active btn-lg  mr-2" (click)="CloseDialog()">Close</button>
-        </div>    
-    </div>-->
-   
-<!--</nav>-->
+<div mat-dialog-actions>
+    <button mat-button matDialogClose>No Thanks</button>
+    <button mat-button [mat-dialog-close]="this.info">Ok</button>
+</div>

@@ -45,6 +45,7 @@
     "ngx-ckeditor": "^0.3.2",
     "ngx-cytoscape": "^0.5.24",
     "ngx-modal-dialog": "^3.0.0",
+    "ngx-take-until-destroy": "^5.4.0",
     "ngx-toastr": "^9.1.1",
     "popper.js": "^1.14.4",
     "rxjs": "~6.5.2",

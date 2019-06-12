@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
@@ -23,7 +23,19 @@ import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LoginService } from './login/login.service';
 import { HttpClientModule } from '@angular/common/http';
+
+import { EditableComponent } from './editable/editable.component';
+import { ViewModeDirective } from './editable/view-mode.directive';
+import { EditModeDirective } from './editable/edit-mode.directive';
+
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -36,11 +48,13 @@ import { MatTableModule } from '@angular/material/table';
     WorkflowsComponent,
     EachWorkflowComponent,
     NodeInfoComponent,
+    EditableComponent,
+    ViewModeDirective,
+    EditModeDirective,
     KeysPipe
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     HttpClientModule,
     AppRoutingModule,
     NgDragDropModule.forRoot(),
@@ -51,6 +65,14 @@ import { MatTableModule } from '@angular/material/table';
     BrowserAnimationsModule, // required animations module
     DragDropModule,
     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatCardModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',

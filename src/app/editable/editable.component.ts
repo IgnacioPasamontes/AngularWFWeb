@@ -15,8 +15,8 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 })
 export class EditableComponent {
   
-  @ContentChild(ViewModeDirective) viewModeTpl: ViewModeDirective;
-  @ContentChild(EditModeDirective) editModeTpl: EditModeDirective;
+  @ContentChild(ViewModeDirective,{static: false}) viewModeTpl: ViewModeDirective;
+  @ContentChild(EditModeDirective,{static: false}) editModeTpl: EditModeDirective;
   @Output() update = new EventEmitter();
 
   editMode = new Subject();

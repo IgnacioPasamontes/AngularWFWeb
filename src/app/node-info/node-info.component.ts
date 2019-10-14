@@ -64,12 +64,14 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   NodeCompleted( project_id: number, node_id: number) {
 
-    this.service.saveNode (this.info.project, this.info.node_seq, this.info.output, this.info.comments).subscribe(
+    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments).subscribe(
       result => {
         console.log(result);
       }
     );
+    
     this.globals.change =  !this.globals.change;
+  
     this.inline_output = true;
     this.inline_comments = true;
 

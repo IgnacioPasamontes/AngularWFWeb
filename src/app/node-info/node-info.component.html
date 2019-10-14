@@ -81,13 +81,13 @@
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div class="card-body p-0">
-           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
-            <!--<ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>-->
+           <!--<textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="this.info.outputs_comments" rows="10"></textarea>-->
+            <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>
         </div>
     </div>
 </div>      
       
 <div mat-dialog-actions>
     <button mat-button matDialogClose>No Thanks</button>
-    <button mat-button [mat-dialog-close]="this.info">Ok</button>
+    <button mat-button (click)="NodeCompleted(this.info.project,this.info.node_seq)" [mat-dialog-close]="">Ok</button>
 </div>

@@ -110,6 +110,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   async ngAfterViewInit() {
     let nodes_info;
       nodes_info = await this.service.getProjectInfoSync(this.globals.actual_user.projects[this.projectName]);
+
       for (const node of nodes_info) {
         this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
       }
@@ -176,9 +177,6 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
           data: result
         });
         dialogRef.afterClosed().subscribe(result => {
-          console.log(result);
-          alert('The dialog was closed');
-          //this.animal = result;
         });
       },
       error => {

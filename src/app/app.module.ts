@@ -36,6 +36,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
+import { CookieService } from 'ngx-cookie-service';
+
 
 @NgModule({
   declarations: [
@@ -79,7 +81,7 @@ import { MatCardModule } from '@angular/material/card';
       preventDuplicates: true,
     }) // ToastrModule added
   ],
-  providers: [ Globals, LoginService ],
+  providers: [ Globals, LoginService, CookieService ],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]
 })

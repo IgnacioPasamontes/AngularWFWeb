@@ -43,6 +43,7 @@
     "jsplumb": "^2.12.0",
     "ng-drag-drop": "^5.0.0",
     "ngx-ckeditor": "^0.3.2",
+    "ngx-cookie-service": "^2.2.0",
     "ngx-cytoscape": "^0.5.24",
     "ngx-modal-dialog": "^3.0.0",
     "ngx-take-until-destroy": "^5.4.0",

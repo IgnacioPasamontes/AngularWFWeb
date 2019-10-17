@@ -12,4 +12,5 @@ npm install --save @ckeditor/ckeditor5-angular
 npm install ngx-toastr --save
 npm install @angular/animations --save
 npm install @angular/cdk --save
+npm install ngx-cookie-service --save
 

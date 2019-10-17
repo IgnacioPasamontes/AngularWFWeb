@@ -62,6 +62,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   name: string;
   project: number;
   node_seq: number;
+  
 
   public Editor = ClassicEditor;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -172,6 +173,14 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     this.service.getNodeInfo(project_id, node_id).subscribe(
       result => {
         result['outputs'] = ELEMENT_DATA;
+        if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
+          this.globals.node_csrf_token[project_id] = {} ;
+        }
+        if (result.hasOwnProperty('CSRF_TOKEN')) {
+          this.globals.node_csrf_token[project_id][node_id] = result.CSRF_TOKEN;
+        } else {
+          this.globals.node_csrf_token[project_id][node_id] = null;
+        }
         const dialogRef = this.dialog.open( NodeInfoComponent, {
           width: '100%',
           data: result
@@ -191,7 +200,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   NodeCompleted( project_id: number, node_id: number) {
 
-    this.service.saveNode (project_id, node_id, this.output, this.comments).subscribe(
+    this.service.saveNode (project_id, node_id, this.output, this.comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
         console.log(result);
       }

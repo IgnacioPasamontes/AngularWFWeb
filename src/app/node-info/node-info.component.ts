@@ -44,12 +44,10 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    console.log("--------------");
-    console.log(this.data);
-    console.log("--------------");
+
     this.info = this.data;
     this.dataSource = new MatTableDataSource(this.data['outputs']);
-    console.log(this.data['outputs']);
+
     this.displayedColumns = Object.keys(this.data['outputs'][0]);
     this.columnsToDisplay = this.displayedColumns.slice();
     this.dataSource.paginator = this.paginator;
@@ -64,9 +62,8 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   NodeCompleted( project_id: number, node_id: number) {
 
-    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments).subscribe(
+    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
-        console.log(result);
       }
     );
     

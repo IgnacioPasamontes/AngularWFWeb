@@ -3,13 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { INode } from '../node';
+import { Globals } from '../globals';
+import { LoginService } from '../login/login.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EachWorkflowService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private loginService : LoginService,
+              public globals: Globals) { }
   token: INode;
   /**
    * Call to the server to create a new model with the given name
@@ -17,10 +22,10 @@ export class EachWorkflowService {
    */
   getNodeInfo(project: number, node: number): Observable<any> {
     const url: string = environment.baseUrl + 'project/' + project + '/node/' + node;
-    return this.http.get(url);
+    return this.http.get(url,{withCredentials: true});
   }
   getResources(node: number): Observable<any> {
-    const url: string = environment.baseUrl + 'node/' + node + '/resources';
+    const url: string = environment.baseUrl + 'node/' + node + '/resources/';
     return this.http.get(url);
   }
   /*private handleError(error: any): Promise<any> {
@@ -30,24 +35,26 @@ export class EachWorkflowService {
 
   async getNodeInfoSync(project: number, node: number) {
     const url: string = environment.baseUrl + 'project/' + project + '/node/' + node;
-    this.token = await this.http.get<INode>(url).toPromise();
+    this.token = await this.http.get<INode>(url,{withCredentials: true}).toPromise();
     return this.token;
   }
 
   async getProjectInfoSync(project: number) {
-    const url: string = environment.baseUrl + 'project/' + project + '/status';
-    this.token = await this.http.get<any>(url).toPromise();
+    const url: string = environment.baseUrl + 'project/' + project + '/status/';
+    this.token = await this.http.get<any>(url,{withCredentials: true}).toPromise();
     return this.token;
   }
 
-  saveNode(project: number, node: number, output: string, comments: string): Observable<any> {
-
+  saveNode(project: number, node: number, output: string, comments: string, csrftoken?: string): Observable<any> {
     const formData = new FormData();
     formData.append('output', output);
     formData.append('output_comments', comments);
+    if (csrftoken !== null && csrftoken !== undefined) {
+      formData.append(this.globals.csrftoken_form_input_name,csrftoken);
+    }
     // formData.append('parameters',  this.model.parameters);
-    const url: string = environment.baseUrl  + 'project/' + project + '/node/' + node;
-    return this.http.post(url, formData);
+    const url: string = environment.baseUrl  + 'project/' + project + '/node/' + node + '/';
+    return this.http.post(url, formData,this.loginService.getPOSTHttpOptions());
 
   }
 }

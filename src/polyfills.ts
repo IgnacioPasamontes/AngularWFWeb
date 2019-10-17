@@ -26,6 +26,11 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+
+ /* Fix for ckeditor 5 in Angular 8
+ *  https://github.com/ckeditor/ckeditor5-angular/issues/109#issuecomment-497344588
+ */
+
 import 'zone.js/dist/zone.js';  // Included with Angular CLI.
 (window as any).__Zone_disable_toString = true;
 

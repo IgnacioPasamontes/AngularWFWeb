@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Globals } from '../globals';
 import { LoginService } from './login.service';
@@ -21,15 +20,12 @@ export class LoginComponent implements OnInit {
   private user_password: string;
   success = false;
   error = false;
-  tmpdivHtml: SafeHtml;
-  parsedCsrfInputTag: any;
 
   @ViewChild("tmpdiv",{static: true}) tmpdiv: ElementRef;
 
 
   constructor(private router: Router, public globals: Globals,
-              private service: LoginService,
-              private sanitizer: DomSanitizer) { }
+              private service: LoginService) { }
 
   ngOnInit() {
 

@@ -17,11 +17,10 @@ import { ConditionalExpr } from '@angular/compiler';
 
 export class LoginComponent implements OnInit {
 
-  user: string;
-  user_password: string;
+  private user: string;
+  private user_password: string;
   success = false;
   error = false;
-  csrftoken: string;
   tmpdivHtml: SafeHtml;
   parsedCsrfInputTag: any;
 
@@ -66,6 +65,9 @@ export class LoginComponent implements OnInit {
           alert('Cannot login.');
         }
         
+      },
+      () => {
+        this.user_password = '';
       }
     );
   }

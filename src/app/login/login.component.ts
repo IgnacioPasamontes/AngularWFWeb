@@ -70,61 +70,16 @@ export class LoginComponent implements OnInit {
     );
   }
 
-/**
- * This function retrieves the csrftoken from the HTML input tag.
- * 
- */
-  getChildRecursion(elementRef : ElementRef) : void {
-    
-    const node = elementRef.nativeElement;
-    let child = node.firstChild;
-    if (child == null){
-      this.getChild(elementRef);
-    } else {
-      if (child.getAttribute('name') === this.globals.csrftoken_form_input_name) {
-        this.csrftoken = child.getAttribute('value');
-      } else {
-        this.csrftoken = null;
-      }
-      this.getUserInfo(this.csrftoken);
-    }
-  }
-
-  /**
-   * This function is used for creating a recursive delay to wait for the DOM to update
-   * Replace by a Promise when its compatibility is no longer an issue
-   * @param elementRef 
-   */
-
-  getChild(elementRef : ElementRef) : void {
-    setTimeout( () => {
-      this.getChildRecursion(elementRef);
-    }, 1000);
-    
-    
-  }
-  
-  
-  /**
-  *  Creates a ElementRef by parsing a string in HTML
-  *  and returns the first HTML tag DOM element as an ElementRef
-  *  by inserting html into "this.tmpdivHtml". This last one is
-  *  an HTML tag of this component bound to the "tmpdivHtml" property of this component. 
-  *  Notice that the inner HTML of the HTML tag will be replaced by htmlText.
-  *  Then, calls getUserInfo().  
-  */
-  DOMHtmlTagParserAndGetUserInfo ( elementRef : ElementRef , htmlText : string) : any {
-    this.tmpdivHtml = this.sanitizer.bypassSecurityTrustHtml(htmlText);
-    const child = this.getChild(elementRef);
-    return child;
-
-  }
-
   login() {
     this.error = false;
     const newLocal = this.success = false;
     this.service.getUserCSRFToken().subscribe(csrf => {
-      this.DOMHtmlTagParserAndGetUserInfo(this.tmpdiv, csrf);
+      let csrftoken : string = null;
+      if (csrf.hasOwnProperty('CSRF_TOKEN')) {
+
+        csrftoken = csrf.CSRF_TOKEN;
+      }
+      this.getUserInfo(csrftoken);
     
     },
       error => {

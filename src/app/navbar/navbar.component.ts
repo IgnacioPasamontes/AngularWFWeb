@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
         this.loginService.logout(csrftoken).subscribe(
         result => {
           alert("You have logged out successfully.");
+          this.router.navigate(['/']);
         },
         error => {alert("An error happened while logging out.")}
         );},

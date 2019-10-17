@@ -22,7 +22,6 @@ export class LoginService {
   getUserCSRFToken(): Observable<any> {
 
     const httpOptions = {
-      responseType: 'text', 
       withCredentials: true
     }
     const url: string = environment.baseUrl + 'user/';

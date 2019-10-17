@@ -83,12 +83,13 @@ export class LoginComponent implements OnInit {
     if (child == null){
       this.getChild(elementRef);
     } else {
+      let csrftoken : string;
       if (child.getAttribute('name') === this.globals.csrftoken_form_input_name) {
-        this.csrftoken = child.getAttribute('value');
+        csrftoken = child.getAttribute('value');
       } else {
-        this.csrftoken = null;
+        csrftoken = null;
       }
-      this.getUserInfo(this.csrftoken);
+      this.getUserInfo(csrftoken);
     }
   }
 

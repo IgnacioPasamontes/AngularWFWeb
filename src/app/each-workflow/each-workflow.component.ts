@@ -5,6 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { Globals } from '../globals';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
+import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -173,6 +174,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     this.service.getNodeInfo(project_id, node_id).subscribe(
       result => {
         result['outputs'] = ELEMENT_DATA;
+        result['node_id'] = node_id;
         if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
           this.globals.node_csrf_token[project_id] = {} ;
         }
@@ -181,6 +183,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
         } else {
           this.globals.node_csrf_token[project_id][node_id] = null;
         }
+
         const dialogRef = this.dialog.open( NodeInfoComponent, {
           width: '100%',
           data: result

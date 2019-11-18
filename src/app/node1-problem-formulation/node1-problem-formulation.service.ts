@@ -8,16 +8,16 @@ import { LoginService } from '../login/login.service';
 @Injectable({
   providedIn: 'root'
 })
-export class NodeInfoService {
+export class Node1ProblemFormulationService {
 
   constructor(private http: HttpClient, 
-              private loginService : LoginService,
-              public globals: Globals) { }
+    private loginService : LoginService,
+    public globals: Globals) { }
 
-  saveNode(project: number, node: number, output: string, comments: string, csrftoken?: string): Observable<any> {
+  saveNode(project: number, inputs: string, csrftoken?: string): Observable<any> {
+    const node = 1;
     const formData = new FormData();
-    formData.append('outputs', output);
-    formData.append('outputs_comments', comments);
+    formData.append('inputs_comments', inputs);
     if (csrftoken !== null && csrftoken !== undefined) {
       formData.append(this.globals.csrftoken_form_input_name,csrftoken);
     }
@@ -26,4 +26,5 @@ export class NodeInfoService {
     return this.http.post(url, formData,this.loginService.getPOSTHttpOptions());
 
   }
+  
 }

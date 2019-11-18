@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 
 
 
@@ -32,6 +33,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   dataSource:any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(Node1ProblemFormulationComponent,{static: false}) node1;
   displayedColumns: string[];
   columnsToDisplay: string[];
   // We use this trigger because fetching the list of persons can be quite long,
@@ -40,12 +42,19 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   constructor(private el: ElementRef, public globals: Globals,
               private service: NodeInfoService,
               public dialogRef: MatDialogRef<any>,
-              @Inject(MAT_DIALOG_DATA) public data: Array<any>) {   }
+              @Inject(MAT_DIALOG_DATA) public data: Array<any>,
+              ) {   }
 
 
   ngOnInit() {
 
     this.info = this.data;
+    console.log('before');
+    console.log(this.info);
+    if (this.info.inputs_comments == undefined) {this.info.inputs_comments = ''};
+    if (this.info.outputs_comments == undefined) {this.info.outputs_comments = ''};
+    console.log('after');
+    console.log(this.info);
     this.dataSource = new MatTableDataSource(this.data['outputs']);
 
     this.displayedColumns = Object.keys(this.data['outputs'][0]);
@@ -64,11 +73,21 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
     this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
+        this.globals.change =  !this.globals.change;
       }
     );
+    switch(node_id) { 
+      case 1: { 
+         this.node1.NodeCompleted(project_id);
+         break; 
+      } 
+      default: { 
+         //statements; 
+         break; 
+      } 
+   } 
+
     
-    this.globals.change =  !this.globals.change;
-  
     this.inline_output = true;
     this.inline_comments = true;
 

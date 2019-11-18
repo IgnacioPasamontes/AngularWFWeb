@@ -37,6 +37,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
 import { CookieService } from 'ngx-cookie-service';
+import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { CookieService } from 'ngx-cookie-service';
     EditableComponent,
     ViewModeDirective,
     EditModeDirective,
-    KeysPipe
+    KeysPipe,
+    Node1ProblemFormulationComponent
   ],
   imports: [
     BrowserModule,

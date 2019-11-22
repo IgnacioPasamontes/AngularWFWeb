@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Globals } from '../globals';
 import { LoginService } from './login.service';
-import { User } from '../user';
-import { ConditionalExpr } from '@angular/compiler';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +12,16 @@ import { ConditionalExpr } from '@angular/compiler';
 
 
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
-  private user: string;
-  private user_password: string;
+  user: string;
+  user_password: string;
+  rememberme: boolean = false;
   success = false;
   error = false;
+  private getuser_subscription: Subscription;
+  private getprojects_subscription: Subscription;
+
 
   @ViewChild("tmpdiv",{static: true}) tmpdiv: ElementRef;
 
@@ -32,27 +34,11 @@ export class LoginComponent implements OnInit {
   }
 
   getUserInfo (csrftoken: string) {
-    this.service.getUser(this.user,this.user_password, csrftoken).subscribe(
+    const resume: boolean = false;
+    this.getuser_subscription = this.service.getUser(this.user,this.user_password, csrftoken, resume, this.rememberme).subscribe(
       result => {
-        this.globals.actual_user = new User();
-        this.globals.actual_user.id = result.id;
-        this.globals.actual_user.name = result.first_name+' '+result.last_name;
-        this.globals.actual_user.mail = result.email;
-        this.globals.actual_user.projects = {};
-        this.service.getProjects().subscribe(
-          result2 => {
-            for (const projects of result2) {
-              this.globals.actual_user.projects[projects.name] = projects.id;
-            }
-            setTimeout(() => {
-              this.router.navigate(['/main']);
-            },
-            1000);
-          },
-          error => {
-            alert('Error getting user projects.');
-          }
-        );
+        this.service.setActualUserGlobals(result);
+        this.router.navigate(['main']);
       },
       error => {
         if (error.status === 401) {
@@ -70,7 +56,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.error = false;
-    const newLocal = this.success = false;
+    this.success = false;
     this.service.getUserCSRFToken().subscribe(csrf => {
       let csrftoken : string = null;
       if (csrf.hasOwnProperty('CSRF_TOKEN')) {
@@ -85,6 +71,11 @@ export class LoginComponent implements OnInit {
           return;
     })
 
+
+  }
+
+  ngOnDestroy() {
+    this.getuser_subscription.unsubscribe();
 
   }
 }

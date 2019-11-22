@@ -38,6 +38,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { CookieService } from 'ngx-cookie-service';
 import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { Node1ProblemFormulationComponent } from './node1-problem-formulation/no
     ViewModeDirective,
     EditModeDirective,
     KeysPipe,
-    Node1ProblemFormulationComponent
+    Node1ProblemFormulationComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

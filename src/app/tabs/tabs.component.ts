@@ -8,7 +8,10 @@ import { Globals } from '../globals';
 })
 export class TabsComponent implements OnInit {
 
+
   constructor( public globals: Globals) { }
+  
+
 
   objectKeys = Object.keys;
 

@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
+import { User } from '../user';
 
 @Injectable({
   providedIn: 'root'
@@ -47,16 +48,29 @@ export class LoginService {
    * Call to the server to create a new model with the given name
    * @param model Name of the model to add
    */
-  getUser(username: string, password: string, csrftoken?: string): Observable<any> {
+  getUser(username?: string, password?: string, csrftoken?: string, resume: boolean = false, rememberme: boolean = false): Observable<any> {
     const url: string = environment.baseUrl + 'user/';
     const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
+    if (!(resume || username == undefined || username == null || password == undefined || password == null)) {
+      formData.append('username', username);
+      formData.append('password', password);
+    }
+
+
     if (csrftoken !== null && csrftoken !== undefined) {
       formData.append(this.globals.csrftoken_form_input_name,csrftoken);
     }
 
-    return this.http.post(url, formData,this.getPOSTHttpOptions());
+    if (rememberme) {
+      formData.append('rememberme', '1');
+    }
+
+    if (resume && !rememberme) {
+      return this.http.get(url,{withCredentials: true});
+    } else {
+      return this.http.post(url, formData,this.getPOSTHttpOptions());
+    }
+    
   }
 
   logout(csrftoken?: string) {
@@ -93,5 +107,14 @@ export class LoginService {
     };
     return null;
   }
+
+  setActualUserGlobals(result) {
+    this.globals.actual_user = new User();
+    this.globals.actual_user.id = result.id;
+    this.globals.actual_user.setName(result.first_name+' '+result.last_name);
+    this.globals.actual_user.mail = result.email;
+    this.globals.actual_user.setProjects({});
+  }
+  
 
 }

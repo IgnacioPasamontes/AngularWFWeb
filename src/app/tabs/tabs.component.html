@@ -1,6 +1,7 @@
 
 <div class="d-flex flex-row">
     <div>
+        
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
             <li *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="nav-item" (click)="visibleProject(project)">
 
@@ -9,7 +10,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                     </a>
-            </li>        
+            </li>    
         </ul>
     </div>
     
@@ -20,7 +21,9 @@
             </button>
             <div class="dropdown-menu">
                 <!--<div class="dropdown-divider"></div>-->
+                <ng-container *ngIf="this.globals.actual_user.projects || false">
                 <a *ngFor="let name of objectKeys(this.globals.actual_user.projects);" class="dropdown-item"  (click)="openProject(name)"> {{name}} </a>
+                </ng-container> 
             </div>
         </div>
     </div>

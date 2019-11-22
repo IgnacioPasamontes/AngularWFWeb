@@ -49,12 +49,10 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.info = this.data;
-    console.log('before');
-    console.log(this.info);
+
     if (this.info.inputs_comments == undefined) {this.info.inputs_comments = ''};
     if (this.info.outputs_comments == undefined) {this.info.outputs_comments = ''};
-    console.log('after');
-    console.log(this.info);
+
     this.dataSource = new MatTableDataSource(this.data['outputs']);
 
     this.displayedColumns = Object.keys(this.data['outputs'][0]);

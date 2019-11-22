@@ -11,6 +11,7 @@ import { stringify } from 'querystring';
 })
 export class NavbarComponent implements OnInit {
 
+
   constructor(public globals: Globals,
      private loginService : LoginService,
      private router: Router,

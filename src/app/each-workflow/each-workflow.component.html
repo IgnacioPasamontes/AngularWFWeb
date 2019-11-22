@@ -60,12 +60,12 @@
                     </div>
                 </div>
                 <div class="row"> 
-                    <div class="card node m-5 col-3 {{projectName}}" [ngClass]="{'checked':this.checked.node9}" id="{{projectName}}_id_9" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,9)">
+                    <div class="card node m-5 col-3 {{projectName}} text-center" [ngClass]="{'checked':this.checked.node9}" id="{{projectName}}_id_9" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,9)">
                         <div class="card-body">
                         TK
                         </div>
                     </div>
-                    <div class="card node m-5 col-3 {{projectName}}" [ngClass]="{'checked':this.checked.node10}" id="{{projectName}}_id_10" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,10)">
+                    <div class="card node m-5 col-3 {{projectName}} justify-content-end text-center" [ngClass]="{'checked':this.checked.node10}" id="{{projectName}}_id_10" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,10)">
                         <div class="card-body">
                         TD
                         </div>
@@ -77,14 +77,14 @@
     <div class="row m-5 justify-content-center">
         <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node11}" id="{{projectName}}_id_11" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,11)">
             <div class="card-body">
-                5.Data gap filling
+                5.Uncertainty assessment
             </div>
         </div>
     </div>
     <div class="row m-5 justify-content-center">
         <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node12}" id="{{projectName}}_id_12" cdkDragBoundary=".limit" cdkDrag (cdkDragMoved)="reDraw()" (dblclick)="nodeInfo_selected(projectName,12)">
             <div class="card-body">
-                6.Uncertainty assessment
+                6.Data gap filling
             </div>
         </div>
     </div>

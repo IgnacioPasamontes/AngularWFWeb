@@ -20,7 +20,6 @@ export class Node1ProblemFormulationComponent implements OnInit {
               public globals: Globals) { }
 
   ngOnInit() {
-    console.log(this.info);
     this.problem_description = this.info.inputs_comments;
   }
 

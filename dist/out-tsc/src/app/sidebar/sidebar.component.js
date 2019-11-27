@@ -15,7 +15,7 @@ let SidebarComponent = class SidebarComponent {
         let num = 1;
         while (!inserted) {
             if (this.globals.active_projects.indexOf(project, 0) === -1 &&
-                this.objectKeys(this.globals.actual_user.projects).indexOf(project, 0) === -1) {
+                this.objectKeys(this.globals.current_user.projects).indexOf(project, 0) === -1) {
                 this.globals.active_projects.push(project);
                 this.globals.visible_project = project;
                 inserted = true;

@@ -1,7 +1,8 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Node1ProblemFormulationService } from './node1-problem-formulation.service';
-import {Globals} from '../globals';
+import { Globals } from '../globals';
+import { NodeInfoService } from '../node-info/node-info.service';
 
 @Component({
   selector: 'app-node1-problem-formulation',
@@ -17,7 +18,8 @@ export class Node1ProblemFormulationComponent implements OnInit {
   public Editor = ClassicEditor;
 
   constructor(private service: Node1ProblemFormulationService,
-              public globals: Globals) { }
+              public globals: Globals,
+              private node: NodeInfoService) { }
 
   ngOnInit() {
     this.problem_description = this.info.inputs_comments;
@@ -28,7 +30,7 @@ export class Node1ProblemFormulationComponent implements OnInit {
     this.service.saveNode (this.info.project, this.problem_description,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
         this.globals.change =  !this.globals.change;
-        
+        this.node.setNodeAsBusy(project_id,node_id,false);
       }
     );
      

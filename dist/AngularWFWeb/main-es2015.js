@@ -51,7 +51,7 @@ module.exports = "<app-navbar></app-navbar>\n<div class=\"container-fluid\">\n  
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0\">\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">{{this.globals.actual_user.name$ | async}}</a>\n    <ul class=\"navbar-nav px-3\">\n        <li class=\"nav-item text-nowrap\">\n            <a class=\"nav-link\" [routerLink]=\"\" (click)=\"this.logout()\" href=\"\">Sign out</a>\n        </li>\n    </ul>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0\">\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">{{this.globals.current_user.name$ | async}}</a>\n    <ul class=\"navbar-nav px-3\">\n        <li class=\"nav-item text-nowrap\">\n            <a class=\"nav-link\" [routerLink]=\"\" (click)=\"this.logout()\" href=\"\">Sign out</a>\n        </li>\n    </ul>\n</nav>"
 
 /***/ }),
 
@@ -95,7 +95,7 @@ module.exports = "<div class=\"sidebar-sticky\">\n    <ul class=\"nav flex-colum
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"d-flex flex-row\">\n    <div>\n        \n        <ul class=\"nav nav-pills\" id=\"pills-tab\" role=\"tablist\">\n            <li *ngFor=\"let project of this.globals.active_projects.slice().reverse(); let i = index\" class=\"nav-item\" (click)=\"visibleProject(project)\">\n\n                <a class=\"nav-link\" [ngClass]=\"{'active show': project===this.globals.visible_project}\" data-toggle=\"pill\" href=\"#pills-{{project}}\" role=\"tab\" aria-controls=\"pills-Project1\" aria-selected=\"true\">\n                        {{project}}<button type=\"button\" class=\"close\" aria-label=\"Close\"(click)=\"deleteProject(project)\">\n                                <span aria-hidden=\"true\">&times;</span>\n                            </button>\n                    </a>\n            </li>    \n        </ul>\n    </div>\n    \n    <div class=\"ml-auto\">\n        <div class=\"btn-group\">\n            <button type=\"button\" class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                Projects\n            </button>\n            <div class=\"dropdown-menu\">\n                <!--<div class=\"dropdown-divider\"></div>-->\n                <ng-container *ngIf=\"this.globals.actual_user.projects || false\">\n                <a *ngFor=\"let name of objectKeys(this.globals.actual_user.projects);\" class=\"dropdown-item\"  (click)=\"openProject(name)\"> {{name}} </a>\n                </ng-container> \n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"d-flex flex-row\">\n    <div>\n        \n        <ul class=\"nav nav-pills\" id=\"pills-tab\" role=\"tablist\">\n            <li *ngFor=\"let project of this.globals.active_projects.slice().reverse(); let i = index\" class=\"nav-item\" (click)=\"visibleProject(project)\">\n\n                <a class=\"nav-link\" [ngClass]=\"{'active show': project===this.globals.visible_project}\" data-toggle=\"pill\" href=\"#pills-{{project}}\" role=\"tab\" aria-controls=\"pills-Project1\" aria-selected=\"true\">\n                        {{project}}<button type=\"button\" class=\"close\" aria-label=\"Close\"(click)=\"deleteProject(project)\">\n                                <span aria-hidden=\"true\">&times;</span>\n                            </button>\n                    </a>\n            </li>    \n        </ul>\n    </div>\n    \n    <div class=\"ml-auto\">\n        <div class=\"btn-group\">\n            <button type=\"button\" class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                Projects\n            </button>\n            <div class=\"dropdown-menu\">\n                <!--<div class=\"dropdown-divider\"></div>-->\n                <ng-container *ngIf=\"this.globals.current_user.projects || false\">\n                <a *ngFor=\"let name of objectKeys(this.globals.current_user.projects);\" class=\"dropdown-item\"  (click)=\"openProject(name)\"> {{name}} </a>\n                </ng-container> \n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -487,7 +487,7 @@ let EachWorkflowComponent = class EachWorkflowComponent {
     ngAfterViewInit() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             let nodes_info;
-            nodes_info = yield this.service.getProjectInfoSync(this.globals.actual_user.projects[this.projectName]);
+            nodes_info = yield this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
             for (const node of nodes_info) {
                 this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
             }
@@ -539,7 +539,7 @@ let EachWorkflowComponent = class EachWorkflowComponent {
         });
     }
     nodeInfo_selected(project, node_id) {
-        const project_id = this.globals.actual_user.projects[project];
+        const project_id = this.globals.current_user.projects[project];
         // GET ID PROJECT
         this.service.getNodeInfo(project_id, node_id).subscribe(result => {
             result['outputs'] = ELEMENT_DATA;
@@ -912,7 +912,7 @@ __webpack_require__.r(__webpack_exports__);
 
 let Globals = class Globals {
     constructor() {
-        this.actual_user = new _user__WEBPACK_IMPORTED_MODULE_2__["User"]();
+        this.current_user = new _user__WEBPACK_IMPORTED_MODULE_2__["User"]();
         this.active_projects = [];
         this.visible_project = '';
         this.operatorId = '';
@@ -1171,11 +1171,11 @@ let LoginService = class LoginService {
         return null;
     }
     setActualUserGlobals(result) {
-        this.globals.actual_user = new _user__WEBPACK_IMPORTED_MODULE_6__["User"]();
-        this.globals.actual_user.id = result.id;
-        this.globals.actual_user.setName(result.first_name + ' ' + result.last_name);
-        this.globals.actual_user.mail = result.email;
-        this.globals.actual_user.setProjects({});
+        this.globals.current_user = new _user__WEBPACK_IMPORTED_MODULE_6__["User"]();
+        this.globals.current_user.id = result.id;
+        this.globals.current_user.setName(result.first_name + ' ' + result.last_name);
+        this.globals.current_user.mail = result.email;
+        this.globals.current_user.setProjects({});
     }
 };
 LoginService.ctorParameters = () => [
@@ -1234,7 +1234,7 @@ let MainComponent = class MainComponent {
         this.router = router;
     }
     ngOnInit() {
-        if (this.globals.actual_user == undefined || this.globals.actual_user.id == null) {
+        if (this.globals.current_user == undefined || this.globals.current_user.id == null) {
             this.getUserInfo();
         }
         this.getUserProjects();
@@ -1266,7 +1266,7 @@ let MainComponent = class MainComponent {
             for (const project of result2) {
                 projects[project.name] = project.id;
             }
-            this.globals.actual_user.setProjects(projects);
+            this.globals.current_user.setProjects(projects);
         }, error => {
             alert('Error getting user projects.');
         });
@@ -1764,7 +1764,7 @@ let SidebarComponent = class SidebarComponent {
         let num = 1;
         while (!inserted) {
             if (this.globals.active_projects.indexOf(project, 0) === -1 &&
-                this.objectKeys(this.globals.actual_user.projects).indexOf(project, 0) === -1) {
+                this.objectKeys(this.globals.current_user.projects).indexOf(project, 0) === -1) {
                 this.globals.active_projects.push(project);
                 this.globals.visible_project = project;
                 inserted = true;

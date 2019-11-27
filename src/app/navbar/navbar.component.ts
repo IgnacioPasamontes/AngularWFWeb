@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Globals } from '../globals';
 import { LoginService } from '../login/login.service';
 import { stringify } from 'querystring';
+import { User } from '../user';
 
 @Component({
   selector: 'app-navbar',
@@ -33,7 +34,8 @@ export class NavbarComponent implements OnInit {
         this.loginService.logout(csrftoken).subscribe(
         result => {
           alert("You have logged out successfully.");
-          this.router.navigate(['/']);
+          this.globals.current_user = new User();
+          this.router.navigate(['login']);
         },
         error => {alert("An error happened while logging out.")}
         );},

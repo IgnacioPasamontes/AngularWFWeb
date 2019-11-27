@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from './user';
 let Globals = class Globals {
     constructor() {
-        this.actual_user = new User();
+        this.current_user = new User();
         this.active_projects = [];
         this.visible_project = '';
         this.operatorId = '';

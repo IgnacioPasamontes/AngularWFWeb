@@ -109,11 +109,11 @@ export class LoginService {
   }
 
   setActualUserGlobals(result) {
-    this.globals.actual_user = new User();
-    this.globals.actual_user.id = result.id;
-    this.globals.actual_user.setName(result.first_name+' '+result.last_name);
-    this.globals.actual_user.mail = result.email;
-    this.globals.actual_user.setProjects({});
+    this.globals.current_user = new User();
+    this.globals.current_user.id = result.id;
+    this.globals.current_user.setName(result.first_name+' '+result.last_name);
+    this.globals.current_user.mail = result.email;
+    this.globals.current_user.setProjects({});
   }
   
 

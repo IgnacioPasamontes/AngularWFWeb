@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Globals } from '../globals';
+import { NodeInfoService } from '../node-info/node-info.service';
 
 @Component({
   selector: 'app-tabs',
@@ -9,7 +10,8 @@ import { Globals } from '../globals';
 export class TabsComponent implements OnInit {
 
 
-  constructor( public globals: Globals) { }
+  constructor( public globals: Globals, 
+              private node : NodeInfoService,) { }
   
 
 
@@ -26,6 +28,7 @@ export class TabsComponent implements OnInit {
     }
     this.globals.active_projects = [].concat(this.globals.active_projects);
     this.globals.visible_project = this.globals.active_projects[0];
+    this.node.freeBusyProject(this.globals.projects[project]);
 
   }
 

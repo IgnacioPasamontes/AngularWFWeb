@@ -77,7 +77,7 @@ let EachWorkflowComponent = class EachWorkflowComponent {
     ngAfterViewInit() {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             let nodes_info;
-            nodes_info = yield this.service.getProjectInfoSync(this.globals.actual_user.projects[this.projectName]);
+            nodes_info = yield this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
             for (const node of nodes_info) {
                 this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
             }
@@ -129,7 +129,7 @@ let EachWorkflowComponent = class EachWorkflowComponent {
         });
     }
     nodeInfo_selected(project, node_id) {
-        const project_id = this.globals.actual_user.projects[project];
+        const project_id = this.globals.current_user.projects[project];
         // GET ID PROJECT
         this.service.getNodeInfo(project_id, node_id).subscribe(result => {
             result['outputs'] = ELEMENT_DATA;

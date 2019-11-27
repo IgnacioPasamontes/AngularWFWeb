@@ -92,6 +92,6 @@
 </div>      
       
 <div mat-dialog-actions>
-    <button mat-button matDialogClose>No Thanks</button>
-    <button mat-button (click)="NodeCompleted(this.info.project,this.info.node_seq)" [mat-dialog-close]="">Ok</button>
+    <button mat-button [mat-dialog-close]="'cancel'">No Thanks</button>
+    <button mat-button (click)="NodeCompleted(this.info.project,this.info.node_seq)" [mat-dialog-close]="'OK'">Ok</button>
 </div>

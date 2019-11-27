@@ -4,7 +4,7 @@ import { INode } from './node';
 @Injectable()
 export class Globals {
   projects;
-  actual_user: User = new User();
+  current_user: User = new User();
   active_projects: Array<string> = [];
   visible_project = '';
   operatorId = '';

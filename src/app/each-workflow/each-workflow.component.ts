@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, AfterViewInit, ViewContainerRef, OnDestroy , OnChanges, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Globals } from '../globals';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
+import { NodeInfoService } from '../node-info/node-info.service';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -91,6 +92,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   constructor(public globals: Globals,
     public dialog: MatDialog,
+    private node: NodeInfoService,
     private service: EachWorkflowService) { }
 
 
@@ -111,7 +113,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   async ngAfterViewInit() {
     let nodes_info;
-      nodes_info = await this.service.getProjectInfoSync(this.globals.actual_user.projects[this.projectName]);
+      nodes_info = await this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
 
       for (const node of nodes_info) {
         this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
@@ -167,10 +169,13 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   nodeInfo_selected(project: string, node_id: number) {
+    const project_id = this.globals.current_user.projects[project]; // GET ID PROJECT
+    let busy = this.node.getNodeBusy(project_id, node_id);
 
-    const project_id = this.globals.actual_user.projects[project];
-    // GET ID PROJECT
-
+    if (busy) {
+      return;
+    }
+    
     this.service.getNodeInfo(project_id, node_id).subscribe(
       result => {
         result['outputs'] = ELEMENT_DATA;
@@ -189,6 +194,11 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
           data: result
         });
         dialogRef.afterClosed().subscribe(result => {
+          if (result === 'cancel' || result == undefined) {
+            this.node.setNodeAsBusy(project_id, node_id,false);
+          } else if (result === 'OK') {
+            this.node.setNodeAsBusy(project_id, node_id);
+          }
         });
       },
       error => {
@@ -205,7 +215,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
     this.service.saveNode (project_id, node_id, this.output, this.comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
-        console.log(result);
+
       }
     );
     this.globals.change =  !this.globals.change;

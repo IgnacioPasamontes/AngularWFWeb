@@ -21,7 +21,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    if(this.globals.actual_user == undefined || this.globals.actual_user.id == null) {
+    if(this.globals.current_user == undefined || this.globals.current_user.id == null) {
       this.getUserInfo();
     }
     this.getUserProjects();
@@ -63,7 +63,7 @@ export class MainComponent implements OnInit, OnDestroy {
         for (const project of result2) {
           projects[project.name] = project.id;
         }
-        this.globals.actual_user.setProjects(projects);
+        this.globals.current_user.setProjects(projects);
       },
       error => {
         alert('Error getting user projects.');

@@ -1,12 +1,12 @@
 import { Component, OnInit, ElementRef, ComponentRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
-import {Globals} from '../globals';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { Globals } from '../globals';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 
 
@@ -40,7 +40,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   // thus we ensure the data is fetched before rendering
 
   constructor(private el: ElementRef, public globals: Globals,
-              private service: NodeInfoService,
+              public service: NodeInfoService,
               public dialogRef: MatDialogRef<any>,
               @Inject(MAT_DIALOG_DATA) public data: Array<any>,
               ) {   }
@@ -68,20 +68,24 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   }
 
   NodeCompleted( project_id: number, node_id: number) {
+    this.service.setNodeAsBusy(project_id,node_id);
+    this.service.setNodeAsBusy(project_id,node_id,false);
 
     this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
       result => {
+        this.service.setNodeAsBusy(project_id,node_id,false);
         this.globals.change =  !this.globals.change;
       }
     );
     switch(node_id) { 
-      case 1: { 
-         this.node1.NodeCompleted(project_id);
-         break; 
+      case 1: {
+        this.service.setNodeAsBusy(project_id,node_id);
+        this.node1.NodeCompleted(project_id);
+        break; 
       } 
       default: { 
-         //statements; 
-         break; 
+        //statements; 
+        break; 
       } 
    } 
 

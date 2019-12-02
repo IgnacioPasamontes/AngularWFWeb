@@ -16,14 +16,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   user: string;
   user_password: string;
-  rememberme: boolean = false;
+  rememberme = false;
   success = false;
   error = false;
   private getuser_subscription: Subscription;
-  private getprojects_subscription: Subscription;
 
 
-  @ViewChild("tmpdiv",{static: true}) tmpdiv: ElementRef;
+  @ViewChild('tmpdiv', {static: true}) tmpdiv: ElementRef;
 
 
   constructor(private router: Router, public globals: Globals,
@@ -34,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   getUserInfo (csrftoken: string) {
-    const resume: boolean = false;
+    const resume = false;
     this.getuser_subscription = this.service.getUser(this.user,this.user_password, csrftoken, resume, this.rememberme).subscribe(
       result => {
         this.service.setActualUserGlobals(result);
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         } else {
           alert('Cannot login.');
         }
-        
+
       },
       () => {
         this.user_password = '';
@@ -58,18 +57,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.error = false;
     this.success = false;
     this.service.getUserCSRFToken().subscribe(csrf => {
-      let csrftoken : string = null;
+      let csrftoken: string = null;
       if (csrf.hasOwnProperty('CSRF_TOKEN')) {
 
         csrftoken = csrf.CSRF_TOKEN;
       }
       this.getUserInfo(csrftoken);
-    
+
     },
-      error => {
-          alert("Cannot retrieve CSRF token.");
+      () => {
+          alert('Cannot retrieve CSRF token.');
           return;
-    })
+    });
 
 
   }

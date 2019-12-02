@@ -19,7 +19,7 @@ export declare class ComponentPortal<T> {
     injector: Injector;
     constructor(component: ComponentType<T>, injector: Injector);
     /** Attach this portal to a host. */
-    attach(host: BasePortalHost, newestOnTop: boolean): ComponentRef<any>;
+    attach(host: BasePortalHost, newestOnTop: boolean): any;
     /** Detach this portal from its host */
     detach(): void;
     /** Whether this portal is attached to a host. */

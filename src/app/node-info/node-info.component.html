@@ -34,7 +34,7 @@
         </div>
     </div>
     <ng-container class="card" [ngSwitch]="this.info.node_id">
-        <app-node1-problem-formulation [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
+        <app-node1-problem-formulation [Editor_config]="this.Editor_config" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
         <ng-container *ngSwitchDefault>
             <div class="card">
                 <h5 class="card-header bg-light p-1">Resources</h5>
@@ -86,7 +86,7 @@
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div class="card-body p-0">
            <!--<textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="this.info.outputs_comments" rows="10"></textarea>-->
-            <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>
+            <ckeditor [editor]="Editor" [config]="this.Editor_config" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>
         </div>
     </div>
 </div>      

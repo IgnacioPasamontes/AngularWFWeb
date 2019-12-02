@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '../../assets/js/ckeditor/ckeditor.js';
 import { Node1ProblemFormulationService } from './node1-problem-formulation.service';
 import { Globals } from '../globals';
 import { NodeInfoService } from '../node-info/node-info.service';
@@ -11,6 +11,7 @@ import { NodeInfoService } from '../node-info/node-info.service';
 })
 export class Node1ProblemFormulationComponent implements OnInit {
   @Input() info;
+  @Input() Editor_config;
   @Output() problem_description : string;
   inline_problem_description = false;
   show_inline = false;

@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from '../../assets/js/ckeditor/ckeditor.js';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 
@@ -29,6 +29,22 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   dtOptions: DataTables.Settings = {};
   public Editor = ClassicEditor;
+  public Editor_config : Object = {
+    toolbar:['heading','bold','italic','link','bulletedList','numberedList',
+              'blockQuote','insertTable','undo','redo','custom','custom-element-tagname1'],
+    removePlugins: ['ImageToolbar','oEmbed'],
+    CustomElement:{
+      items:[
+        {
+          tag: 'tagname1',
+          placeholder: 'some text', 
+          attributes:{name:'ABCD'}, 
+          inline:false,
+          editable:false
+        }
+      ]
+    }
+  };
   dtTrigger: Subject<any> = new Subject();
 
   dataSource:any;
@@ -47,6 +63,8 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+
+    this.Editor.open_angular_file_upload_dialog = () => {};
 
     this.info = this.data;
 

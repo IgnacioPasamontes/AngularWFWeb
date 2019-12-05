@@ -31,7 +31,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   public Editor = ClassicEditor;
   public Editor_config : Object = {
     toolbar:['heading','bold','italic','link','bulletedList','numberedList',
-              'blockQuote','insertTable','undo','redo','custom','custom-element-tagname1'],
+              'blockQuote','insertTable','undo','redo','custom-element-tagname1'],
     removePlugins: ['ImageToolbar','oEmbed'],
     CustomElement:{
       items:[

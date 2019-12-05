@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { EditableComponent } from './editable/editable.component';
 import { ViewModeDirective } from './editable/view-mode.directive';
 import { EditModeDirective } from './editable/edit-mode.directive';
+import { EditableOnEnterDirective } from './editable/edit-on-enter.directive';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -55,6 +56,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     EditableComponent,
     ViewModeDirective,
     EditModeDirective,
+    EditableOnEnterDirective,
     KeysPipe,
     Node1ProblemFormulationComponent,
     WelcomeComponent

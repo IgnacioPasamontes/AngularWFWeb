@@ -1,0 +1,6 @@
+[submodule "ckeditor5-custom-element-molecule"]
+	path = ckeditor5-custom-element-molecule
+	url = git@github.com:phi-grib/ckeditor5-custom-element-molecule.git
+[submodule "ckeditor5-build-classic-custom"]
+	path = ckeditor5-build-classic-custom
+	url = git@github.com:phi-grib/ckeditor5-build-classic-custom.git

@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
-import * as ClassicEditor from '../../assets/js/ckeditor/ckeditor.js';
+import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 
@@ -64,7 +64,9 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.Editor.open_angular_file_upload_dialog = () => {};
+    this.Editor.open_angular_file_upload_dialog = (tagname: string) => {
+      alert(tagname+' added.');
+    };
 
     this.info = this.data;
 

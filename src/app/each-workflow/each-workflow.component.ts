@@ -9,7 +9,7 @@ import { NodeInfoService } from '../node-info/node-info.service';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
-import * as ClassicEditor from '../../assets/js/ckeditor/ckeditor.js';
+import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 
 declare var $: any;
 

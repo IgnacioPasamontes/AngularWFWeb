@@ -1,8 +1,9 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
-import * as ClassicEditor from '../../assets/js/ckeditor/ckeditor.js';
 import { Node1ProblemFormulationService } from './node1-problem-formulation.service';
 import { Globals } from '../globals';
 import { NodeInfoService } from '../node-info/node-info.service';
+
+import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 
 @Component({
   selector: 'app-node1-problem-formulation',

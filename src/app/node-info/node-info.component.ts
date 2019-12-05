@@ -40,7 +40,8 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
           placeholder: 'some text', 
           attributes:{name:'ABCD'}, 
           inline:false,
-          editable:false
+          editable:false,
+          exec_function: function (tagname: string) { alert(tagname+' added.'); }
         }
       ]
     }
@@ -63,10 +64,6 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-
-    this.Editor.open_angular_file_upload_dialog = (tagname: string) => {
-      alert(tagname+' added.');
-    };
 
     this.info = this.data;
 

@@ -1,6 +1,9 @@
 <div class="card">
         <h5 class="card-header bg-light p-1">Problem description</h5>
-        <div class="card-body p-0">
-            <ckeditor [editor]="Editor" [config]="this.Editor_config" [(ngModel)]="problem_description" [disabled]="this.inline_problem_description"></ckeditor>
+        <div id="smiles-micromodal-container">
+                <app-smiles-micromodal [id]="this.ckeditor_id+'-smiles-micromodal'"></app-smiles-micromodal>
+        </div>
+        <div id="upload-angular-container" class="card-body p-0">
+            <ckeditor [id]="this.ckeditor_id" [editor]="Editor" [config]="this.Editor_config" [(ngModel)]="problem_description" [disabled]="this.inline_problem_description"></ckeditor>
         </div>
 </div>

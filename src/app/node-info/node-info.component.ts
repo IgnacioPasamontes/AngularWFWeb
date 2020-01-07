@@ -31,9 +31,11 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   inline_output = false;
   show_inline = false;
   ckeditor_id: string;
-  public Editor_config : Object;
+  public Editor_config: Object;
+  public Editor_config_copy: Object;
   environment = environment;
   micromodal = MicroModal;
+  part = 0;
 
   dtOptions: DataTables.Settings = {};
   public Editor = ClassicEditor;
@@ -104,7 +106,8 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
       }
     };
 
-    
+    //deep copy
+    this.Editor_config_copy = $.extend(true,{},this.Editor_config);
     
 
 

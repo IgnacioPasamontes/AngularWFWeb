@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ComponentRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewContainerRef, ViewChild, AfterViewInit, Inject, NgZone, ComponentRef, ComponentFactoryResolver} from '@angular/core';
 import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
 import { Globals } from '../globals';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,10 +8,14 @@ import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
+import { environment } from '../../environments/environment';
+
+import MicroModal from 'micromodal';
 
 
-
-declare let jQuery: any;
+//declare let jQuery: any;
+//declare let $: any;
+declare let SmilesDrawer: any;
 
 @Component({
   selector: 'app-node-info',
@@ -26,46 +30,84 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   savecontent = false;
   inline_output = false;
   show_inline = false;
+  ckeditor_id: string;
+  public Editor_config : Object;
+  environment = environment;
+  micromodal = MicroModal;
 
   dtOptions: DataTables.Settings = {};
   public Editor = ClassicEditor;
-  public Editor_config : Object = {
-    toolbar:['heading','bold','italic','link','bulletedList','numberedList',
-              'blockQuote','insertTable','undo','redo','custom-element-tagname1'],
-    removePlugins: ['ImageToolbar','oEmbed'],
-    CustomElement:{
-      items:[
-        {
-          tag: 'tagname1',
-          placeholder: 'some text', 
-          attributes:{name:'ABCD'}, 
-          inline:false,
-          editable:false,
-          exec_function: function (tagname: string) { alert(tagname+' added.'); }
-        }
-      ]
-    }
-  };
   dtTrigger: Subject<any> = new Subject();
-
   dataSource:any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(Node1ProblemFormulationComponent,{static: false}) node1;
+  
+  
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(Node1ProblemFormulationComponent,{ static: false }) node1: Node1ProblemFormulationComponent;
   displayedColumns: string[];
   columnsToDisplay: string[];
   // We use this trigger because fetching the list of persons can be quite long,
   // thus we ensure the data is fetched before rendering
 
+
+
+  
   constructor(private el: ElementRef, public globals: Globals,
-              public service: NodeInfoService,
-              public dialogRef: MatDialogRef<any>,
+              public dialog: MatDialog,
+              public ngZone: NgZone,
+              @Inject(NodeInfoService) public service,
+              public dialogRef: MatDialogRef<NodeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Array<any>,
-              ) {   }
+              ) {  }
+
 
 
   ngOnInit() {
-
+    this.micromodal.init();
     this.info = this.data;
+    this.ckeditor_id = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_ouputs_comments';
+    
+    this.Editor_config = {
+      toolbar:['heading','bold','italic','link','bulletedList','numberedList',
+                'blockQuote','insertTable','undo','redo','custom-element-insert-molecule','custom-element-upload-table'],
+      removePlugins: ['ImageToolbar','oEmbed'],
+      CustomElement: {
+        items:[
+          {
+            tag: 'image',
+            placeholder: undefined, 
+            attributes:{src: '', alt: 'C1CCCCC1' },
+            toolname: 'insert-molecule',
+            label: 'Add molecule', 
+            inline: false,
+            editable: false,
+            component: this,
+            exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
+              alert(url);
+              
+            }
+          },
+          {
+            tag: 'table',
+            placeholder: undefined, 
+            attributes:{src: '', alt: 'C1CCCCC1' },
+            toolname: 'upload-table',
+            label: 'Add table from CSV', 
+            inline: false,
+            editable: false,
+            component: this,
+            exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
+              alert(url);
+              
+            }
+          }
+        ]
+      }
+    };
+
+    
+    
+
+
 
     if (this.info.inputs_comments == undefined) {this.info.inputs_comments = ''};
     if (this.info.outputs_comments == undefined) {this.info.outputs_comments = ''};
@@ -82,22 +124,25 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     // Add 'implements AfterViewInit' to the class.
     this.savecomment = true;
     this.savecontent = true;
+    
   }
 
-  NodeCompleted( project_id: number, node_id: number) {
-    this.service.setNodeAsBusy(project_id,node_id);
-    this.service.setNodeAsBusy(project_id,node_id,false);
+  NodeCompleted() {
+    const project_id = this.info.project;
+    const node_seq = this.info.node_seq;
+    this.service.setNodeAsBusy(project_id,project_id);
+    this.service.setNodeAsBusy(project_id,node_seq,false);
 
-    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_id]).subscribe(
+    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
-        this.service.setNodeAsBusy(project_id,node_id,false);
+        this.service.setNodeAsBusy(project_id,node_seq,false);
         this.globals.change =  !this.globals.change;
       }
     );
-    switch(node_id) { 
+    switch(node_seq) { 
       case 1: {
-        this.service.setNodeAsBusy(project_id,node_id);
-        this.node1.NodeCompleted(project_id);
+        this.service.setNodeAsBusy(project_id,node_seq);
+        this.node1.NodeCompleted();
         break; 
       } 
       default: { 

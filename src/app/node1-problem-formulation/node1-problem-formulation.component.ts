@@ -27,12 +27,13 @@ export class Node1ProblemFormulationComponent implements OnInit {
     this.problem_description = this.info.inputs_comments;
   }
 
-  NodeCompleted( project_id: number) {
-    const node_id = 1;
-    this.service.saveNode (this.info.project, this.problem_description,this.globals.node_csrf_token[project_id][node_id]).subscribe(
+  NodeCompleted() {
+    const project_id = this.info.project;
+    const node_seq = 1;
+    this.service.saveNode (project_id, this.problem_description,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
         this.globals.change =  !this.globals.change;
-        this.node.setNodeAsBusy(project_id,node_id,false);
+        this.node.setNodeAsBusy(project_id,node_seq,false);
       }
     );
      

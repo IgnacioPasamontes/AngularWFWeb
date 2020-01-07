@@ -17,7 +17,8 @@ import { CytoscapeModule } from 'ngx-cytoscape';
 import { KeysPipe } from './keys.pipe';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+//import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CKEditorComponent } from './ckeditor/ckeditor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -37,9 +38,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
+import { EachWorkflowService } from './each-workflow/each-workflow.service';
+import { Node1ProblemFormulationService } from './node1-problem-formulation/node1-problem-formulation.service';
+import { NodeInfoService } from './node-info/node-info.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { SmilesMicromodalComponent } from './smiles-micromodal/smiles-micromodal.component';
 
 
 @NgModule({
@@ -59,7 +64,9 @@ import { WelcomeComponent } from './welcome/welcome.component';
     EditableOnEnterDirective,
     KeysPipe,
     Node1ProblemFormulationComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    CKEditorComponent,
+    SmilesMicromodalComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +76,6 @@ import { WelcomeComponent } from './welcome/welcome.component';
     CytoscapeModule,
     DataTablesModule,
     ModalDialogModule.forRoot(),
-    CKEditorModule,
     BrowserAnimationsModule, // required animations module
     DragDropModule,
     MatTableModule,
@@ -87,7 +93,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
       preventDuplicates: true,
     }) // ToastrModule added
   ],
-  providers: [ Globals, LoginService, CookieService ],
+  providers: [ Globals, LoginService, CookieService, EachWorkflowService ,NodeInfoService, Node1ProblemFormulationService],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]
 })

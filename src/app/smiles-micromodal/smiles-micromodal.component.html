@@ -1,0 +1,29 @@
+<!-- [1] -->
+<div [id]="id" class="modal" aria-hidden="true">
+
+        <!-- [2] -->
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    
+            <!-- [3] -->
+            <div class="modal__container" role="dialog" aria-modal="true" [attr.aria-labelledby]="this.id+'-title'" >
+        
+        
+                <div class="modal__header">
+                    <h2 class="modal__title" [id]="this.id+'-title'">
+                        Enter SMILES:
+                    </h2>
+            
+                    <!-- [4] -->
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </div>
+        
+                <div [id]="this.id+'-content'">
+                <textarea id="modal-smiles-textarea" cols=50 rows=5></textarea>
+                </div>
+                <div class="modal__footer">
+                    <button id="ok-button" data-micromodal-close class="modal__btn modal__btn-primary">OK</button>
+                </div>
+        
+            </div>
+        </div>
+</div>

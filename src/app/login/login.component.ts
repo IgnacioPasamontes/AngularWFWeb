@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.router.navigate(['main']);
       },
       error => {
-        if (error.status === 401) {
+        if (error.status === 403) {
           alert('Invalid username or password.');
         } else {
           alert('Cannot login.');

@@ -14,15 +14,23 @@ export class Node1ProblemFormulationService {
     private loginService : LoginService,
     public globals: Globals) { }
 
-  saveNode(project: number, inputs: string, csrftoken?: string): Observable<any> {
+
+
+  getProblemDescription(project: number): Observable<any> {
+    const url: string = environment.baseUrl + 'project/' + project + '/problem_description/';
+    return this.http.get(url,{withCredentials: true});
+  }
+
+
+  saveNode(project: number, description: string, csrftoken?: string): Observable<any> {
     const node = 1;
     const formData = new FormData();
-    formData.append('inputs_comments', inputs);
+    formData.append('description', description);
     if (csrftoken !== null && csrftoken !== undefined) {
       formData.append(this.globals.csrftoken_form_input_name,csrftoken);
     }
     // formData.append('parameters',  this.model.parameters);
-    const url: string = environment.baseUrl  + 'project/' + project + '/node/' + node + '/';
+    const url: string = environment.baseUrl  + 'project/' + project + '/problem_description/';
     return this.http.post(url, formData,this.loginService.getPOSTHttpOptions());
 
   }

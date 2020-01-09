@@ -2,7 +2,7 @@ import { Injectable, Inject, ReflectiveInjector, ComponentFactoryResolver } from
 import { HttpClient}  from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Globals} from '../globals';
+import { Globals } from '../globals';
 import { LoginService } from '../login/login.service';
 import { CKEditorComponent } from '../ckeditor/ckeditor.component';
 

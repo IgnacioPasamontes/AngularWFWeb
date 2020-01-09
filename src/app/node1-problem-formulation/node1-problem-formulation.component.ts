@@ -42,9 +42,20 @@ export class Node1ProblemFormulationComponent implements OnInit {
       i++;
     });
 
-    
+    this.service.getProblemDescription(this.info.project).subscribe(
+      result => {
+        this.problem_description = result.description;
+      },
+      error => {
+        if (error.status === 404) {
+          this.problem_description = '';
+        } else {
+          alert('Error getting problem description');
+        }
+      }
+    );
 
-    this.problem_description = this.info.inputs_comments;
+    
   }
 
   NodeCompleted() {

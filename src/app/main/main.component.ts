@@ -46,7 +46,7 @@ export class MainComponent implements OnInit, OnDestroy {
           this.router.navigate(['login']);
             return;
         }
-        this.login.setActualUserGlobals(result);
+        this.login.setCurrentUserGlobals(result);
         
       },
       error => {

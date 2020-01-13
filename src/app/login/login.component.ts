@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     const resume = false;
     this.getuser_subscription = this.service.getUser(this.user,this.user_password, csrftoken, resume, this.rememberme).subscribe(
       result => {
-        this.service.setActualUserGlobals(result);
+        this.service.setCurrentUserGlobals(result);
         this.router.navigate(['main']);
       },
       error => {

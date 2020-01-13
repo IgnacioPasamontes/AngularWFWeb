@@ -28,7 +28,7 @@ export class TabsComponent implements OnInit {
     }
     this.globals.active_projects = [].concat(this.globals.active_projects);
     this.globals.visible_project = this.globals.active_projects[0];
-    this.node.freeBusyProject(this.globals.projects[project]);
+    this.node.freeBusyProject(this.globals.current_user.projects[project]);
 
   }
 
@@ -39,6 +39,7 @@ export class TabsComponent implements OnInit {
       this.globals.visible_project = project;
     }
   }
+
   visibleProject(project:string){
     this.globals.visible_project = project;
 

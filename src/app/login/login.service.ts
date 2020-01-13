@@ -108,7 +108,7 @@ export class LoginService {
     return null;
   }
 
-  setActualUserGlobals(result) {
+  setCurrentUserGlobals(result) {
     this.globals.current_user = new User();
     this.globals.current_user.id = result.id;
     this.globals.current_user.setName(result.first_name+' '+result.last_name);

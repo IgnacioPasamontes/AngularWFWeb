@@ -21,7 +21,7 @@
             </button>
             <div class="dropdown-menu" [ngClass]="{'disabled': objectKeys(this.globals.current_user.projects$ | async).length > 0 }">
                 <!--<div class="dropdown-divider"></div>-->
-                <a *ngFor="let name of objectKeys(this.globals.current_user.projects$ | async);" class="dropdown-item"  (click)="openProject(name)"> {{name}} </a>
+                <a *ngFor="let name of objectKeys(this.globals.current_user.projects$ | async);" class="dropdown-item"  (click)="swapProject(this.globals.visible_project, name)"> {{name}} </a>
             </div>
         </div>
     </div>

@@ -40,6 +40,15 @@ export class TabsComponent implements OnInit {
     }
   }
 
+  swapProject(from_project: string, to_project: string) {
+    if (typeof from_project !== 'undefined' && from_project !== null  && from_project != '') {
+      this.deleteProject(from_project);
+    }
+    if (typeof to_project !== 'undefined' && to_project !== null && to_project != '') {
+      this.openProject(to_project);
+    }
+  }
+
   visibleProject(project:string){
     this.globals.visible_project = project;
 

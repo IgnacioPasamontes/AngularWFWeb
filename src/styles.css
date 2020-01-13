@@ -27,4 +27,7 @@ body {
     z-index: 1;
     border-radius: 100%;
     pointer-events: none;
+    box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
 }

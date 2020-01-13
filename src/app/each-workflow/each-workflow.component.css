@@ -11,6 +11,9 @@
     background-color: #A5A5A5;
     cursor: pointer;
     color: whitesmoke;
+    box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
 }
 .card.node.checked {
     background-color:#FFB266;

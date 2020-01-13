@@ -160,10 +160,17 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     $('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12').connections({
       class: 'fast'
     });
+
+    //redraw connector lines when window size changes
     const that = this;
-    setTimeout(function() {
+    $(window).resize(function() {
       that.reDraw();
-    }, 200);
+    });
+
+    //redraw connector every 200 ms    
+    /*setInterval(function() {
+      this.reDraw();
+    }.bind(this), 200);*/
   }
 
 

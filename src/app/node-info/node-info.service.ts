@@ -48,7 +48,7 @@ export class NodeInfoService {
     
   }
 
-  freeBusyProject(project_id: number) {
+  freeBusyProject(project_id: number, subproject_type: string = null) {
     if (this.project_node_busy_count.hasOwnProperty(project_id)) {
       delete this.project_node_busy_count[project_id];
     }   

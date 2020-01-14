@@ -3,7 +3,7 @@
     <div>
         
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
-            <li *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="nav-item" (click)="visibleProject(project)">
+            <li *ngFor="let project of this.globals.active_projects.slice(); let i = index" class="nav-item" (click)="visibleProject(project)">
 
                 <a class="nav-link" [ngClass]="{'active show': project===this.globals.visible_project}" data-toggle="pill" href="#pills-{{project}}" role="tab" aria-controls="pills-Project1" aria-selected="true">
                         {{project}}<button type="button" class="close" aria-label="Close"(click)="deleteProject(project)">

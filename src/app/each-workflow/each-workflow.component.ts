@@ -9,6 +9,7 @@ import { NodeInfoService } from '../node-info/node-info.service';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
+import { TabsService } from '../tabs/tabs.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 
 declare var $: any;
@@ -93,6 +94,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   constructor(public globals: Globals,
     private dialog: MatDialog,
     private node: NodeInfoService,
+    private tabs : TabsService,
     private service: EachWorkflowService) { }
 
 
@@ -232,6 +234,19 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   onCloseHandled() {
     this.display = 'none';
+  }
+
+
+  openTD() {
+    const td_projectName = this.projectName+this.globals.td_project_suffix;
+    $('.card').connections('remove');
+    this.tabs.openProject(td_projectName);
+  }
+
+  openTK() {
+    const tk_projectName = this.projectName+this.globals.tk_project_suffix;
+    $('.card').connections('remove');
+    this.tabs.openProject(tk_projectName);
   }
 
   addColumn() {

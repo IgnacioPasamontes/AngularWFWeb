@@ -8,9 +8,12 @@ import { Globals } from '../globals';
 })
 export class WorkflowsComponent implements OnInit {
 
-  constructor( public globals: Globals) { }
+  subproject_suffix_separator_pattern : RegExp;
+  
+  constructor(public globals: Globals) { }
 
   ngOnInit() {
-  
+    this.subproject_suffix_separator_pattern = new RegExp('^.*'+RegExpEscape(this.globals.subproject_suffix_separator));
+
   }
 }

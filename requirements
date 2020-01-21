@@ -13,4 +13,7 @@ npm install ngx-toastr --save
 npm install @angular/animations --save
 npm install @angular/cdk --save
 npm install ngx-cookie-service --save
-npm install ckeditor5-custom-element
+npm install ckeditor5-custom-element --save
+npm install micromodal --save
+npm install css-element-queries --save
+

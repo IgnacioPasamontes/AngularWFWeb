@@ -15,7 +15,6 @@ export class EachWorkflowService {
   constructor(private http: HttpClient,
               private loginService : LoginService,
               public globals: Globals) { }
-  token: INode;
   /**
    * Call to the server to create a new model with the given name
    * @param model Name of the model to add
@@ -35,14 +34,19 @@ export class EachWorkflowService {
 
   async getNodeInfoSync(project: number, node: number) {
     const url: string = environment.baseUrl + 'project/' + project + '/node/' + node;
-    this.token = await this.http.get<INode>(url,{withCredentials: true}).toPromise();
-    return this.token;
+    let token = await this.http.get<INode>(url,{withCredentials: true}).toPromise();
+    return token;
   }
 
   async getProjectInfoSync(project: number) {
     const url: string = environment.baseUrl + 'project/' + project + '/status/';
-    this.token = await this.http.get<any>(url,{withCredentials: true}).toPromise();
-    return this.token;
+    let token = await this.http.get<any>(url,{withCredentials: true}).toPromise();
+    return token;
+  }
+
+  getProjectInfo(project: number) {
+    const url: string = environment.baseUrl + 'project/' + project + '/status/';
+    return this.http.get(url,{withCredentials: true});
   }
 
   saveNode(project: number, node: number, output: string, comments: string, csrftoken?: string): Observable<any> {

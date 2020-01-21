@@ -11,8 +11,10 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { EachWorkflowService } from './each-workflow.service';
 import { TabsService } from '../tabs/tabs.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
+import { ResizeSensor } from 'css-element-queries';
 
-declare var $: any;
+declare var $: JQueryStatic;
+//declare var resizeSensor: any;
 
 export interface PeriodicElement {
   name: string;
@@ -101,73 +103,103 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.updateCheckedNodes();
   }
-   ngOnChanges () {
+
+  ngOnChanges (changes) {
     if (this.visibleProject !== '') {
       if (this.projectName === this.visibleProject) {
-        this.ngAfterViewInit();
+        
+        if (changes.hasOwnProperty('visibleProject')) {
+          this.drawConnections();
+        }
+        if (changes.hasOwnProperty('change')) {
+          this.updateCheckedNodes();
+        }
       }
     }
   }
   ngOnDestroy() {
-    $('.' + this.projectName).connections('remove');
+    (<any>$('.' + this.projectName)).connections('remove');
   }
 
-  async ngAfterViewInit() {
+
+  async updateCheckedNodes() {
     let nodes_info;
-      nodes_info = await this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
+    nodes_info = await this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
 
-      for (const node of nodes_info) {
-        this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
-      }
-    $('.card').connections('remove');
+    for (const node of nodes_info) {
+      this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
+    }
+  }
 
-    $('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2').connections({
+  drawConnections() {
+    (<any>$('.' + this.projectName)).connections('remove');
+
+    (<any>$('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_2, #' + this.projectName + '_id_3').connections({
+    (<any>$('#' + this.projectName + '_id_2, #' + this.projectName + '_id_3')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_3, #' + this.projectName + '_id_4').connections({
+    (<any>$('#' + this.projectName + '_id_3, #' + this.projectName + '_id_4')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_4, #' + this.projectName + '_id_5').connections({
+    (<any>$('#' + this.projectName + '_id_4, #' + this.projectName + '_id_5')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_5, #' + this.projectName + '_id_6').connections({
+    (<any>$('#' + this.projectName + '_id_5, #' + this.projectName + '_id_6')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_6, #' + this.projectName + '_id_7').connections({
+    (<any>$('#' + this.projectName + '_id_6, #' + this.projectName + '_id_7')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_7, #' + this.projectName + '_id_8').connections({
+    (<any>$('#' + this.projectName + '_id_7, #' + this.projectName + '_id_8')).connections({
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_9').connections({
+    (<any>$('#' + this.projectName + '_id_9')).connections({
       from: '#' + this.projectName + '_id_8',
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_10').connections({
+    (<any>$('#' + this.projectName + '_id_10')).connections({
       from: '#' + this.projectName + '_id_8',
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_11').connections({
+    (<any>$('#' + this.projectName + '_id_11')).connections({
       from: '#' + this.projectName + '_id_9',
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_11').connections({
+    (<any>$('#' + this.projectName + '_id_11')).connections({
       from: '#' + this.projectName + '_id_10',
       class: 'fast'
     });
-    $('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12').connections({
+    (<any>$('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12')).connections({
       class: 'fast'
     });
+  }
+
+  ngAfterViewInit() {
+    this.updateCheckedNodes();
+    this.drawConnections();
+
+
+    
+    
+    //redraw connector lines when div.limit resizes
+    const that = this;
+    $(".limit").each(function(){
+      let resize_sensor = new ResizeSensor(this, function () {
+        that.reDraw();
+      })
+     
+    })
 
     //redraw connector lines when window size changes
-    const that = this;
-    $(window).resize(function() {
+    /*$(window).resize(function() {
       that.reDraw();
-    });
+    });*/
+    
+  
 
     //redraw connector every 200 ms    
     /*setInterval(function() {
@@ -217,7 +249,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   }
 
   reDraw() {
-    $('.' + this.projectName).connections('update');
+    (<any>$('.' + this.projectName)).connections('update');
   }
 
   NodeCompleted() {
@@ -239,13 +271,13 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
   openTD() {
     const td_projectName = this.projectName+this.globals.td_project_suffix;
-    $('.card').connections('remove');
+    (<any>$('.card')).connections('remove');
     this.tabs.openProject(td_projectName);
   }
 
   openTK() {
     const tk_projectName = this.projectName+this.globals.tk_project_suffix;
-    $('.card').connections('remove');
+    (<any>$('.card')).connections('remove');
     this.tabs.openProject(tk_projectName);
   }
 

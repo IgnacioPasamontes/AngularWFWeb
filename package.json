@@ -33,6 +33,7 @@
     "caniuse-lite": "^1.0.30001017",
     "connection-line": "^1.1.6",
     "core-js": "^3.6.1",
+    "css-element-queries": "^1.2.3",
     "cytoscape": "^3.12.1",
     "cytoscape-canvas": "^3.0.1",
     "datatables.net": "^1.10.20",

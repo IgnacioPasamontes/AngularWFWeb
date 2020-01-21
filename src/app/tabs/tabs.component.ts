@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Globals } from '../globals';
 import { TabsService } from './tabs.service';
 
+
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.css']
 })
+
 export class TabsComponent implements OnInit {
 
 
@@ -66,36 +68,11 @@ export class TabsComponent implements OnInit {
   }
   
 
+
+
   visibleProject(project:string){
-    $('.card').connections('remove');
     this.globals.previous_visible_project = this.globals.visible_project
     this.globals.visible_project = project;
-
-
-
-    /*const tk_class_name = this.globals.previous_visible_project.replace(
-      new RegExp(RegExpEscape(this.globals.tk_project_suffix)+'$'),
-      this.globals.tk_class_suffix
-    )
-
-    const td_class_name = this.globals.previous_visible_project.replace(
-      new RegExp(RegExpEscape(this.globals.td_project_suffix)+'$'),
-      this.globals.td_class_suffix
-    )
-
-
-    let class_name = this.globals.previous_visible_project;
-    if (tk_class_name !== class_name) {
-      class_name = tk_class_name;
-    } else if (td_class_name !== class_name) {
-      class_name = td_class_name;
-    }
-
-    setTimeout(function() {
-      $('.' + class_name).connections('update');
-    }.bind(this), 0);*/
-
-    
-
+    this.service.updateConnections();
   }
  }

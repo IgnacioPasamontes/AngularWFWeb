@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Globals } from '../globals';
 
+declare var RegExpEscape: any;
+
 @Component({
   selector: 'app-workflows',
   templateUrl: './workflows.component.html',

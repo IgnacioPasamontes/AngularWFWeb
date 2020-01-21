@@ -1,0 +1,7 @@
+- CKeditor5 (GPLv2 or later)
+- ckeditor5-custom-element (GPLv2 or later)
+- jquery (MIT)
+- jquery.flowchart (MIT)
+- jquery.connections (MIT)
+- jquery-ui (MIT)
+- smiles-drawer 1.0.2 (MIT)

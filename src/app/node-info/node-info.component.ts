@@ -43,7 +43,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   dataSource:any;
   
   
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(Node1ProblemFormulationComponent,{ static: false }) node1: Node1ProblemFormulationComponent;
   displayedColumns: string[];
   columnsToDisplay: string[];
@@ -116,13 +116,14 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     if (this.info.outputs_comments == undefined) {this.info.outputs_comments = ''};
 
     this.dataSource = new MatTableDataSource(this.data['outputs']);
-
     this.displayedColumns = Object.keys(this.data['outputs'][0]);
     this.columnsToDisplay = this.displayedColumns.slice();
-    this.dataSource.paginator = this.paginator;
+
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    
     // Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     // Add 'implements AfterViewInit' to the class.
     this.savecomment = true;

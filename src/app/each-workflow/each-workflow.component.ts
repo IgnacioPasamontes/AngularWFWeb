@@ -229,18 +229,25 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
         } else {
           this.globals.node_csrf_token[project_id][node_seq] = null;
         }
-
-        const dialogRef = this.dialog.open( NodeInfoComponent, {
-          width: '100%',
-          data: result,
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if (result === 'cancel' || result == undefined) {
-            this.node.setNodeAsBusy(project_id, node_seq,false);
-          } else if (result === 'OK') {
-            this.node.setNodeAsBusy(project_id, node_seq);
-          }
-        });
+        const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
+        this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
+          result_file_text => {
+            result['add_molecule_icon'] = result_file_text;
+            const dialogRef = this.dialog.open( NodeInfoComponent, {
+              width: '100%',
+              data: result,
+            });
+            dialogRef.afterClosed().subscribe(result => {
+              if (result === 'cancel' || result == undefined) {
+                this.node.setNodeAsBusy(project_id, node_seq,false);
+              } else if (result === 'OK') {
+                this.node.setNodeAsBusy(project_id, node_seq);
+              }
+            });
+          },
+          error => {
+            alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
+          });
       },
       error => {
         alert('Error getting node');

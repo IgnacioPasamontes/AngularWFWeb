@@ -49,6 +49,11 @@ export class EachWorkflowService {
     return this.http.get(url,{withCredentials: true});
   }
 
+  getAssetFileAsText(path: string) {
+    const url: string = '/assets/' + path;
+    return this.http.get(url,{responseType: "text", withCredentials: true});
+  }
+
   saveNode(project: number, node: number, output: string, comments: string, csrftoken?: string): Observable<any> {
     const formData = new FormData();
     formData.append('output', output);

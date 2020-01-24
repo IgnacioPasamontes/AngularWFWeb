@@ -73,8 +73,12 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getuser_subscription.unsubscribe();
-    this.getprojects_subscription.unsubscribe();
+    if (typeof this.getuser_subscription != 'undefined') {
+      this.getuser_subscription.unsubscribe();
+    }
+    if (typeof this.getprojects_subscription != 'undefined') {
+      this.getprojects_subscription.unsubscribe();
+    }
 
   }
 

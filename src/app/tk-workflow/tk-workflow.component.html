@@ -1,1 +1,216 @@
-<p>tk-workflow works!</p>
+<div class="limit">
+    <div class="p-5">
+        <div class="row">
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;"  [ngClass]="{'checked':this.checked.node22}" id="{{projectClass}}_id_22"    (dblclick)="nodeInfo_selected(projectName,22)">
+                            <div class="card-body">
+                                Assess <i>in vitro</i> biokinetics:
+                                <ul style="margin-bottom:0px;">
+                                    <li>Unbound treatment concentration</li>
+                                    <li>Intracellular concentration <i>in vitro</i></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div style="width:27%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;" [ngClass]="{'checked':this.checked.node23}" id="{{projectClass}}_id_23"    (dblclick)="nodeInfo_selected(projectName,23)">
+                            <div class="card-body">
+                                There is <i>in vitro</i> TK data<br>
+                                available for TC/SC(s)?<br>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div class=""  style="width:13%">
+                <div style="height:30%"></div>
+                <div style="" class="row {{projectClass}}" id="{{projectClass}}_node_23_no" style="width:50%">
+                    <!--<p style="padding-top:15%;padding-left:33%">Yes</p>-->
+                    <table class="align-self-center" style="width:100%;text-align: center">
+                            <tr>
+                                <td>No</td>
+                            </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="width:0%"></div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;" [ngClass]="{'checked':this.checked.node24}" id="{{projectClass}}_id_24"    (dblclick)="nodeInfo_selected(projectName,24)">
+                            <div class="card-body">
+                                    There is <i>in vivo TK</i> data
+                                    available for TC/SC(s)
+                                    suitable for IVIVE-PBPK
+                                    parameters derivation?
+                                    
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div style="height:8rem" class="row">
+            <div style="width:50%"></div>
+            <div>
+                <div style="height:6rem"></div>
+                <div class="row {{projectClass}}" id="{{projectClass}}_node_24_no">
+                        <!--<p style="padding-top:15%;padding-left:33%">Yes</p>-->
+                        <table class="align-self-center" style="width:100%;text-align: center">
+                                <tr>
+                                    <td>No</td>
+                                </tr>
+                        </table>
+                </div>
+            </div>
+            <div style="width:35%"></div>
+            <div>
+                <div style="height:20%"></div>
+                <div class="row {{projectClass}}" id="{{projectClass}}_node_24_yes" style="height:50%">
+                        <!--<p style="padding-top:15%;padding-left:33%">Yes</p>-->
+                        <table class="align-self-center" style="width:4rem;text-align: center">
+                                <tr>
+                                    <td>Yes</td>
+                                </tr>
+                        </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div style="width:35%"></div>
+            <div class=""  style="width:10%">
+                <div style="height:40%"></div>
+                <div style="" class="row {{projectClass}}" id="{{projectClass}}_node_23_yes" style="height:50%">
+                    <!--<p style="padding-top:15%;padding-left:33%">Yes</p>-->
+                    <table class="align-self-center" style="width:100%;text-align: center">
+                            <tr>
+                                <td>Yes</td>
+                            </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="width:25%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:75%;width:75%" [ngClass]="{'checked':this.checked.node26}" id="{{projectClass}}_id_26"    (dblclick)="nodeInfo_selected(projectName,26)">
+                            <div class="card-body">
+                                    <i>In vitro ADME</i> assays<br>
+                                    and/or<br>
+                                    QSAR predictions<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node25}" id="{{projectClass}}_id_25"    (dblclick)="nodeInfo_selected(projectName,25)">
+                            <div class="card-body">
+                                Reverse translation PBPK                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="width:20%"></div>
+            <div style="width:30%"></div>
+            <div style="width:20%"></div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node27}" id="{{projectClass}}_id_27"    (dblclick)="nodeInfo_selected(projectName,27)">
+                            <div class="card-body">
+                                Parametrize IVIVE-PBPK model                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="width:40%"></div>
+            <div style="width:30%"></div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node28}" id="{{projectClass}}_id_28"    (dblclick)="nodeInfo_selected(projectName,28)">
+                            <div class="card-body">
+                                Develop IVIVE-PBPK model                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="width:40%"></div>
+            <div style="width:30%"></div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node29}" id="{{projectClass}}_id_29"    (dblclick)="nodeInfo_selected(projectName,29)">
+                            <div class="card-body">
+                                <i>In vivo</i> data for at least one TC/SC                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">     
+            <div style="width:40%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:40%;width:40%" [ngClass]="{'checked':this.checked.node30}" id="{{projectClass}}_id_30"    (dblclick)="nodeInfo_selected(projectName,30)">
+                            <div class="card-body">
+                                qIVIVE                                                                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="width:30%"></div>
+            <div style="width:30%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node31}" id="{{projectClass}}_id_31"    (dblclick)="nodeInfo_selected(projectName,31)">
+                            <div class="card-body">
+                                Verification of IVIVE-PBPK<br>
+                                Model with in vivo data                                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">     
+            <div style="width:40%">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:80%;width:80%" [ngClass]="{'checked':this.checked.node32}" id="{{projectClass}}_id_32"    (dblclick)="nodeInfo_selected(projectName,32)">
+                            <div class="card-body">
+                                Human equivalent dose                                       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="width:30%"></div>
+            <div style="width:30%"></div>
+        </div>
+    </div>
+</div>
+

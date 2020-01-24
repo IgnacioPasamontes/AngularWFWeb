@@ -59,25 +59,11 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
               ) { }
 
   ngOnInit() {
-    /*const tk_class_name = this.projectName.replace(
-      new RegExp(RegExpEscape(this.globals.tk_project_suffix)+'$'),
-      this.globals.tk_class_suffix
-    )*/
-
     const td_class_name = this.projectName.replace(
       new RegExp(RegExpEscape(this.globals.td_project_suffix)+'$'),
       this.globals.td_class_suffix
     )
 
-    
-    /*let class_name = projectName;
-    if (tk_class_name !== class_name) {
-      class_name = tk_class_name;
-    } else if (td_class_name !== class_name) {
-      class_name = td_class_name;
-    }
-    this.projectClass = class_name; //also used for IDs
-    */
     this.projectClass = td_class_name; //also used for IDs
 
     //this.updateCheckedNodes();

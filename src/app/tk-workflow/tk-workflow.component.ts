@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResizeSensor } from 'css-element-queries';
 import { EachWorkflowService } from '../each-workflow/each-workflow.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 declare var RegExpEscape: any;
@@ -21,6 +22,8 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   @Input() change: boolean;
 
   projectClass: string; //also used for IDs
+
+  in_vitro_data_check: boolean;
 
   checked = {
     'node1': false,
@@ -40,7 +43,24 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     'node15': false,
     'node16': false,
     'node17': false,
-    'node18': false
+    'node18': false,
+    'node19': false,
+    'node20': false,
+    'node21': false,
+    'node22': false,
+    'node23': false,
+    'node24': false,
+    'node25': false,
+    'node26': false,
+    'node27': false,
+    'node28': false,
+    'node29': false,
+    'node30': false,
+    'node31': false,
+    'node32': false,
+    'node33': false,
+    'node34': false,
+
   };
 
   constructor(public globals: Globals,
@@ -71,6 +91,10 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     }
   }
 
+  inVitroDataCheckChange() {
+    console.log('check:');
+    console.log(this.in_vitro_data_check);
+  }
 
   ngOnDestroy() {
 
@@ -80,30 +104,57 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   drawConnections() {
     (<any>$('.' + this.projectClass)).connections('remove');
 
-    $('#' + this.projectClass + '_id_13, #' + this.projectClass + '_id_16').connections({
+    $('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_no').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_14, #' + this.projectClass + '_id_17').connections({
+    $('#' + this.projectClass + '_node_23_no, #' + this.projectClass + '_id_24').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_15, #' + this.projectClass + '_id_18').connections({
+    $('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_no').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_16, #' + this.projectClass + '_id_19').connections({
+    $('#' + this.projectClass + '_node_24_no, #' + this.projectClass + '_id_26').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_17, #' + this.projectClass + '_id_19').connections({
+    $('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_yes').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_18, #' + this.projectClass + '_id_20').connections({
+    $('#' + this.projectClass + '_node_24_yes, #' + this.projectClass + '_id_25').connections({
       class: 'fast'
     });
-    /*$('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_13').connections({
+    $('#' + this.projectClass + '_id_25, #' + this.projectClass + '_id_27').connections({
       class: 'fast'
     });
-    $('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_14').connections({
+    $('#' + this.projectClass + '_id_27, #' + this.projectClass + '_id_28').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_28, #' + this.projectClass + '_id_29').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_29, #' + this.projectClass + '_id_31').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_31, #' + this.projectClass + '_id_30').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_30, #' + this.projectClass + '_id_32').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_yes').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_node_23_yes, #' + this.projectClass + '_id_27').connections({
+      class: 'fast'
+    });
+    /*$('#' + this.projectClass + '_id_24, #' + this.projectClass + '_id_27').connections({
       class: 'fast'
     });*/
+    $('#' + this.projectClass + '_id_22, #' + this.projectClass + '_id_30').connections({
+      class: 'fast'
+    });
+    $('#' + this.projectClass + '_id_26, #' + this.projectClass + '_id_27').connections({
+      class: 'fast'
+    });
   }
 
   async updateCheckedNodes() {
@@ -116,8 +167,8 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   }
 
   ngAfterViewInit() {
-    (<any>$('.' + this.projectClass)).connections('remove');
     this.drawConnections();
+    
     //redraw connector lines when div.limit resizes
     const that = this;
     $(".limit").each(function(){

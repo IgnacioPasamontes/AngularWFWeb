@@ -2,7 +2,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { CytoscapeModule } from 'ngx-cytoscape';
 //import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -20,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { Globals } from './globals';
 
@@ -98,6 +99,7 @@ import { CookieService } from 'ngx-cookie-service';
     ReactiveFormsModule,
     MatDialogModule,
     MatCardModule,
+    MatCheckboxModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',

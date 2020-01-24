@@ -10,11 +10,13 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { environment } from '../../environments/environment';
 
+
 import MicroModal from 'micromodal';
 
 
 //declare let jQuery: any;
 //declare let $: any;
+declare var require: any;
 declare let SmilesDrawer: any;
 
 @Component({
@@ -64,8 +66,10 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
+    
     this.micromodal.init();
     this.info = this.data;
+
     this.ckeditor_id = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_ouputs_comments';
     
     this.Editor_config = {
@@ -74,7 +78,8 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
       removePlugins: ['ImageToolbar','oEmbed'],
       CustomElement: {
         items:[
-          {
+          { 
+            icon: this.data['add_molecule_icon'],
             tag: 'image',
             placeholder: undefined, 
             attributes:{src: '', alt: 'C1CCCCC1' },

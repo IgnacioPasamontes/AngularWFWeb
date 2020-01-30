@@ -16,4 +16,9 @@ npm install ngx-cookie-service --save
 npm install ckeditor5-custom-element --save
 npm install micromodal --save
 npm install css-element-queries --save
+npm install xml2js --save
+npm install timers-browserify --save
+npm install stream-browserify --save
+npm install @types/xml2js --save-dev
+npm install --save @types/jquery --save-dev
 

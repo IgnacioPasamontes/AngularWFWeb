@@ -4,3 +4,6 @@
 [submodule "ckeditor5-build-classic-custom"]
 	path = ckeditor5-build-classic-custom
 	url = git@github.com:phi-grib/ckeditor5-build-classic-custom.git
+[submodule "multi-select"]
+	path = multi-select
+	url = git@github.com:lou/multi-select.git

@@ -1,0 +1,39 @@
+<div class="card">
+    <h5 class="card-header bg-light p-1">Name2CAS resolution</h5>
+
+    <div class="row m-5 form-group" style="margin-bottom:0px !important">
+        <table style="width:100%;vertical-align:bottom">
+            <tr>
+                <td style="width:9rem"><label style="margin-bottom:0px" for="name2cas_compound_name" >Compound name:</label></td>
+                <td><input id="name2cas_compound_name" class="form-control" [(ngModel)]="compound_name" type="text"></td>
+                <td style="width:12rem"><button class="btn btn-primary" [disabled]="cas_from_name_running" (click)="CASFromNameButton()">Search</button>
+                    <mat-spinner *ngIf="cas_from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width:9rem"><label style="margin-bottom:0px" for="name2cas_cas" >CAS registry number(s):</label></td>
+                <td style="width:auto"><!--<div class="block1">-->
+                        <select id="name2cas_cas" size=5 class="form-control" [(ngModel)]="selected_cas_int_id_list" multiple>
+                            <option *ngFor="let cas of cas_list" [ngValue]="cas.int_id"><b>{{cas.rgn}}</b>,<!-- input_type="{{cas.string_class}}",--> source="{{cas.resolver}}":"{{cas.classification}}"</option>
+                        </select>
+                        <!--</div>-->
+                </td>
+                <td style="width:12rem"><button class="btn" (click)="CASFromNameRemoveDuplicatesButton()">Remove duplicates</button><br>
+                    <button class="btn" (click)="CASFromNameDeleteButton()">Delete</button>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <div class="row m-5" style="margin-top:0px !important">
+        <div *ngIf="cas_from_name_executed">
+        <!--TODO: sentences about how many cas numbers have been found-->
+        <label *ngIf="cas_list.length === 1 && selected_cas_int_id_list.length === 0 && !cas_from_name_running" >1 CAS registry number entry found.</label>
+        <label *ngIf="cas_list.length !== 1 && selected_cas_int_id_list.length === 0 && !cas_from_name_running" >{{cas_list.length}} CAS registry number entries found.</label>
+        <label *ngIf="selected_cas_int_id_list.length === 1" [innerHTML]="this.cas_current_text"></label>
+        <!-- <label *ngIf="selected_cas_int_id_list.length === 1" >Selected 1 CAS registry number.</label> -->
+        <label *ngIf="selected_cas_int_id_list.length > 1" >Selected {{selected_cas_int_id_list.length}} CAS registry numbers.</label>
+        </div>
+    </div>
+</div>

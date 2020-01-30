@@ -12,6 +12,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -39,7 +40,7 @@ import { EditableComponent } from './editable/editable.component';
 import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
 import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
 import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
-
+import { TcCharacteritzationComponent } from './tc-characteritzation/tc-characteritzation.component';
 
 import { KeysPipe } from './keys.pipe';
 
@@ -53,6 +54,8 @@ import { EachWorkflowService } from './each-workflow/each-workflow.service';
 import { Node1ProblemFormulationService } from './node1-problem-formulation/node1-problem-formulation.service';
 import { NodeInfoService } from './node-info/node-info.service';
 import { CookieService } from 'ngx-cookie-service';
+import { TcCharacteritzationService } from './tc-characteritzation/tc-characteritzation.service';
+
 
 
 
@@ -79,6 +82,7 @@ import { CookieService } from 'ngx-cookie-service';
     SmilesMicromodalComponent,
     TkWorkflowComponent,
     TdWorkflowComponent,
+    TcCharacteritzationComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,13 +104,23 @@ import { CookieService } from 'ngx-cookie-service';
     MatDialogModule,
     MatCardModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',
       preventDuplicates: true,
     }) // ToastrModule added
   ],
-  providers: [ Globals, LoginService, CookieService, TabsService, EachWorkflowService ,NodeInfoService, Node1ProblemFormulationService],
+  providers: [
+    Globals,
+    LoginService,
+    CookieService,
+    TabsService,
+    EachWorkflowService,
+    NodeInfoService,
+    Node1ProblemFormulationService,
+    TcCharacteritzationService
+  ],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]
 })

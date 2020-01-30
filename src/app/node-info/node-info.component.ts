@@ -9,6 +9,7 @@ import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { environment } from '../../environments/environment';
+import { Subscription } from 'rxjs';
 
 
 import MicroModal from 'micromodal';
@@ -38,6 +39,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   environment = environment;
   micromodal = MicroModal;
   part = 0;
+  sub: Subscription;
 
   dtOptions: DataTables.Settings = {};
   public Editor = ClassicEditor;
@@ -142,10 +144,14 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     this.service.setNodeAsBusy(project_id,project_id);
     this.service.setNodeAsBusy(project_id,node_seq,false);
 
-    this.service.saveNode (this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
+    this.sub = this.service.saveNode(this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
         this.service.setNodeAsBusy(project_id,node_seq,false);
         this.globals.change =  !this.globals.change;
+      },
+      error => {},
+      () => {
+        this.sub.unsubscribe;
       }
     );
     switch(node_seq) { 

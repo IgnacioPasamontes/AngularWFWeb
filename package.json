@@ -55,7 +55,10 @@
     "popper.js": "^1.16.0",
     "rxjs": "^6.5.4",
     "sqlite3": "^4.1.1",
+    "stream-browserify": "^2.0.2",
+    "timers-browserify": "^2.0.11",
     "tslib": "^1.10.0",
+    "xml2js": "^0.4.23",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
@@ -68,6 +71,7 @@
     "@types/jasminewd2": "^2.0.8",
     "@types/jquery": "^3.3.31",
     "@types/node": "^8.9.5",
+    "@types/xml2js": "^0.4.5",
     "ckeditor5-custom-element": "^3.0.0",
     "codelyzer": "^5.2.1",
     "jasmine-core": "~2.99.1",

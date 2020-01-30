@@ -67,6 +67,7 @@
     </div>
     <ng-container class="card" [ngSwitch]="this.info.node_seq">
         <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
+        <app-tc-characteritzation [info]="this.info" *ngSwitchCase="2"></app-tc-characteritzation>
         <ng-container *ngSwitchDefault>
             <div class="card">
                 <h5 class="card-header bg-light p-1">Resources</h5>

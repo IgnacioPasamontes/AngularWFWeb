@@ -23,6 +23,7 @@
               "src/assets"
             ],
             "styles": [
+              "multi-select/css/multi-select.css",
               "node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.min.css",
               "node_modules/bootstrap-material-design-icons/css/material-icons.min.css",
               "node_modules/ng-drag-drop/style.css",
@@ -38,7 +39,8 @@
               "src/assets/js/jquery-ui.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
               "node_modules/jq-simple-connect/demos/js/jqSimpleConnect.min.js",
-              "src/assets/js/jquery-connections.js"
+              "src/assets/js/jquery-connections.js",
+              "src/assets/js/jquery.multi-select.js"
             ]
           },
           "configurations": {

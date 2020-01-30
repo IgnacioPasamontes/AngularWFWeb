@@ -3,6 +3,7 @@ import { Node1ProblemFormulationService } from './node1-problem-formulation.serv
 import { Globals } from '../globals';
 import { NodeInfoService } from '../node-info/node-info.service';
 import { environment } from '../../environments/environment';
+import { Subscription } from 'rxjs';
 
 //import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import MicroModal from 'micromodal';

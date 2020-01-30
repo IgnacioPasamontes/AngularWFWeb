@@ -39,6 +39,7 @@
               "src/assets/js/jquery-ui.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
               "node_modules/jq-simple-connect/demos/js/jqSimpleConnect.min.js",
+              "node_modules/smiles-drawer/dist/smiles-drawer.min.js",
               "src/assets/js/jquery-connections.js",
               "src/assets/js/jquery.multi-select.js"
             ]

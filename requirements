@@ -19,6 +19,7 @@ npm install css-element-queries --save
 npm install xml2js --save
 npm install timers-browserify --save
 npm install stream-browserify --save
+npm install smiles-drawer --save
 npm install @types/xml2js --save-dev
 npm install --save @types/jquery --save-dev
 

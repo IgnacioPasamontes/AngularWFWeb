@@ -54,6 +54,7 @@
     "ngx-toastr": "^11.2.1",
     "popper.js": "^1.16.0",
     "rxjs": "^6.5.4",
+    "smiles-drawer": "^1.1.22",
     "sqlite3": "^4.1.1",
     "stream-browserify": "^2.0.2",
     "timers-browserify": "^2.0.11",

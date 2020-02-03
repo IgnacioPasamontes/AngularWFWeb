@@ -22,36 +22,7 @@
                             <div class="col-6">
                                 <div>
                                     <h6>Content:</h6>
-                                    <ng-container [ngSwitch]="i">
-                                        <ng-container *ngSwitchCase="0">
-                                            <div [innerHTML]="info.content"></div>                                        </ng-container>
-                                        <ng-container *ngSwitchDefault>
-                                            <p><b>Output:</b></p>
-                                            <table>
-                                                <tr><th>Position</th><th>Name</th><th>Weight</th><th>Symbol</th></tr>
-                                                <tr><td>1</td><td>Hydrogen</td><td>1.0079</td><td>H</td></tr>
-                                                <tr><td>2</td><td>Helium</td><td>4.0026</td><td>He</td></tr>
-                                                <tr><td>3</td><td>Lithium</td><td>6.941</td><td>Li</td></tr>
-                                                <tr><td>4</td><td>Beryllium</td><td>9.0122</td><td>Be</td></tr>
-                                                <tr><td>5</td><td>Boron</td><td>10.811</td><td>B</td></tr>
-                                                <tr><td>6</td><td>Carbon</td><td>12.0107</td><td>C</td></tr>
-                                                <tr><td>7</td><td>Nitrogen</td><td>14.0067</td><td>N</td></tr>
-                                                <tr><td>8</td><td>Oxygen</td><td>15.9994</td><td>O</td></tr>
-                                                <tr><td>9</td><td>Fluorine</td><td>18.9984</td><td>F</td></tr>
-                                                <tr><td>10</td><td>Neon</td><td>20.1797</td><td>Ne</td></tr>
-                                                <tr><td>11</td><td>Sodium</td><td>22.9897</td><td>Na</td></tr>
-                                                <tr><td>12</td><td>Magnesium</td><td>24.305</td><td>Mg</td></tr>
-                                                <tr><td>13</td><td>Aluminum</td><td>26.9815</td><td>Al</td></tr>
-                                                <tr><td>14</td><td>Silicon</td><td>28.0855</td><td>Si</td></tr>
-                                                <tr><td>15</td><td>Phosphorus</td><td>30.9738</td><td>P</td></tr>
-                                                <tr><td>16</td><td>Sulfur</td><td>32.065</td><td>S</td></tr>
-                                                <tr><td>17</td><td>Chlorine</td><td>35.453</td><td>Cl</td></tr>
-                                                <tr><td>18</td><td>Argon</td><td>39.948</td><td>Ar</td></tr>
-                                                <tr><td>19</td><td>Potassium</td><td>39.0983</td><td>K</td></tr>
-                                                <tr><td>20</td><td>Calcium</td><td>40.078</td><td>Ca</td></tr>
-                                            </table>
-                                        </ng-container>
-                                    </ng-container>
+                                         <div [innerHTML]="info.content"></div>
                                 </div>       
                             </div>
                             <div class="col-6">
@@ -83,35 +54,7 @@
             <div class="card">
                 <h5 class="card-header bg-light p-1">Output</h5>
                 <div class="card-body p-0">
-                    <div class="mat-elevation-z8">
-                        <button mat-raised-button (click)="addColumn()"> Add column </button>
-                        <button mat-raised-button (click)="removeColumn()"> Remove column </button>
-                        <button mat-raised-button (click)="shuffle()"> Shuffle </button>
-                        <div>
-                        <table mat-table [dataSource]="this.dataSource" class="mat-elevation-z8" matSort>
-                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> {{column}} </th>
-                            <td mat-cell *matCellDef="let element;let index = index"> 
-                                <editable>
-                                    <ng-template viewMode>
-                                        {{element[column]}}
-                                    </ng-template>
-                                    <ng-template editMode>
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput [formControl]="getControl(index, column)">
-                                        </mat-form-field>
-                                        <!-- <input  [formControl]="getControl(index, 'name')" focusable editableOnEnter> -->
-                                    </ng-template>
-                                </editable>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-                        </table>
-                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-                        </div>
-                    </div> 
-                <!-- <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>-->
+                <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
                 </div>
             </div>
         </ng-container>    

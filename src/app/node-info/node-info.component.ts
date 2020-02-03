@@ -1,8 +1,6 @@
 import { Component, OnInit, ElementRef, ViewContainerRef, ViewChild, AfterViewInit, Inject, NgZone, ComponentRef, ComponentFactoryResolver} from '@angular/core';
 import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal-dialog';
 import { Globals } from '../globals';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
@@ -41,16 +39,10 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   part = 0;
   sub: Subscription;
 
-  dtOptions: DataTables.Settings = {};
-  public Editor = ClassicEditor;
-  dtTrigger: Subject<any> = new Subject();
-  dataSource:any;
+
+  public Editor = ClassicEditor;  
   
-  
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(Node1ProblemFormulationComponent,{ static: false }) node1: Node1ProblemFormulationComponent;
-  displayedColumns: string[];
-  columnsToDisplay: string[];
   // We use this trigger because fetching the list of persons can be quite long,
   // thus we ensure the data is fetched before rendering
 
@@ -122,14 +114,9 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     if (this.info.inputs_comments == undefined) {this.info.inputs_comments = ''};
     if (this.info.outputs_comments == undefined) {this.info.outputs_comments = ''};
 
-    this.dataSource = new MatTableDataSource(this.data['outputs']);
-    this.displayedColumns = Object.keys(this.data['outputs'][0]);
-    this.columnsToDisplay = this.displayedColumns.slice();
-
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     
     // Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     // Add 'implements AfterViewInit' to the class.
@@ -182,30 +169,6 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   onNoClick(): void {
     alert("Eeeeee");
     this.dialogRef.close();
-  }
-
-  addColumn() {
-    const randomColumn = Math.floor(Math.random() * this.displayedColumns.length);
-    this.columnsToDisplay.push(this.displayedColumns[randomColumn]);
-  }
-
-  removeColumn() {
-    if (this.columnsToDisplay.length) {
-      this.columnsToDisplay.pop();
-    }
-  }
-
-  shuffle() {
-    let currentIndex = this.columnsToDisplay.length;
-    while (0 !== currentIndex) {
-      let randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // Swap
-      let temp = this.columnsToDisplay[currentIndex];
-      this.columnsToDisplay[currentIndex] = this.columnsToDisplay[randomIndex];
-      this.columnsToDisplay[randomIndex] = temp;
-    }
   }
 
 }

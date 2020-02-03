@@ -219,7 +219,6 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     
     this.service.getNodeInfo(project_id, node_seq).subscribe(
       result => {
-        result['outputs'] = ELEMENT_DATA;
         result['node_seq'] = node_seq;
         if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
           this.globals.node_csrf_token[project_id] = {} ;

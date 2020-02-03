@@ -36,3 +36,8 @@
 .ms-container {
     width: 100% !important;
 }
+
+.cas2name-modal {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}

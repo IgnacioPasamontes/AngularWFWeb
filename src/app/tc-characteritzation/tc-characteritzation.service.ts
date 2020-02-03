@@ -24,7 +24,7 @@ export class TcCharacteritzationService {
     return this.http.get(url,{responseType: 'text', params: params});
   }
 
-  cactusXMLparsed(parseString_result: any) {
+  cactusXMLparsed(parseString_result: any, include_input_type: boolean = false) {
     let cas_list = [];
     let counter: number = 0;
     if (parseString_result.request.hasOwnProperty('data')) {
@@ -34,6 +34,7 @@ export class TcCharacteritzationService {
         let string_class = dat.$.string_class; //type of input string detected
         if (dat.hasOwnProperty('item')) {
           dat.item.forEach(it =>{
+
             let cas = {
               int_id: counter,
               resolver: resolver,
@@ -41,6 +42,13 @@ export class TcCharacteritzationService {
               rgn: it._,
               classification: it.$.classification
             };
+            let input_type_string : string = '';
+            if (include_input_type) {
+              let input_type_string = 'input_type="'+cas.string_class+'", ';
+            }
+            cas['string_rep'] = cas.rgn+', '+input_type_string+'source="'+cas.resolver+'":"'+cas.classification+'"';
+            cas['html_rep'] = '<b>'+cas.rgn+'</b>, '+input_type_string+'source="'+cas.resolver+'":"'+cas.classification+'"';
+    
             cas_list.push(cas);
             counter++;
           });

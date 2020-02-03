@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseString } from 'xml2js';
 import { TestBed } from '@angular/core/testing';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tc-characteritzation',
@@ -17,14 +18,19 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   cas_from_name_running: boolean = false;
   cas_from_name_executed: boolean = false;
   cas_current: Object;
-  cas_current_text: string = '';
-  cas_list: Array<Object>;
+  cas_list: Array<Object> = [];
+  cas_set: Array<Object> = [];
+  cas_text_dump: string;
+  cas_show_cactvs_data: boolean = true;
+  cas_copy_show_cactvs_data: boolean = true;
+  cas_copy_copy_selection_only: boolean;
   //cas_list: Array<Object> = [{rgn:'test',string_class:'test',resolver:'test',classification:'test'}];
   selected_cas_int_id_list: Array<number> = [];
   cas_from_name_subscription: Subscription;
 
 
-  constructor(private service: TcCharacteritzationService,) { }
+  constructor(private service: TcCharacteritzationService,
+              private modalService: NgbModal) { }
 
   ngOnInit() {
     
@@ -50,10 +56,32 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
         }.bind(this),
 
     });
+    this.update_multiselect();
+    
+  }
+
+  update_multiselect() {
     setTimeout(function() {
       (<any>$("#name2cas_cas")).multiSelect('refresh');
     },0);
-    
+  }
+
+  changeCASShowCactvsData() {
+    this.selected_cas_int_id_list = [];
+    this.cas_copy_show_cactvs_data = Boolean(this.cas_show_cactvs_data);
+    this.update_multiselect();
+    setTimeout(function() {
+      (<any>$("#name2cas_cas")).multiSelect('deselect_all');
+    },0);
+  }
+
+  updateCASSet(remove_duplicates : boolean = true) {
+    let cas_list = this.cas_list;
+    if (remove_duplicates) {
+      cas_list = this.removeCASDuplicates(cas_list);
+    }
+    this.cas_set = cas_list;
+
   }
 
   CASFromNameButton () {
@@ -61,11 +89,9 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
     this.cas_from_name_running = true;
     this.selected_cas_int_id_list = [];
     this.cas_current = undefined;
-    this.cas_current_text = '';
     this.cas_list = [];
-    setTimeout(function() {
-      (<any>$("#name2cas_cas")).multiSelect('refresh');
-    },0);
+    this.cas_set = [];
+    this.update_multiselect();
 
     this.cas_from_name_subscription = this.service.getCASFromName(this.compound_name).subscribe(result => {
       parseString(result, function(err,result) {
@@ -82,10 +108,9 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
           console.log(result);
         } else {
           this.cas_list = this.service.cactusXMLparsed(result);
+          this.updateCASSet();
           this.cas_from_name_executed = true;
-          setTimeout(function() {
-            (<any>$("#name2cas_cas")).multiSelect('refresh');
-          },0);
+          this.update_multiselect();
         }
 
         
@@ -124,45 +149,110 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
       } catch(e) {
         if (e !== BreakException) throw e;
       }
-      this.cas_current_text = 'Selected <b>'+this.cas_current['rgn']+'</b>, input_type="'+
-      this.cas_current['string_class']+'", source="'+this.cas_current['resolver']+'":"'+
-      this.cas_current['classification']+'"';
     }
   }
 
-  CASFromNameRemoveDuplicatesButton() {
+  removeCASDuplicates(cas_list: Array<Object>) {
     let j = {};
-    this.cas_list = this.cas_list.filter((value,index,array) => {
+    let cas_list_set = cas_list.filter((value,index,array) => {
       if (j.hasOwnProperty(value['rgn'])) {
         return false;
       }
       j[value['rgn']] = 0;
       return true
     });
+    return cas_list_set;
+  }
+
+  CASFromNameRemoveDuplicatesButton() {
+    
+    this.cas_list = this.removeCASDuplicates(this.cas_list);
+    this.updateCASSet(false);
     this.cas_current = undefined;
-    this.cas_current_text = '';
     this.selected_cas_int_id_list = [];
-    setTimeout(function() {
-      (<any>$("#name2cas_cas")).multiSelect('refresh');
-    }.bind(this),0);
+    this.update_multiselect();
+  }
+
+  
+  filterObjectListByKey(object_list: Array<Object>, key : string, values : Array<any>, inverted: boolean = false) {
+    let j_key = {};
+    values.forEach((value) => {
+      j_key[value] = 0;
+    })
+
+    let filtered_object_list = object_list.filter((value,index,array) => {
+      let is_in_j_key = j_key.hasOwnProperty(value[key]);
+      return inverted ? !is_in_j_key : is_in_j_key;
+    });
+    return filtered_object_list;
+  }
+  
+  
+  filterCASListByIntId(cas_list : Array<Object>, cas_int_id_list: Array<number>, inverted: boolean = false) {
+    let cas_int_id_list_number : Array<number> = [];
+    cas_int_id_list.forEach((cas_int_id) => {
+      cas_int_id_list_number.push(Number(cas_int_id));
+    });
+    return this.filterObjectListByKey(cas_list, 'int_id', cas_int_id_list_number, inverted);
   }
 
   CASFromNameDeleteButton() {
-    let j_int_id = {};
-    this.selected_cas_int_id_list.forEach((cas_int_id) => {
-      j_int_id[Number(cas_int_id)] = 0;
-    })
-
-    this.cas_list = this.cas_list.filter((value,index,array) => {
-      return !j_int_id.hasOwnProperty(value['int_id']);
-    });
+    if (this.cas_show_cactvs_data) {
+      this.cas_list = this.filterCASListByIntId(this.cas_list, this.selected_cas_int_id_list, true);
+    } else {
+      let selected_cas = this.filterCASListByIntId(this.cas_list,this.selected_cas_int_id_list);
+      let rgn_list : Array<string> = [];
+      selected_cas.forEach((cas) => {
+        rgn_list.push(cas['rgn']);
+      });
+      this.cas_list = this.filterObjectListByKey(this.cas_list,'rgn',rgn_list,true);
+    }
+    this.updateCASSet();
     this.cas_current = undefined;
-    this.cas_current_text = '';
     this.selected_cas_int_id_list = [];
 
-    setTimeout(function() {
-      (<any>$("#name2cas_cas")).multiSelect('refresh');
-    },0);
+    this.update_multiselect();
   }
 
+  updateCASTextDump(copy_selection_only: boolean = true, cas_rgn_only: boolean = false) {
+    let cas_list: Array<Object>;
+    if (copy_selection_only) {
+      cas_list = this.filterCASListByIntId(this.cas_list, this.selected_cas_int_id_list);
+    } else {
+      cas_list = this.cas_list;
+    }
+
+    this.cas_text_dump = '';
+
+    let key : string;
+    if (cas_rgn_only) {
+      key = 'rgn';
+      cas_list = this.removeCASDuplicates(cas_list);
+    } else {
+      key = 'string_rep';
+    }
+    cas_list.forEach((cas) => {
+      this.cas_text_dump += cas[key]+'\n';
+    })
+  }
+
+
+  openCopy(content, copy_selection_only: boolean = true) {
+    let closeResult: any;
+    this.cas_copy_copy_selection_only = copy_selection_only;
+    this.updateCASTextDump(copy_selection_only,!this.cas_copy_show_cactvs_data);
+    setTimeout(function() {
+      (<any>document.getElementById("name2cas-copy-textarea")).select();
+      document.execCommand("copy");
+    },0);
+    this.modalService.open(content, {ariaLabelledBy: 'name2cas-copy-cliboard-basic-title', centered: true, windowClass: 'cas2name-modal'}).result.then((result) => {
+      closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+        //ModalDismissReasons contains reason possible values
+    });
+  }
+
+  changeShowName2CasData() {
+    this.updateCASTextDump(this.cas_copy_copy_selection_only, !this.cas_copy_show_cactvs_data);
+  }
 }

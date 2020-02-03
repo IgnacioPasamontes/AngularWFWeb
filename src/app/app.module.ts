@@ -5,14 +5,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { CytoscapeModule } from 'ngx-cytoscape';
-//import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { CKEditorComponent } from './ckeditor/ckeditor.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -78,7 +79,6 @@ import { TcCharacteritzationService } from './tc-characteritzation/tc-characteri
     KeysPipe,
     Node1ProblemFormulationComponent,
     WelcomeComponent,
-    CKEditorComponent,
     SmilesMicromodalComponent,
     TkWorkflowComponent,
     TdWorkflowComponent,
@@ -105,6 +105,8 @@ import { TcCharacteritzationService } from './tc-characteritzation/tc-characteri
     MatCardModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    CKEditorModule,
+    NgbModalModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',

@@ -35,6 +35,11 @@
 
 .ms-container {
     width: 100% !important;
+    
+}
+
+.ms-list {
+    height: 100px !important;
 }
 
 .cas2name-modal {

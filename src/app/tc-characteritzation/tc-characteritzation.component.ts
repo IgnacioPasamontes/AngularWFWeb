@@ -43,6 +43,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
           $("#name2cas_cas").children("[selected='selected']").removeAttr('selected');
           $("#name2cas_cas").children("[selected='selected']").prop('selected',false);
           $("#ms-name2cas_cas").css('width','100%');
+          $("#ms-name2cas_cas").find(".ms-list").css('height','100px');
         },
       'afterSelect':
         function() {

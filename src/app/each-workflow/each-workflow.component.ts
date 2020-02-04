@@ -258,18 +258,6 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     (<any>$('.' + this.projectName)).connections('update');
   }
 
-  NodeCompleted() {
-    const project_id = this.project;
-    const node_seq = this.node_seq;
-    this.service.saveNode (project_id, node_seq, this.output, this.comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
-      result => {
-
-      }
-    );
-    this.globals.change =  !this.globals.change;
-    this.display = 'none';
-  }
-
   onCloseHandled() {
     this.display = 'none';
   }

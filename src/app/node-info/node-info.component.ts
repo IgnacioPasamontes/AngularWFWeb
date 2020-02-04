@@ -29,6 +29,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   inline_comments = false;
   savecomment = false;
   savecontent = false;
+  inline_input = false;
   inline_output = false;
   show_inline = false;
   ckeditor_id: string;
@@ -131,7 +132,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     this.service.setNodeAsBusy(project_id,project_id);
     this.service.setNodeAsBusy(project_id,node_seq,false);
 
-    this.sub = this.service.saveNode(this.info.project, this.info.node_seq, this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
+    this.sub = this.service.saveNode(this.info.project, this.info.node_seq, this.info.inputs_comments,this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
         this.service.setNodeAsBusy(project_id,node_seq,false);
         this.globals.change =  !this.globals.change;
@@ -153,7 +154,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
       } 
    } 
 
-    
+   this.inline_input = true;
     this.inline_output = true;
     this.inline_comments = true;
 
@@ -161,6 +162,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   }
 
   NodeEdit() {
+    this.inline_input = false;
     this.inline_output = false;
     this.inline_comments = false;
     return false;

@@ -5,8 +5,8 @@
          {{this.info.description}}
       </div>
     </div>
-    <div class="card" *ngIf="this.info.inputs.length>0">
-        <h5 class="card-header bg-light p-1">Inputs</h5>
+    <div class="card" *ngIf=" true || this.info.inputs.length>0">
+        <h5 class="card-header bg-light p-1">Previous inputs</h5>
         <div class="card-body p-0">
             <div class="card m-0" *ngFor="let info of this.info.inputs ; let i=index;"> 
                 <div class="card-header p-0">
@@ -36,29 +36,51 @@
             </div>
         </div>
     </div>
-    <ng-container class="card" [ngSwitch]="this.info.node_seq">
-        <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
-        <app-tc-characteritzation [info]="this.info" *ngSwitchCase="2"></app-tc-characteritzation>
-        <ng-container *ngSwitchDefault>
-            <div class="card">
-                <h5 class="card-header bg-light p-1">Resources</h5>
-                <div class="card-body p-2">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item p-1" *ngFor="let info of this.info.resources ;">
-                        {{this.info.resources_name}}  <a target="_blank" rel="noopener noreferrer" href="{{this.info.resources_link}}"> ( {{this.info.resources_link}} )</a>
-                        </li>
-                    
-                    </ul>
-                </div>
+    
+        
+        
+    <div class="card">
+        <h5 class="card-header bg-light p-1">Resources</h5>
+        <ng-container [ngSwitch]="this.info.node_seq">
+            <app-tc-characteritzation [info]="this.info" *ngSwitchCase="2"></app-tc-characteritzation>
+        </ng-container>
+        
+        <div *ngIf="this.info.resources.length > 0" class="card" style="margin-bottom:0px">
+            <h6 class="card-header bg-light p-1">Links</h6>
+            <div class="card-body p-2">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item p-1" *ngFor="let info of this.info.resources ;">
+                    {{this.info.resources_name}}  <a target="_blank" rel="noopener noreferrer" href="{{this.info.resources_link}}"> ( {{this.info.resources_link}} )</a>
+                    </li>
+                
+                </ul>
             </div>
-            <div class="card">
-                <h5 class="card-header bg-light p-1">Output</h5>
-                <div class="card-body p-0">
-                <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
-                </div>
-            </div>
-        </ng-container>    
-    </ng-container>
+        </div>
+         
+    </div>
+    <div class="card">
+            <h5 class="card-header bg-light p-1">Input</h5>
+            <ng-container [ngSwitch]="this.info.node_seq">
+                <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
+                <ng-container *ngSwitchDefault>
+                    <div class="card-body p-0">
+                    <ckeditor [editor]="Editor" [(ngModel)]="this.info.inputs_comments" [disabled]="inline_input"></ckeditor>
+                    </div>
+                </ng-container>
+            </ng-container>
+    </div>
+           
+    
+    <div class="card">
+            <h5 class="card-header bg-light p-1">Output</h5>
+            <ng-container [ngSwitch]="this.info.node_seq">
+                <ng-container *ngSwitchDefault>
+                    <div class="card-body p-0">
+                    <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
+                    </div>
+                </ng-container>
+            </ng-container>
+    </div>
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div id="smiles-micromodal-container">

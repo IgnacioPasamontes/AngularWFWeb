@@ -54,16 +54,4 @@ export class EachWorkflowService {
     return this.http.get(url,{responseType: "text", withCredentials: true});
   }
 
-  saveNode(project: number, node: number, output: string, comments: string, csrftoken?: string): Observable<any> {
-    const formData = new FormData();
-    formData.append('output', output);
-    formData.append('output_comments', comments);
-    if (csrftoken !== null && csrftoken !== undefined) {
-      formData.append(this.globals.csrftoken_form_input_name,csrftoken);
-    }
-    // formData.append('parameters',  this.model.parameters);
-    const url: string = environment.baseUrl  + 'project/' + project + '/node/' + node + '/';
-    return this.http.post(url, formData,this.loginService.getPOSTHttpOptions());
-
-  }
 }

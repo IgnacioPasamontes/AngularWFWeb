@@ -17,10 +17,11 @@ export class NodeInfoService {
               private loginService : LoginService,
               public globals: Globals) { }
 
-  saveNode(project: number, node: number, output: string, comments: string,
+  saveNode(project: number, node: number, input: string, output: string, comments: string,
     csrftoken?: string): Observable<any> {
     
     const formData = new FormData();
+    formData.append('inputs_comments', input);
     formData.append('outputs', output);
     formData.append('outputs_comments', comments);
     if (csrftoken !== null && csrftoken !== undefined) {

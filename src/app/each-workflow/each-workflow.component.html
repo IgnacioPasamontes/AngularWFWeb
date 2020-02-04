@@ -1,7 +1,7 @@
 
 <div class="limit">
     <div class="row p-5 justify-content-center">
-        <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node1}" id="{{projectName}}_id_1"    (dblclick)="nodeInfo_selected(projectName,1)">
+        <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node1}" id="{{projectName}}_id_1"    (click)="nodeInfo_selected(projectName,1)">
             <div class="card-body">
                 1.Problem formulation
             </div>
@@ -10,17 +10,17 @@
     <div class="row m-5 justify-content-center">
         <div class="card parent"   >
             <div class="card-body">
-                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node2}" id="{{projectName}}_id_2" (dblclick)="nodeInfo_selected(projectName,2)">
+                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node2}" id="{{projectName}}_id_2" (click)="nodeInfo_selected(projectName,2)">
                     <div class="card-body">
                     2.TC Characterization
                     </div>
                 </div>
-                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node3}" id="{{projectName}}_id_3" (dblclick)="nodeInfo_selected(projectName,3)">
+                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node3}" id="{{projectName}}_id_3" (click)="nodeInfo_selected(projectName,3)">
                     <div class="card-body">
                     Metabolism data gathering
                     </div>
                 </div>
-                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node4}" id="{{projectName}}_id_4" (dblclick)="nodeInfo_selected(projectName,4)">
+                <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node4}" id="{{projectName}}_id_4" (click)="nodeInfo_selected(projectName,4)">
                     <div class="card-body">
                     Initial RAX hypothesis
                     </div>
@@ -29,21 +29,21 @@
         </div>
     </div>
     <div class="row m-5 justify-content-center">
-        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node5}" id="{{projectName}}_id_5"    (dblclick)="nodeInfo_selected(projectName,5)">
+        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node5}" id="{{projectName}}_id_5"    (click)="nodeInfo_selected(projectName,5)">
             <div class="card-body">
                 3.SCs identification
             </div>
         </div>
     </div>
     <div class="row m-5 justify-content-center">
-        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node6}" id="{{projectName}}_id_6"    (dblclick)="nodeInfo_selected(projectName,6)">
+        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node6}" id="{{projectName}}_id_6"    (click)="nodeInfo_selected(projectName,6)">
             <div class="card-body">
                 4.SCs evaluation
             </div>
         </div>
     </div>
     <div class="row m-5 justify-content-center">
-        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node7}" id="{{projectName}}_id_7"    (dblclick)="nodeInfo_selected(projectName,7)">
+        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node7}" id="{{projectName}}_id_7"    (click)="nodeInfo_selected(projectName,7)">
             <div class="card-body">
                 Overarching RAX hypothesis
             </div>
@@ -53,20 +53,20 @@
         <div class="card parent2"   >
             <div class="card-body">
                 <div class="row" style="margin-left:0px;margin-right:0px;">
-                    <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node8}"  id="{{projectName}}_id_8"   (dblclick)="nodeInfo_selected(projectName,8)">
+                    <div class="card node m-5 {{projectName}}" [ngClass]="{'checked':this.checked.node8}"  id="{{projectName}}_id_8"   (click)="nodeInfo_selected(projectName,8)">
                         <div style="padding-left:3rem;padding-right:3rem;" class="card-body">
                         NAM testing and evaluation (in vitro & in silico)
                         </div>
                     </div>
                 </div>
                 <div class="row m-5" style="margin-left:0px;margin-right:0px;"> 
-                    <div style="box-sizing:content-box" class="col card node {{projectName}} text-center" [ngClass]="{'checked':this.checked.node9}" id="{{projectName}}_id_9"   (dblclick)="openTK()">
+                    <div style="box-sizing:content-box" class="col card node {{projectName}} text-center" [ngClass]="{'checked':this.checked.node9}" id="{{projectName}}_id_9"   (click)="openTK()">
                         <div class="card-body">
                         TK
                         </div>
                     </div>
                     <div class="col"></div>
-                    <div style="box-sizing:content-box" class="col card node {{projectName}} justify-content-end text-center" [ngClass]="{'checked':this.checked.node10}" id="{{projectName}}_id_10"   (dblclick)="openTD()">
+                    <div style="box-sizing:content-box" class="col card node {{projectName}} justify-content-end text-center" [ngClass]="{'checked':this.checked.node10}" id="{{projectName}}_id_10"   (click)="openTD()">
                         <div class="card-body">
                         TD
                         </div>
@@ -76,14 +76,14 @@
         </div>
     </div>
     <div class="row m-5 justify-content-center">
-        <div class="card node {{projectName}}" style="box-sizing:content-box"  [ngClass]="{'checked':this.checked.node11}" id="{{projectName}}_id_11"    (dblclick)="nodeInfo_selected(projectName,11)">
+        <div class="card node {{projectName}}" style="box-sizing:content-box"  [ngClass]="{'checked':this.checked.node11}" id="{{projectName}}_id_11"    (click)="nodeInfo_selected(projectName,11)">
             <div class="card-body">
                 5.Uncertainty assessment
             </div>
         </div>
     </div>
     <div class="row m-5 justify-content-center">
-        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node12}" id="{{projectName}}_id_12"    (dblclick)="nodeInfo_selected(projectName,12)">
+        <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node12}" id="{{projectName}}_id_12"    (click)="nodeInfo_selected(projectName,12)">
             <div class="card-body">
                 6.Data gap filling
             </div>

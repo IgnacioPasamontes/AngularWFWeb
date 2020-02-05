@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseString } from 'xml2js';
 import { TestBed } from '@angular/core/testing';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tc-characteritzation',
@@ -14,7 +14,8 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
 
   @Input() info;
-  compound_name: string;
+  search_string: string;
+  search_type: string = 'compound_name';
   cas_from_name_running: boolean = false;
   cas_from_name_executed: boolean = false;
   cas_current: Object;
@@ -24,9 +25,22 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   cas_show_cactvs_data: boolean = true;
   cas_copy_show_cactvs_data: boolean = true;
   cas_copy_copy_selection_only: boolean;
-  //cas_list: Array<Object> = [{rgn:'test',string_class:'test',resolver:'test',classification:'test'}];
+  //cas_list: Array<Object> = [{value:'test',string_class:'test',resolver:'test',classification:'test'}];
   selected_cas_int_id_list: Array<number> = [];
   cas_from_name_subscription: Subscription;
+
+  smiles_from_name_running: boolean = false;
+  smiles_from_name_executed: boolean = false;
+  smiles_current: Object;
+  smiles_list: Array<Object> = [];
+  smiles_set: Array<Object> = [];
+  smiles_text_dump: string;
+  smiles_show_cactvs_data: boolean = this.cas_show_cactvs_data;
+  smiles_copy_show_cactvs_data: boolean = true;
+  smiles_copy_copy_selection_only: boolean;
+  //smiles_list: Array<Object> = [{value:'test',string_class:'test',resolver:'test',classification:'test'}];
+  selected_smiles_int_id_list: Array<number> = [];
+  smiles_from_name_subscription: Subscription;
 
 
   constructor(private service: TcCharacteritzationService,
@@ -47,21 +61,54 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
         },
       'afterSelect':
         function() {
-          this.selected_cas_int_id_list = this.getSelectedFromMultiselect();
+          this.selected_cas_int_id_list = this.getSelectedCASFromMultiselect();
           this.setCurrentCasIntId();
         }.bind(this),
       'afterDeselect':
         function() {
-          this.selected_cas_int_id_list = this.getSelectedFromMultiselect();
+          this.selected_cas_int_id_list = this.getSelectedCASFromMultiselect();
           this.setCurrentCasIntId();
         }.bind(this),
 
     });
-    this.update_multiselect();
+    this.updateCASMultiselect();
+
+    (<any>$("#name2smiles_smiles")).multiSelect({
+      'afterInit': 
+        function() {
+          $("#name2smiles_smiles").children("[selected='selected']").removeAttr('selected');
+          $("#name2smiles_smiles").children("[selected='selected']").prop('selected',false);
+          $("#ms-name2smiles_smiles").css('width','100%');
+          $("#ms-name2smiles_smiles").find(".ms-list").css('height','100px');
+        },
+      'afterSelect':
+        function() {
+          this.selected_smiles_int_id_list = this.getSelectedSmilesFromMultiselect();
+          this.setCurrentSmilesIntId();
+        }.bind(this),
+      'afterDeselect':
+        function() {
+          this.selected_smiles_int_id_list = this.getSelectedSmilesFromMultiselect();
+          this.setCurrentSmilesIntId();
+        }.bind(this),
+
+    });
+    this.updateSmilesMultiselect();
     
   }
 
-  update_multiselect() {
+  CASandSmilesFromNameButton() {
+    this.CASFromNameButton();
+    this.smilesFromNameButton();
+  }
+
+  changeCASandSmilesShowCactvsData() {
+    this.smiles_show_cactvs_data = this.cas_show_cactvs_data;
+    this.changeCASShowCactvsData();
+    this.changeSmilesShowCactvsData()
+  }
+
+  updateCASMultiselect() {
     setTimeout(function() {
       (<any>$("#name2cas_cas")).multiSelect('refresh');
     },0);
@@ -70,7 +117,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   changeCASShowCactvsData() {
     this.selected_cas_int_id_list = [];
     this.cas_copy_show_cactvs_data = Boolean(this.cas_show_cactvs_data);
-    this.update_multiselect();
+    this.updateCASMultiselect();
     setTimeout(function() {
       (<any>$("#name2cas_cas")).multiSelect('deselect_all');
     },0);
@@ -92,9 +139,9 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
     this.cas_current = undefined;
     this.cas_list = [];
     this.cas_set = [];
-    this.update_multiselect();
+    this.updateCASMultiselect();
 
-    this.cas_from_name_subscription = this.service.getCASFromName(this.compound_name).subscribe(result => {
+    this.cas_from_name_subscription = this.service.getCASFromName(this.search_string,this.search_type).subscribe(result => {
       parseString(result, function(err,result) {
         if (err !== null) {
           alert('Error while parsing CACTVS query');
@@ -111,7 +158,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
           this.cas_list = this.service.cactusXMLparsed(result);
           this.updateCASSet();
           this.cas_from_name_executed = true;
-          this.update_multiselect();
+          this.updateCASMultiselect();
         }
 
         
@@ -127,7 +174,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getSelectedFromMultiselect() {
+  getSelectedCASFromMultiselect() {
     let selected_cas_int_id_list = [];
     $("#name2cas_cas").children("[selected='selected']").each(function() {
       selected_cas_int_id_list.push(Number((<string>$(this).val()).replace(/^[0-9]+:\s+/,''))+0);
@@ -156,10 +203,10 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   removeCASDuplicates(cas_list: Array<Object>) {
     let j = {};
     let cas_list_set = cas_list.filter((value,index,array) => {
-      if (j.hasOwnProperty(value['rgn'])) {
+      if (j.hasOwnProperty(value['value'])) {
         return false;
       }
-      j[value['rgn']] = 0;
+      j[value['value']] = 0;
       return true
     });
     return cas_list_set;
@@ -171,7 +218,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
     this.updateCASSet(false);
     this.cas_current = undefined;
     this.selected_cas_int_id_list = [];
-    this.update_multiselect();
+    this.updateCASMultiselect();
   }
 
   
@@ -204,15 +251,15 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
       let selected_cas = this.filterCASListByIntId(this.cas_list,this.selected_cas_int_id_list);
       let rgn_list : Array<string> = [];
       selected_cas.forEach((cas) => {
-        rgn_list.push(cas['rgn']);
+        rgn_list.push(cas['value']);
       });
-      this.cas_list = this.filterObjectListByKey(this.cas_list,'rgn',rgn_list,true);
+      this.cas_list = this.filterObjectListByKey(this.cas_list,'value',rgn_list,true);
     }
     this.updateCASSet();
     this.cas_current = undefined;
     this.selected_cas_int_id_list = [];
 
-    this.update_multiselect();
+    this.updateCASMultiselect();
   }
 
   updateCASTextDump(copy_selection_only: boolean = true, cas_rgn_only: boolean = false) {
@@ -227,7 +274,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
 
     let key : string;
     if (cas_rgn_only) {
-      key = 'rgn';
+      key = 'value';
       cas_list = this.removeCASDuplicates(cas_list);
     } else {
       key = 'string_rep';
@@ -238,7 +285,7 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   }
 
 
-  openCopy(content, copy_selection_only: boolean = true) {
+  openCASCopy(content, copy_selection_only: boolean = true) {
     let closeResult: any;
     this.cas_copy_copy_selection_only = copy_selection_only;
     this.updateCASTextDump(copy_selection_only,!this.cas_copy_show_cactvs_data);
@@ -256,4 +303,186 @@ export class TcCharacteritzationComponent implements OnInit, AfterViewInit {
   changeShowName2CasData() {
     this.updateCASTextDump(this.cas_copy_copy_selection_only, !this.cas_copy_show_cactvs_data);
   }
+
+  updateSmilesMultiselect() {
+    setTimeout(function() {
+      (<any>$("#name2smiles_smiles")).multiSelect('refresh');
+    },0);
+  }
+
+  changeSmilesShowCactvsData() {
+    this.selected_smiles_int_id_list = [];
+    this.smiles_copy_show_cactvs_data = Boolean(this.smiles_show_cactvs_data);
+    this.updateSmilesMultiselect();
+    setTimeout(function() {
+      (<any>$("#name2smiles_smiles")).multiSelect('deselect_all');
+    },0);
+  }
+
+  updateSmilesSet(remove_duplicates : boolean = true) {
+    let smiles_list = this.smiles_list;
+    if (remove_duplicates) {
+      smiles_list = this.removeSmilesDuplicates(smiles_list);
+    }
+    this.smiles_set = smiles_list;
+
+  }
+
+  smilesFromNameButton () {
+    if (this.smiles_from_name_running) {return}
+    this.smiles_from_name_running = true;
+    this.selected_smiles_int_id_list = [];
+    this.smiles_current = undefined;
+    this.smiles_list = [];
+    this.smiles_set = [];
+    this.updateSmilesMultiselect();
+
+    this.smiles_from_name_subscription = this.service.getSmilesFromName(this.search_string, this.search_type).subscribe(result => {
+      parseString(result, function(err,result) {
+        if (err !== null) {
+          alert('Error while parsing CACTVS query');
+          console.log('Error while parsing CACTVS query:');
+          console.log(err);
+          return;
+        }
+        
+        if (!result.hasOwnProperty('request')) {
+          alert("Error in CACTVS query");
+          console.log("Error in CACTVS query. Response:");
+          console.log(result);
+        } else {
+          this.smiles_list = this.service.cactusXMLparsed(result);
+          this.updateSmilesSet();
+          this.smiles_from_name_executed = true;
+          this.updateSmilesMultiselect();
+        }
+
+        
+      }.bind(this));
+      
+    },
+    error => {
+      alert("Error in CACTVS query");
+    },
+    () => {
+      this.smiles_from_name_running = false;
+      this.smiles_from_name_subscription.unsubscribe();
+    });
+  }
+
+  getSelectedSmilesFromMultiselect() {
+    let selected_smiles_int_id_list = [];
+    $("#name2smiles_smiles").children("[selected='selected']").each(function() {
+      selected_smiles_int_id_list.push(Number((<string>$(this).val()).replace(/^[0-9]+:\s+/,''))+0);
+    });
+    return selected_smiles_int_id_list;
+    
+  }
+
+  setCurrentSmilesIntId() {
+    if (this.selected_smiles_int_id_list.length === 1 ) {
+      const current_smiles_int_id = this.selected_smiles_int_id_list[0]
+      const BreakException = {};
+      try {
+        this.smiles_list.forEach((smiles) => {
+          if (smiles['int_id'] === current_smiles_int_id) {
+            this.smiles_current = smiles;
+            throw BreakException;
+          }
+        });
+      } catch(e) {
+        if (e !== BreakException) throw e;
+      }
+    }
+  }
+
+  removeSmilesDuplicates(smiles_list: Array<Object>) {
+    let j = {};
+    let smiles_list_set = smiles_list.filter((value,index,array) => {
+      if (j.hasOwnProperty(value['value'])) {
+        return false;
+      }
+      j[value['value']] = 0;
+      return true
+    });
+    return smiles_list_set;
+  }
+
+  smilesFromNameRemoveDuplicatesButton() {
+    
+    this.smiles_list = this.removeSmilesDuplicates(this.smiles_list);
+    this.updateSmilesSet(false);
+    this.smiles_current = undefined;
+    this.selected_smiles_int_id_list = [];
+    this.updateSmilesMultiselect();
+  }
+
+  filterSmilesListByIntId(smiles_list : Array<Object>, smiles_int_id_list: Array<number>, inverted: boolean = false) {
+    let smiles_int_id_list_number : Array<number> = [];
+    smiles_int_id_list.forEach((smiles_int_id) => {
+      smiles_int_id_list_number.push(Number(smiles_int_id));
+    });
+    return this.filterObjectListByKey(smiles_list, 'int_id', smiles_int_id_list_number, inverted);
+  }
+
+  smilesFromNameDeleteButton() {
+    if (this.smiles_show_cactvs_data) {
+      this.smiles_list = this.filterSmilesListByIntId(this.smiles_list, this.selected_smiles_int_id_list, true);
+    } else {
+      let selected_smiles = this.filterSmilesListByIntId(this.smiles_list,this.selected_smiles_int_id_list);
+      let smiles_list : Array<string> = [];
+      selected_smiles.forEach((smiles) => {
+        smiles_list.push(smiles['value']);
+      });
+      this.smiles_list = this.filterObjectListByKey(this.smiles_list,'value',smiles_list,true);
+    }
+    this.updateSmilesSet();
+    this.smiles_current = undefined;
+    this.selected_smiles_int_id_list = [];
+
+    this.updateSmilesMultiselect();
+  }
+
+  updateSmilesTextDump(copy_selection_only: boolean = true, smiles_smiles_only: boolean = false) {
+    let smiles_list: Array<Object>;
+    if (copy_selection_only) {
+      smiles_list = this.filterSmilesListByIntId(this.smiles_list, this.selected_smiles_int_id_list);
+    } else {
+      smiles_list = this.smiles_list;
+    }
+
+    this.smiles_text_dump = '';
+
+    let key : string;
+    if (smiles_smiles_only) {
+      key = 'value';
+      smiles_list = this.removeSmilesDuplicates(smiles_list);
+    } else {
+      key = 'string_rep';
+    }
+    smiles_list.forEach((smiles) => {
+      this.smiles_text_dump += smiles[key]+'\n';
+    })
+  }
+
+
+  openSmilesCopy(content, copy_selection_only: boolean = true) {
+    let closeResult: any;
+    this.smiles_copy_copy_selection_only = copy_selection_only;
+    this.updateSmilesTextDump(copy_selection_only,!this.smiles_copy_show_cactvs_data);
+    setTimeout(function() {
+      (<any>document.getElementById("name2smiles-copy-textarea")).select();
+      document.execCommand("copy");
+    },0);
+    this.modalService.open(content, {ariaLabelledBy: 'name2smiles-copy-cliboard-basic-title', centered: true, windowClass: 'smiles2name-modal'}).result.then((result) => {
+      closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+        //ModalDismissReasons contains reason possible values
+    });
+  }
+
+  changeShowName2SmilesData() {
+    this.updateSmilesTextDump(this.smiles_copy_copy_selection_only, !this.smiles_copy_show_cactvs_data);
+  }
+  
 }

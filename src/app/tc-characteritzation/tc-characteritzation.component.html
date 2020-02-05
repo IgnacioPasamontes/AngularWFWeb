@@ -1,13 +1,15 @@
 <div class="card">
-    <h6 class="card-header bg-light p-1">Name2CAS resolution</h6>
+    <h6 class="card-header bg-light p-1">Name2CAS/SMILES resolver</h6>
 
     <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
         <table style="width:100%;vertical-align:bottom">
             <tr>
 
-                    <td style="width:9rem"><label style="margin-bottom:0px" for="name2cas_compound_name" >Compound name:</label></td>
-                    <td><input id="name2cas_compound_name" class="form-control" name="compound_name" [(ngModel)]="compound_name" type="text"></td>
-                    <td style="width:auto"><button class="btn btn-primary" [disabled]="cas_from_name_running" (click)="CASFromNameButton()">Search</button>
+                    <td style="width:9rem">
+                        <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name:</label>
+                    </td>
+                    <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text"></td>
+                    <td style="width:6rem"><button class="btn btn-primary" [disabled]="cas_from_name_running" (click)="CASandSmilesFromNameButton()">Search</button>
                         <mat-spinner *ngIf="cas_from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
 
             </tr>
@@ -15,7 +17,7 @@
                 <td></td>
                 <td><br>
                     <div class="form-check">
-                        <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeCASShowCactvsData()" [(ngModel)]="cas_show_cactvs_data">
+                        <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeCASandSmilesShowCactvsData()" [(ngModel)]="cas_show_cactvs_data">
                         <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
                 </div><br></td>
                 <td></td>
@@ -26,7 +28,7 @@
                     <td style="width:auto">
                             <select id="name2cas_cas" size=5 class="form-control" name="selected_cas" [(ngModel)]="selected_cas_int_id_list" multiple>
                             <ng-container *ngIf="cas_show_cactvs_data"><option *ngFor="let cas of cas_list" [ngValue]="cas.int_id" [innerHTML]="cas.html_rep"></option></ng-container>
-                            <ng-container *ngIf="!cas_show_cactvs_data"><option *ngFor="let cas of cas_set" [ngValue]="cas.int_id" [innerHTML]="cas.rgn"></option></ng-container>
+                            <ng-container *ngIf="!cas_show_cactvs_data"><option *ngFor="let cas of cas_set" [ngValue]="cas.int_id">{{ cas.value }}</option></ng-container>
                             </select>
                             
                     </td>
@@ -36,8 +38,8 @@
             <tr>
                 <td><button class="btn" [disabled]="cas_list.length === 0 || !cas_show_cactvs_data" (click)="CASFromNameRemoveDuplicatesButton()">Remove duplicates</button><br></td>
                 <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="selected_cas_int_id_list.length === 0" (click)="CASFromNameDeleteButton()">Delete</button>
-                <button style="display:inline-block" class="btn" [disabled]="selected_cas_int_id_list.length === 0" (click)="openCopy(content,true)">Copy in clipboard</button>
-                <button style="display:inline-block" class="btn" [disabled]="cas_list.length === 0" (click)="openCopy(content,false)">Copy all in clipboard</button></td>
+                <button style="display:inline-block" class="btn" [disabled]="selected_cas_int_id_list.length === 0" (click)="openCASCopy(contentCAS,true)">Copy in clipboard</button>
+                <button style="display:inline-block" class="btn" [disabled]="cas_list.length === 0" (click)="openCASCopy(contentCAS,false)">Copy all in clipboard</button></td>
 
             </tr>
         </table>
@@ -48,17 +50,56 @@
         <!--TODO: sentences about how many cas numbers have been found-->
         <label *ngIf="cas_list.length !== 0 && selected_cas_int_id_list.length === 0 && !cas_from_name_running" >
             <ng-container *ngIf="cas_show_cactvs_data">{{cas_list.length}}</ng-container>
-            <ng-container *ngIf="!cas_show_cactvs_data">{{cas_set.length}}</ng-container> CAS registry number
-            <ng-container *ngIf="cas_list.length > 1">s</ng-container> found.
+            <ng-container *ngIf="!cas_show_cactvs_data">{{cas_set.length}}</ng-container> CAS registry number<!--
+         --><ng-container *ngIf="cas_list.length > 1">s</ng-container> found.
         </label>
         <label *ngIf="selected_cas_int_id_list.length === 1 && cas_show_cactvs_data" [innerHTML]="this.cas_current.html_rep"></label>
         <label *ngIf="selected_cas_int_id_list.length > 1 || selected_cas_int_id_list.length === 1 && !cas_show_cactvs_data" >Selected {{selected_cas_int_id_list.length}} CAS registry numbers.</label>
-        <label *ngIf="selected_cas_int_id_list.length === 1 && !cas_show_cactvs_data" >Selected 1 CAS registry number.</label>
+        </div>
+    </div>
+    
+    <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+        <table style="width:100%;vertical-align:bottom">
+            <tr>
+
+                    <td style="width:9rem"><label style="margin-bottom:0px" for="name2smiles_smiles" >SMILES:</label></td>
+                    <td style="width:auto">
+                            <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="selected_smiles_int_id_list" multiple>
+                            <ng-container *ngIf="smiles_show_cactvs_data"><option *ngFor="let smiles of smiles_list" [ngValue]="smiles.int_id" [innerHTML]="smiles.html_rep"></option></ng-container>
+                            <ng-container *ngIf="!smiles_show_cactvs_data"><option *ngFor="let smiles of smiles_set" [ngValue]="smiles.int_id">{{smiles.value}}</option></ng-container>
+                            </select>
+                            
+                    </td>
+                    <td style="width:6rem">
+                    </td>
+            </tr>
+            <tr>
+                <td><button class="btn" [disabled]="smiles_list.length === 0 || !smiles_show_cactvs_data" (click)="smilesFromNameRemoveDuplicatesButton()">Remove duplicates</button><br></td>
+                <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="selected_smiles_int_id_list.length === 0" (click)="smilesFromNameDeleteButton()">Delete</button>
+                <button style="display:inline-block" class="btn" [disabled]="selected_smiles_int_id_list.length === 0" (click)="openSmilesCopy(contentSmiles,true)">Copy in clipboard</button>
+                <button style="display:inline-block" class="btn" [disabled]="smiles_list.length === 0" (click)="openSmilesCopy(contentSmiles,false)">Copy all in clipboard</button></td>
+
+            </tr>
+        </table>
+    </div>
+    <br>
+    <div class="row m-5" style="margin-top:0px !important; margin-bottom:10px !important">
+        <div *ngIf="smiles_from_name_executed">
+        <!--TODO: sentences about how many smiles numbers have been found-->
+        <label *ngIf="smiles_list.length !== 0 && selected_smiles_int_id_list.length === 0 && !smiles_from_name_running" >
+            <ng-container *ngIf="smiles_show_cactvs_data">{{smiles_list.length}} SMILES found.</ng-container>
+            <ng-container *ngIf="!smiles_show_cactvs_data">{{smiles_set.length}} SMILES found.</ng-container>
+        </label>
+        <label *ngIf="selected_smiles_int_id_list.length === 1 && smiles_show_cactvs_data" [innerHTML]="this.smiles_current.html_rep"></label>
+        <label *ngIf="selected_smiles_int_id_list.length > 1 || selected_smiles_int_id_list.length === 1 && !smiles_show_cactvs_data" >Selected {{selected_smiles_int_id_list.length}} SMILES.</label>
+        <label *ngIf="selected_smiles_int_id_list.length === 1 && !smiles_show_cactvs_data" >Selected 1 SMILES.</label>
 
         </div>
     </div>
+
+
 </div>
-<ng-template #content let-modal>
+<ng-template #contentCAS let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="name2cas-copy-cliboard-basic-title">CAS registry number(s)</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
@@ -78,7 +119,7 @@
                 <p>The following CAS registry number data has been copied in your clipboard:</p>
             </div>
             <div class="input-group">
-                <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" rows=10 readonly [innerHTML]="cas_text_dump"></textarea>
+            <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" rows=10 readonly ="">{{ cas_text_dump }}</textarea>
             </div>
         </div>
     </div>
@@ -86,3 +127,31 @@
         <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('close')">Close</button>
     </div>
 </ng-template>
+<ng-template #contentSmiles let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="name2smiles-copy-cliboard-basic-title">smiles registry number(s)</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="form-check">
+                        <input class="form-check-input" id="show-name2smiles-copy-data" type="checkbox" (change)="changeShowName2SmilesData()" [(ngModel)]="smiles_copy_show_cactvs_data">
+                        <label class="form-check-label" for="show-name2smiles-copy-data">Show CACTVS data</label>
+                    </div>  
+                </div>
+                <br>
+                <div class="input-group">
+                    <p>The following SMILES data has been copied in your clipboard:</p>
+                </div>
+                <div class="input-group">
+                <textarea id="name2smiles-copy-textarea" style="width:100%" class="form-control" rows=10 readonly>{{ smiles_text_dump }}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('close')">Close</button>
+        </div>
+    </ng-template>

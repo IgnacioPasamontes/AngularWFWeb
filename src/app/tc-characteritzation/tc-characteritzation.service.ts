@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
 import { User } from '../user';
 
-
+declare let escapeHtmlString: any;
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +18,40 @@ export class TcCharacteritzationService {
 
   cactus_webservice_URL: string = 'https://cactus.nci.nih.gov/chemical/structure/';
 
-  getCASFromName(compound_name: string): Observable<any> {
-    const url: string = this.cactus_webservice_URL+encodeURIComponent(compound_name)+'/cas/xml';
-    let params = new HttpParams().append('resolver','name_by_opsin,name_by_cir');
+  getCASFromName(search_string: string, search_type: string = null): Observable<any> {
+    const resolvers = {
+      compound_name: 'name_by_opsin,name_by_cir',
+      SMILES: 'smiles'
+    }
+    let params: HttpParams;
+    const url: string = this.cactus_webservice_URL+encodeURIComponent(search_string)+'/cas/xml';
+    if (search_type !== null) {
+      params = new HttpParams().append('resolver',resolvers[search_type]);
+    } else {
+      params = new HttpParams();
+    }
+    
+    return this.http.get(url,{responseType: 'text', params: params});
+  }
+
+  getSmilesFromName(search_string: string, search_type: string = null): Observable<any> {
+    const resolvers = {
+      compound_name: 'name_by_opsin,name_by_cir',
+      SMILES: 'smiles'
+    }
+    let params: HttpParams;
+    const url: string = this.cactus_webservice_URL+encodeURIComponent(search_string)+'/smiles/xml';
+    if (search_type !== null) {
+      params = new HttpParams().append('resolver',resolvers[search_type]);
+    } else {
+      params = new HttpParams();
+    }
+    
     return this.http.get(url,{responseType: 'text', params: params});
   }
 
   cactusXMLparsed(parseString_result: any, include_input_type: boolean = false) {
-    let cas_list = [];
+    let item_list = [];
     let counter: number = 0;
     if (parseString_result.request.hasOwnProperty('data')) {
       parseString_result.request.data.forEach(dat => {
@@ -35,28 +61,41 @@ export class TcCharacteritzationService {
         if (dat.hasOwnProperty('item')) {
           dat.item.forEach(it =>{
 
-            let cas = {
+            let item = {
               int_id: counter,
               resolver: resolver,
               string_class: string_class,
-              rgn: it._,
+              value: it._,
               classification: it.$.classification
             };
             let input_type_string : string = '';
             if (include_input_type) {
-              let input_type_string = 'input_type="'+cas.string_class+'", ';
+              let input_type_string = 'input_type="'+item.string_class+'", ';
             }
-            cas['string_rep'] = cas.rgn+', '+input_type_string+'source="'+cas.resolver+'":"'+cas.classification+'"';
-            cas['html_rep'] = '<b>'+cas.rgn+'</b>, '+input_type_string+'source="'+cas.resolver+'":"'+cas.classification+'"';
+            item['string_rep'] = item.value;
+            item['html_rep'] = '<b>'+escapeHtmlString(item.value)+'</b>';
+            if (typeof item.resolver === 'undefined' && typeof item.resolver === 'undefined') {
+              item['string_rep'] = item.value;
+              item['html_rep'] = '<b>'+item.value+'</b>';
+            } else if (typeof item.resolver === 'undefined') {
+              item['string_rep'] += ', '+input_type_string+'source="NA":"'+item.classification+'"';
+              item['html_rep'] += ', '+input_type_string+'source="NA":"'+item.classification+'"';
+            } else if (typeof item.classification === 'undefined') {
+              item['string_rep'] += ', '+input_type_string+'source="'+item.resolver+'":"NA"';
+              item['html_rep'] += ', '+input_type_string+'source="'+item.resolver+'":"NA"';
+            } else {
+              item['string_rep'] += ', '+input_type_string+'source="'+item.resolver+'":"'+item.classification+'"';
+              item['html_rep'] += ', '+input_type_string+'source="'+item.resolver+'":"'+item.classification+'"';
+            }
     
-            cas_list.push(cas);
+            item_list.push(item);
             counter++;
           });
         }
 
       });
     }
-    return cas_list;
+    return item_list;
   }
 
 }

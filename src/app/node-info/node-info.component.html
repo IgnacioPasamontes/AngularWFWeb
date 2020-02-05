@@ -1,12 +1,12 @@
-<h1 mat-dialog-title> {{this.info.name}}</h1>
+<h1 mat-dialog-title style="margin-bottom: 0px;"> {{this.info.name}}</h1>
 <div mat-dialog-content>
-    <div class="card">
-      <div class="card-body">
+    <!--<div class="card">-->
+      <div style="padding-top: 0px;" class="card-body">
          {{this.info.description}}
       </div>
-    </div>
-    <div class="card" *ngIf=" true || this.info.inputs.length>0">
-        <h5 class="card-header bg-light p-1">Previous inputs</h5>
+    <!--</div>-->
+    <div class="card" *ngIf="this.info.inputs.length>0">
+        <h5 class="card-header bg-light p-1">Previous knowledge</h5>
         <div class="card-body p-0">
             <div class="card m-0" *ngFor="let info of this.info.inputs ; let i=index;"> 
                 <div class="card-header p-0">
@@ -58,22 +58,22 @@
         </div>
          
     </div>
-    <div class="card">
+    <!--<div class="card">
             <h5 class="card-header bg-light p-1">Input</h5>
             <ng-container [ngSwitch]="this.info.node_seq">
-                <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
                 <ng-container *ngSwitchDefault>
                     <div class="card-body p-0">
                     <ckeditor [editor]="Editor" [(ngModel)]="this.info.inputs_comments" [disabled]="inline_input"></ckeditor>
                     </div>
                 </ng-container>
             </ng-container>
-    </div>
+    </div>-->
            
     
     <div class="card">
-            <h5 class="card-header bg-light p-1">Output</h5>
+            <h5 class="card-header bg-light p-1">New knowledge</h5>
             <ng-container [ngSwitch]="this.info.node_seq">
+                <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
                 <ng-container *ngSwitchDefault>
                     <div class="card-body p-0">
                     <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
@@ -96,5 +96,5 @@
       
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="'cancel'">Cancel</button>
-    <button mat-button (click)="NodeCompleted()" [mat-dialog-close]="'OK'">Ok</button>
+    <button mat-button (click)="NodeCompleted()" [mat-dialog-close]="'OK'">OK</button>
 </div>

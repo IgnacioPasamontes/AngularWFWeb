@@ -18,10 +18,10 @@
                 </div>
         
                 <div [id]="this.id+'-content'">
-                <textarea id="modal-smiles-textarea" cols=50 rows=5></textarea>
+                <textarea [id]="'modal-smiles-textarea-'+id" cols=50 rows=5></textarea>
                 </div>
                 <div class="modal__footer">
-                    <button id="ok-button" data-micromodal-close class="modal__btn modal__btn-primary">OK</button>
+                    <button [id]="'ok-button-'+id" data-micromodal-close class="modal__btn modal__btn-primary">OK</button>
                 </div>
         
             </div>

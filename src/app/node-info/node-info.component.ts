@@ -32,9 +32,13 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   inline_input = false;
   inline_output = false;
   show_inline = false;
-  ckeditor_id: string;
+  ckeditor_id_outputs: string;
+  ckeditor_id_comments: string;
   public Editor_config: Object;
   public Editor_config_copy: Object;
+  public Editor_config_outputs: Object;
+  public Editor_config_comments: Object;
+  smiles_drawer_size : number = 100;
   environment = environment;
   micromodal = MicroModal;
   part = 0;
@@ -65,15 +69,17 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     this.micromodal.init();
     this.info = this.data;
 
-    this.ckeditor_id = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_ouputs_comments';
-    
+    this.ckeditor_id_outputs = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_outputs';
+    this.ckeditor_id_comments = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_outputs_comments';
+    /*'custom-element-upload-table'*/
     this.Editor_config = {
       toolbar:['heading','bold','italic','link','bulletedList','numberedList',
-                'blockQuote','insertTable','undo','redo','custom-element-insert-molecule','custom-element-upload-table'],
-      removePlugins: ['ImageToolbar','oEmbed'],
+                'blockQuote','insertTable','undo','redo','custom-element-insert-molecule','|',],
+      removePlugins: ['oEmbed'],
       CustomElement: {
         items:[
           { 
+            ckeditor_id: '',
             icon: this.data['add_molecule_icon'],
             tag: 'image',
             placeholder: undefined, 
@@ -89,6 +95,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
             }
           },
           {
+            ckeditor_id: '',
             tag: 'table',
             placeholder: undefined, 
             attributes:{src: '', alt: 'C1CCCCC1' },
@@ -108,7 +115,19 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
     //deep copy
     this.Editor_config_copy = $.extend(true,{},this.Editor_config);
-    
+    this.Editor_config_outputs = $.extend(true,{},this.Editor_config);
+    this.Editor_config_comments = $.extend(true,{},this.Editor_config);
+
+    let i = 0;
+    this.Editor_config_outputs['CustomElement'].items.forEach( (item) => {
+      this.Editor_config_outputs['CustomElement'].items[i].ckeditor_id = this.ckeditor_id_outputs;
+      i++;
+    });
+    i = 0;
+    this.Editor_config_comments['CustomElement'].items.forEach( (item) => {
+      this.Editor_config_comments['CustomElement'].items[i].ckeditor_id = this.ckeditor_id_comments;
+      i++;
+    });
 
 
 

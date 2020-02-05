@@ -75,20 +75,23 @@
             <ng-container [ngSwitch]="this.info.node_seq">
                 <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
                 <ng-container *ngSwitchDefault>
-                    <div class="card-body p-0">
-                    <ckeditor [editor]="Editor" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
+                    <div class="smiles-micromodal-container">
+                        <app-smiles-micromodal [id]="this.ckeditor_id_outputs+'-smiles-micromodal'"></app-smiles-micromodal>
+                    </div>
+                    <div class="upload-angular-container" class="card-body p-0">
+                        <ckeditor #ckeditor_dynamic_outputs [id]="this.ckeditor_id_outputs" [editor]="Editor" [config]="this.Editor_config_outputs" [(ngModel)]="this.info.outputs" [disabled]="inline_output"></ckeditor>
                     </div>
                 </ng-container>
             </ng-container>
     </div>
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
-        <div id="smiles-micromodal-container">
-            <app-smiles-micromodal [id]="this.ckeditor_id+'-smiles-micromodal'"></app-smiles-micromodal>
+        <div class="smiles-micromodal-container">
+            <app-smiles-micromodal [id]="this.ckeditor_id_comments+'-smiles-micromodal'"></app-smiles-micromodal>
         </div>
-        <div id="upload-angular-container" class="card-body p-0">
+        <div class="upload-angular-container" class="card-body p-0">
            <!--<textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="this.info.outputs_comments" rows="10"></textarea>-->
-            <ckeditor #ckeditor_dynamic [id]="this.ckeditor_id" [editor]="Editor" [config]="this.Editor_config" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>
+            <ckeditor #ckeditor_dynamic_comments [id]="this.ckeditor_id_comments" [editor]="Editor" [config]="this.Editor_config_comments" [(ngModel)]="this.info.outputs_comments" [disabled]="inline_comments"></ckeditor>
         </div>
     </div>
     <!--<footer class="text-right" style="font-size:0.75rem">Benzene icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></footer>-->

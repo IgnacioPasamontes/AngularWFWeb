@@ -20,7 +20,7 @@ export class Node1ProblemFormulationComponent implements OnInit {
   @Output() problem_description : string;
   inline_problem_description = false;
   show_inline = false;
-
+  smiles_drawer_size : number = 100;
   data: any;
   environment = environment;
   micromodal = MicroModal;
@@ -39,6 +39,7 @@ export class Node1ProblemFormulationComponent implements OnInit {
     this.ckeditor_id = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_problem_formulation';
     let i = 0;
     this.Editor_config.CustomElement.items.forEach( (item) => {
+      this.Editor_config.CustomElement.items[i].ckeditor_id = this.ckeditor_id;
       this.Editor_config.CustomElement.items[i].component = this;
       i++;
     });

@@ -12,6 +12,13 @@ body {
     right:0; 
     left:0;
 }
+
+.node .card-body {
+    text-align: center !important;
+}
+.node .card-body li {
+    text-align: left !important;
+}
 .container-fluid {
     height: 100%;
 }

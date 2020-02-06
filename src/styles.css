@@ -44,3 +44,7 @@ body {
     -moz-box-sizing: content-box !important;
     -webkit-box-sizing: content-box !important;
 }
+
+#nam_title {
+    text-align: right !important;
+}

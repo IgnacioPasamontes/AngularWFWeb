@@ -41,7 +41,7 @@ import { EditableComponent } from './editable/editable.component';
 import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
 import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
 import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
-import { TcCharacteritzationComponent } from './tc-characteritzation/tc-characteritzation.component';
+import { TcCharacterizationComponent } from './tc-characterization/tc-characterization.component';
 
 import { KeysPipe } from './keys.pipe';
 
@@ -55,7 +55,7 @@ import { EachWorkflowService } from './each-workflow/each-workflow.service';
 import { Node1ProblemFormulationService } from './node1-problem-formulation/node1-problem-formulation.service';
 import { NodeInfoService } from './node-info/node-info.service';
 import { CookieService } from 'ngx-cookie-service';
-import { TcCharacteritzationService } from './tc-characteritzation/tc-characteritzation.service';
+import { TcCharacterizationService } from './tc-characterization/tc-characterization.service';
 
 
 
@@ -82,7 +82,7 @@ import { TcCharacteritzationService } from './tc-characteritzation/tc-characteri
     SmilesMicromodalComponent,
     TkWorkflowComponent,
     TdWorkflowComponent,
-    TcCharacteritzationComponent,
+    TcCharacterizationComponent,
   ],
   imports: [
     BrowserModule,
@@ -121,7 +121,7 @@ import { TcCharacteritzationService } from './tc-characteritzation/tc-characteri
     EachWorkflowService,
     NodeInfoService,
     Node1ProblemFormulationService,
-    TcCharacteritzationService
+    TcCharacterizationService
   ],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]

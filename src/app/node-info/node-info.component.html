@@ -42,7 +42,7 @@
     <div class="card">
         <h5 class="card-header bg-light p-1">Resources</h5>
         <ng-container [ngSwitch]="this.info.node_seq">
-            <app-tc-characteritzation [info]="this.info" *ngSwitchCase="2"></app-tc-characteritzation>
+            <app-tc-characterization [info]="this.info" *ngSwitchCase="2"></app-tc-characterization>
         </ng-container>
         
         <div *ngIf="this.info.resources.length > 0" class="card" style="margin-bottom:0px">

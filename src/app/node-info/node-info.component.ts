@@ -38,7 +38,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   public Editor_config_copy: Object;
   public Editor_config_outputs: Object;
   public Editor_config_comments: Object;
-  smiles_drawer_size : number = 150;
+  smiles_drawer_size : number = 200;
   environment = environment;
   micromodal = MicroModal;
   part = 0;

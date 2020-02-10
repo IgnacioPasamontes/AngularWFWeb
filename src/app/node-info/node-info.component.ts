@@ -8,6 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
+import { ResizeSensor } from 'css-element-queries';
 
 
 import MicroModal from 'micromodal';
@@ -142,6 +143,24 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     // Add 'implements AfterViewInit' to the class.
     this.savecomment = true;
     this.savecontent = true;
+    
+
+
+
+
+    const dialog_height = $('.mat-dialog-container').height();
+    let style = $('<style id="style_ck-editor__editable">.ck-editor__editable { max-height: '+
+      (dialog_height*0.80).toString()+'px }</style>');
+    $('html > head').append(style);
+
+    $(".mat-dialog-container").each(function(){
+      let resize_sensor = new ResizeSensor(this, function () {
+        const dialog_height = $('.mat-dialog-container').height();
+        let style = $('#style_ck-editor__editable').html('.ck-editor__editable { max-height: '+
+          (dialog_height*0.70).toString()+'px }');
+        $('html > head').append(style);
+      });
+    });
     
   }
 

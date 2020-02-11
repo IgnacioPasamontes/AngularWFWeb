@@ -84,7 +84,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
             icon: this.data['add_molecule_icon'],
             tag: 'image',
             placeholder: undefined, 
-            attributes:{src: '', alt: 'C1CCCCC1' },
+            attributes:{src: '', alt: 'C1CCCCC1', 'molecule-smiles' : 'test'},
             toolname: 'insert-molecule',
             label: 'Add molecule', 
             inline: false,

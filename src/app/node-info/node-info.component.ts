@@ -204,10 +204,4 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
     this.inline_comments = false;
     return false;
   }
-
-  onNoClick(): void {
-    alert("Eeeeee");
-    this.dialogRef.close();
-  }
-
 }

@@ -167,7 +167,6 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   NodeCompleted() {
     const project_id = this.info.project;
     const node_seq = this.info.node_seq;
-    this.service.setNodeAsBusy(project_id,project_id);
     this.service.setNodeAsBusy(project_id,node_seq,false);
 
     this.sub = this.service.saveNode(this.info.project, this.info.node_seq, this.info.inputs_comments,this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(

@@ -23,6 +23,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { PortalModule } from '@angular/cdk/portal';
+import { OverlayModule, OverlayContainer, FullscreenOverlayContainer } from '@angular/cdk/overlay';
 
 import { Globals } from './globals';
 
@@ -107,6 +109,8 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     MatProgressSpinnerModule,
     CKEditorModule,
     NgbModalModule,
+    OverlayModule,
+    PortalModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-center',
@@ -121,7 +125,8 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     EachWorkflowService,
     NodeInfoService,
     Node1ProblemFormulationService,
-    TcCharacterizationService
+    TcCharacterizationService,
+    {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent],
   bootstrap: [AppComponent]

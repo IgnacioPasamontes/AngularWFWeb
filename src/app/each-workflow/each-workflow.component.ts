@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, OnDestroy , OnChanges, ViewChild} from '@angular/core';
+/* @import '~@angular/cdk/overlay-prebuilt.css';*/ /*uncomment if @angular/material is not used */
+import { Overlay } from '@angular/cdk/overlay';
+import { Portal, TemplatePortal } from '@angular/cdk/portal'; 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,8 +9,9 @@ import { Globals } from '../globals';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 import { NodeInfoService } from '../node-info/node-info.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
 import { TabsService } from '../tabs/tabs.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
@@ -56,6 +60,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   @Input() projectName;
   @Input() visibleProject: string;
   @Input() change: boolean;
+  @ViewChild('portalOverlay', {static: false}) overlayPortal: TemplatePortal<any>;
   actual_node = undefined;
   display = 'none';
 
@@ -67,6 +72,8 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   name: string;
   project: number;
   node_seq: number;
+  overlayRef: any;
+  
   
 
   public Editor = ClassicEditor;
@@ -97,7 +104,8 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     private dialog: MatDialog,
     private node: NodeInfoService,
     private tabs : TabsService,
-    private service: EachWorkflowService) { }
+    private service: EachWorkflowService,
+    public overlay: Overlay) { }
 
 
   ngOnInit() {
@@ -210,10 +218,16 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   nodeInfo_selected(project: string, node_seq: number) {
+    let node_loading_overlayRef = this.overlay.create({
+      hasBackdrop: true,
+      scrollStrategy: this.overlay.scrollStrategies.block()
+    });
+    node_loading_overlayRef.attach(this.overlayPortal);
     const project_id = this.globals.current_user.projects[project]; // GET ID PROJECT
     let busy = this.node.getNodeBusy(project_id, node_seq);
 
     if (busy) {
+      node_loading_overlayRef.dispose();
       return;
     }
     
@@ -232,10 +246,11 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
         this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
           result_file_text => {
             result['add_molecule_icon'] = result_file_text;
-            const dialogRef = this.dialog.open( NodeInfoComponent, {
+            const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
               width: '100%',
               data: result,
             });
+            dialogRef.afterOpened().subscribe(() => { node_loading_overlayRef.dispose(); });
             dialogRef.afterClosed().subscribe(result => {
               if (result === 'cancel' || result == undefined) {
                 this.node.setNodeAsBusy(project_id, node_seq,false);

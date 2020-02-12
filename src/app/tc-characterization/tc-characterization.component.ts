@@ -25,7 +25,6 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
   cas_show_cactvs_data: boolean = true;
   cas_copy_show_cactvs_data: boolean = true;
   cas_copy_copy_selection_only: boolean;
-  //cas_list: Array<Object> = [{value:'test',string_class:'test',resolver:'test',classification:'test'}];
   selected_cas_int_id_list: Array<number> = [];
   cas_from_name_subscription: Subscription;
 
@@ -38,7 +37,6 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
   smiles_show_cactvs_data: boolean = this.cas_show_cactvs_data;
   smiles_copy_show_cactvs_data: boolean = true;
   smiles_copy_copy_selection_only: boolean;
-  //smiles_list: Array<Object> = [{value:'test',string_class:'test',resolver:'test',classification:'test'}];
   selected_smiles_int_id_list: Array<number> = [];
   smiles_from_name_subscription: Subscription;
 

@@ -27,6 +27,7 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
   cas_copy_copy_selection_only: boolean;
   selected_cas_int_id_list: Array<number> = [];
   cas_from_name_subscription: Subscription;
+  content_cas_textarea: string;
 
   smiles_from_name_running: boolean = false;
   smiles_from_name_executed: boolean = false;
@@ -39,6 +40,7 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
   smiles_copy_copy_selection_only: boolean;
   selected_smiles_int_id_list: Array<number> = [];
   smiles_from_name_subscription: Subscription;
+  content_smiles_textarea: string;
 
 
   constructor(private service: TcCharacterizationService,
@@ -291,16 +293,33 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
       (<any>document.getElementById("name2cas-copy-textarea")).select();
       document.execCommand("copy");
     },0);
+    this.content_cas_textarea = this.cas_text_dump;
     this.modalService.open(content, {ariaLabelledBy: 'name2cas-copy-cliboard-basic-title', centered: true, windowClass: 'cas2name-modal'}).result.then((result) => {
       closeResult = `Closed with: ${result}`;
+      $("#name2cas-copy-textarea").off('input');
     }, (reason) => {
-        //ModalDismissReasons contains reason possible values
+      //ModalDismissReasons contains reason possible values
+      $("#name2cas-copy-textarea").off('input');
     });
+    setTimeout(() => {
+      const that = this;
+      $("#name2cas-copy-textarea").on('input', function(event)  {
+        that.content_cas_textarea = that.cas_text_dump;
+      })
+    },0);
   }
 
   changeShowName2CasData() {
     this.updateCASTextDump(this.cas_copy_copy_selection_only, !this.cas_copy_show_cactvs_data);
+    this.content_cas_textarea = this.cas_text_dump;
   }
+
+  changeContentCASTextarea() {
+    if (this.content_cas_textarea !== this.cas_text_dump) {
+      this.content_cas_textarea = this.cas_text_dump
+    }
+  }
+
 
   updateSmilesMultiselect() {
     setTimeout(function() {
@@ -472,15 +491,32 @@ export class TcCharacterizationComponent implements OnInit, AfterViewInit {
       (<any>document.getElementById("name2smiles-copy-textarea")).select();
       document.execCommand("copy");
     },0);
+
+    this.content_smiles_textarea = this.smiles_text_dump;
     this.modalService.open(content, {ariaLabelledBy: 'name2smiles-copy-cliboard-basic-title', centered: true, windowClass: 'smiles2name-modal'}).result.then((result) => {
+      $("#name2smiles-copy-textarea").off('input');
       closeResult = `Closed with: ${result}`;
     }, (reason) => {
-        //ModalDismissReasons contains reason possible values
+      //ModalDismissReasons contains reason possible values
+      $("#name2smiles-copy-textarea").off('input');
     });
+    setTimeout(() => {
+      const that = this;
+      $("#name2smiles-copy-textarea").on('input', function(event)  {
+        that.content_smiles_textarea = that.smiles_text_dump;
+      })
+    },0);
+
   }
 
   changeShowName2SmilesData() {
     this.updateSmilesTextDump(this.smiles_copy_copy_selection_only, !this.smiles_copy_show_cactvs_data);
+    this.content_smiles_textarea = this.smiles_text_dump;
   }
   
+  changeContentSmilesTextarea() {
+    if (this.content_smiles_textarea !== this.smiles_text_dump) {
+      this.content_smiles_textarea = this.smiles_text_dump
+    }
+  }
 }

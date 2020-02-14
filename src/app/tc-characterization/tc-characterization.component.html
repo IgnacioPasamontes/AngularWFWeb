@@ -120,7 +120,7 @@
                 <p>The following CAS registry number data has been copied in your clipboard:</p>
             </div>
             <div class="input-group">
-            <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" rows=10 readonly ="">{{ cas_text_dump }}</textarea>
+            <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" (change)="changeContentCASTextarea()" [(ngModel)]="content_cas_textarea" rows=10></textarea>
             </div>
         </div>
     </div>
@@ -148,7 +148,7 @@
                     <p>The following SMILES data has been copied in your clipboard:</p>
                 </div>
                 <div class="input-group">
-                <textarea id="name2smiles-copy-textarea" style="width:100%" class="form-control" rows=10 readonly>{{ smiles_text_dump }}</textarea>
+                <textarea id="name2smiles-copy-textarea" style="width:100%" class="form-control" (change)="changeContentSmilesTextarea()" [(ngModel)]="content_smiles_textarea" rows=10></textarea>
                 </div>
             </div>
         </div>

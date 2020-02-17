@@ -220,10 +220,13 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
             });
           },
           error => {
+            node_loading_overlayRef.dispose();
             alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
+            
           });
       },
       error => {
+        node_loading_overlayRef.dispose();
         alert('Error getting node');
       }
     );

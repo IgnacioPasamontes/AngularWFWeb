@@ -9,6 +9,7 @@ import { User } from '../user';
 
 declare let escapeHtmlString: any;
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,29 +19,14 @@ export class TcCharacterizationService {
 
   cactus_webservice_URL: string = 'https://cactus.nci.nih.gov/chemical/structure/';
 
-  getCASFromName(search_string: string, search_type: string = null): Observable<any> {
-    const resolvers = {
-      compound_name: 'name_by_opsin,name_by_cir',
-      SMILES: 'smiles'
-    }
-    let params: HttpParams;
-    const url: string = this.cactus_webservice_URL+encodeURIComponent(search_string)+'/cas/xml';
-    if (search_type !== null) {
-      params = new HttpParams().append('resolver',resolvers[search_type]);
-    } else {
-      params = new HttpParams();
-    }
-    
-    return this.http.get(url,{responseType: 'text', params: params});
-  }
 
-  getSmilesFromName(search_string: string, search_type: string = null): Observable<any> {
+  getFromName(search_string: string, search_output: string, search_type: string = null): Observable<any> {
     const resolvers = {
       compound_name: 'name_by_opsin,name_by_cir',
       SMILES: 'smiles'
     }
     let params: HttpParams;
-    const url: string = this.cactus_webservice_URL+encodeURIComponent(search_string)+'/smiles/xml';
+    const url: string = this.cactus_webservice_URL+encodeURIComponent(search_string)+'/'+search_output+'/xml';
     if (search_type !== null) {
       params = new HttpParams().append('resolver',resolvers[search_type]);
     } else {

@@ -9,8 +9,8 @@
                         <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name:</label>
                     </td>
                     <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text"></td>
-                    <td style="width:8rem"><button class="btn btn-primary" [disabled]="cas_from_name_running" (click)="CASandSmilesFromNameButton()">Search</button>
-                        <mat-spinner *ngIf="cas_from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                    <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running" (click)="itemsFromNameButton()">Search</button>
+                        <mat-spinner *ngIf="this.cas.from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                     </td>
 
             </tr>
@@ -18,7 +18,7 @@
                 <td></td>
                 <td><br>
                     <div class="form-check">
-                        <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeCASandSmilesShowCactvsData()" [(ngModel)]="cas_show_cactvs_data">
+                        <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeItemsShowCactvsData()" [(ngModel)]="show_cactvs_data">
                         <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
                 </div><br></td>
                 <td></td>
@@ -27,9 +27,9 @@
 
                     <td style="width:9rem"><label style="margin-bottom:0px" for="name2cas_cas" >CAS registry number(s):</label></td>
                     <td style="width:auto">
-                            <select id="name2cas_cas" size=5 class="form-control" name="selected_cas" [(ngModel)]="selected_cas_int_id_list" multiple>
-                            <ng-container *ngIf="cas_show_cactvs_data"><option *ngFor="let cas of cas_list" [ngValue]="cas.int_id" [innerHTML]="cas.html_rep"></option></ng-container>
-                            <ng-container *ngIf="!cas_show_cactvs_data"><option *ngFor="let cas of cas_set" [ngValue]="cas.int_id">{{ cas.value }}</option></ng-container>
+                            <select id="name2cas_cas" size=5 class="form-control" name="selected_cas" [(ngModel)]="this.cas.selected_item_int_id_list" multiple>
+                            <ng-container *ngIf="this.cas.item_show_cactvs_data"><option *ngFor="let item of this.cas.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
+                            <ng-container *ngIf="!this.cas.item_show_cactvs_data"><option *ngFor="let item of this.cas.item_set" [ngValue]="item.int_id">{{ item.value }}</option></ng-container>
                             </select>
                             
                     </td>
@@ -37,25 +37,26 @@
                     </td>
             </tr>
             <tr>
-                <td><button class="btn" [disabled]="cas_list.length === 0 || !cas_show_cactvs_data" (click)="CASFromNameRemoveDuplicatesButton()">Remove duplicates</button><br></td>
-                <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="selected_cas_int_id_list.length === 0" (click)="CASFromNameDeleteButton()">Delete</button>
-                <button style="display:inline-block" class="btn" [disabled]="selected_cas_int_id_list.length === 0" (click)="openCASCopy(contentCAS,true)">Copy in clipboard</button>
-                <button style="display:inline-block" class="btn" [disabled]="cas_list.length === 0" (click)="openCASCopy(contentCAS,false)">Copy all in clipboard</button></td>
+                <td><button class="btn" [disabled]="this.cas.item_list.length === 0 || !this.cas.item_show_cactvs_data" (click)="this.cas.removeItemValueDuplicates();">Remove duplicates</button><br></td>
+                <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="this.cas.selected_item_int_id_list.length === 0" (click)="this.cas.deleteSelectedItems()">Delete</button>
+                <button style="display:inline-block" class="btn" [disabled]="this.cas.selected_item_int_id_list.length === 0" (click)="openCopy(contentCAS,'cas',true)">Copy in clipboard</button>
+                <button style="display:inline-block" class="btn" [disabled]="this.cas.item_list.length === 0" (click)="openCopy(contentCAS,'cas',false)">Copy all in clipboard</button></td>
 
             </tr>
         </table>
     </div>
     <br>
     <div class="row m-5" style="margin-top:0px !important; margin-bottom:10px !important">
-        <div *ngIf="cas_from_name_executed">
+        <div *ngIf="this.cas.from_name_executed">
         <!--TODO: sentences about how many cas numbers have been found-->
-        <label *ngIf="cas_list.length !== 0 && selected_cas_int_id_list.length === 0 && !cas_from_name_running" >
-            <ng-container *ngIf="cas_show_cactvs_data">{{cas_list.length}}</ng-container>
-            <ng-container *ngIf="!cas_show_cactvs_data">{{cas_set.length}}</ng-container> CAS registry number<!--
-         --><ng-container *ngIf="cas_list.length > 1">s</ng-container> found.
+        <label *ngIf="this.cas.item_list.length !== 0 && this.cas.selected_item_int_id_list.length === 0 && !this.cas.from_name_running" >
+            <ng-container *ngIf="this.cas.item_show_cactvs_data">{{this.cas.item_list.length}} CAS registry number<!--
+            --><ng-container *ngIf="this.cas.item_list.length > 1">s</ng-container> found.</ng-container> 
+            <ng-container *ngIf="!this.cas.item_show_cactvs_data">{{this.cas.item_set.length}} CAS registry number<!--
+         --><ng-container *ngIf="this.cas.item_set.length > 1">s</ng-container> found.</ng-container>
         </label>
-        <label *ngIf="selected_cas_int_id_list.length === 1 && cas_show_cactvs_data" [innerHTML]="this.cas_current.html_rep"></label>
-        <label *ngIf="selected_cas_int_id_list.length > 1 || selected_cas_int_id_list.length === 1 && !cas_show_cactvs_data" >Selected {{selected_cas_int_id_list.length}} CAS registry numbers.</label>
+        <label *ngIf="this.cas.selected_item_int_id_list.length === 1 && this.cas.item_show_cactvs_data" [innerHTML]="this.cas.current_item.html_rep"></label>
+        <label *ngIf="this.cas.selected_item_int_id_list.length > 1 || this.cas.selected_item_int_id_list.length === 1 && !this.cas.item_show_cactvs_data" >Selected {{this.cas.selected_item_int_id_list.length}} CAS registry numbers.</label>
         </div>
     </div>
     
@@ -65,9 +66,9 @@
 
                     <td style="width:9rem"><label style="margin-bottom:0px" for="name2smiles_smiles" >SMILES:</label></td>
                     <td style="width:auto">
-                            <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="selected_smiles_int_id_list" multiple>
-                            <ng-container *ngIf="smiles_show_cactvs_data"><option *ngFor="let smiles of smiles_list" [ngValue]="smiles.int_id" [innerHTML]="smiles.html_rep"></option></ng-container>
-                            <ng-container *ngIf="!smiles_show_cactvs_data"><option *ngFor="let smiles of smiles_set" [ngValue]="smiles.int_id">{{smiles.value}}</option></ng-container>
+                            <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="this.smiles.selected_item_int_id_list" multiple>
+                            <ng-container *ngIf="this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
+                            <ng-container *ngIf="!this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_set" [ngValue]="item.int_id">{{item.value}}</option></ng-container>
                             </select>
                             
                     </td>
@@ -75,25 +76,24 @@
                     </td>
             </tr>
             <tr>
-                <td><button class="btn" [disabled]="smiles_list.length === 0 || !smiles_show_cactvs_data" (click)="smilesFromNameRemoveDuplicatesButton()">Remove duplicates</button><br></td>
-                <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="selected_smiles_int_id_list.length === 0" (click)="smilesFromNameDeleteButton()">Delete</button>
-                <button style="display:inline-block" class="btn" [disabled]="selected_smiles_int_id_list.length === 0" (click)="openSmilesCopy(contentSmiles,true)">Copy in clipboard</button>
-                <button style="display:inline-block" class="btn" [disabled]="smiles_list.length === 0" (click)="openSmilesCopy(contentSmiles,false)">Copy all in clipboard</button></td>
+                <td><button class="btn" [disabled]="this.smiles.item_list.length === 0 || !this.smiles.item_show_cactvs_data" (click)="this.smiles.removeItemValueDuplicates();">Remove duplicates</button><br></td>
+                <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="this.smiles.selected_item_int_id_list.length === 0" (click)="this.smiles.deleteSelectedItems()">Delete</button>
+                <button style="display:inline-block" class="btn" [disabled]="this.smiles.selected_item_int_id_list.length === 0" (click)="openCopy(contentSmiles,'smiles',true)">Copy in clipboard</button>
+                <button style="display:inline-block" class="btn" [disabled]="this.smiles.item_list.length === 0" (click)="openCopy(contentSmiles,'smiles',false)">Copy all in clipboard</button></td>
 
             </tr>
         </table>
     </div>
     <br>
     <div class="row m-5" style="margin-top:0px !important; margin-bottom:10px !important">
-        <div *ngIf="smiles_from_name_executed">
+        <div *ngIf="this.smiles.from_name_executed">
         <!--TODO: sentences about how many smiles numbers have been found-->
-        <label *ngIf="smiles_list.length !== 0 && selected_smiles_int_id_list.length === 0 && !smiles_from_name_running" >
-            <ng-container *ngIf="smiles_show_cactvs_data">{{smiles_list.length}} SMILES found.</ng-container>
-            <ng-container *ngIf="!smiles_show_cactvs_data">{{smiles_set.length}} SMILES found.</ng-container>
+        <label *ngIf="this.smiles.item_list.length !== 0 && this.smiles.selected_item_int_id_list.length === 0 && !this.smiles.from_name_running" >
+            <ng-container *ngIf="this.smiles.item_show_cactvs_data">{{this.smiles.item_list.length}} SMILES found.</ng-container>
+            <ng-container *ngIf="!this.smiles.item_show_cactvs_data">{{this.smiles.item_set.length}} SMILES found.</ng-container> 
         </label>
-        <label *ngIf="selected_smiles_int_id_list.length === 1 && smiles_show_cactvs_data" [innerHTML]="this.smiles_current.html_rep"></label>
-        <label *ngIf="selected_smiles_int_id_list.length > 1 || selected_smiles_int_id_list.length === 1 && !smiles_show_cactvs_data" >Selected {{selected_smiles_int_id_list.length}} SMILES.</label>
-        <label *ngIf="selected_smiles_int_id_list.length === 1 && !smiles_show_cactvs_data" >Selected 1 SMILES.</label>
+        <label *ngIf="this.smiles.selected_item_int_id_list.length === 1 && this.smiles.item_show_cactvs_data" [innerHTML]="this.smiles.current_item.html_rep"></label>
+        <label *ngIf="this.smiles.selected_item_int_id_list.length > 1 || this.smiles.selected_item_int_id_list.length === 1 && !this.smiles.item_show_cactvs_data" >Selected {{this.smiles.selected_item_int_id_list.length}} SMILES.</label>
 
         </div>
     </div>
@@ -102,7 +102,7 @@
 </div>
 <ng-template #contentCAS let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="name2cas-copy-cliboard-basic-title">CAS registry number(s)</h4>
+        <h4 class="modal-title" id="name2cas-copy-clipboard-basic-title">CAS registry number(s)</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
         <span aria-hidden="true">&times;</span>
         </button>
@@ -111,7 +111,7 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="form-check">
-                    <input class="form-check-input" id="show-name2cas-copy-data" type="checkbox" (change)="changeShowName2CasData()" [(ngModel)]="cas_copy_show_cactvs_data">
+                    <input class="form-check-input" id="show-name2cas-copy-data" type="checkbox" (change)="changeShowName2ItemData(this.cas)" [(ngModel)]="this.cas.item_copy_show_cactvs_data">
                     <label class="form-check-label" for="show-name2cas-copy-data">Show CACTVS data</label>
                 </div>  
             </div>
@@ -120,7 +120,7 @@
                 <p>The following CAS registry number data has been copied in your clipboard:</p>
             </div>
             <div class="input-group">
-            <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" (change)="changeContentCASTextarea()" [(ngModel)]="content_cas_textarea" rows=10></textarea>
+            <textarea id="name2cas-copy-textarea" style="width:100%" class="form-control" (change)="changeContentItemTextarea(this.cas)" [(ngModel)]="this.cas.content_item_textarea" rows=10></textarea>
             </div>
         </div>
     </div>
@@ -130,7 +130,7 @@
 </ng-template>
 <ng-template #contentSmiles let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="name2smiles-copy-cliboard-basic-title">smiles registry number(s)</h4>
+            <h4 class="modal-title" id="name2smiles-copy-clipboard-basic-title">SMILES registry number(s)</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -139,7 +139,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="form-check">
-                        <input class="form-check-input" id="show-name2smiles-copy-data" type="checkbox" (change)="changeShowName2SmilesData()" [(ngModel)]="smiles_copy_show_cactvs_data">
+                        <input class="form-check-input" id="show-name2smiles-copy-data" type="checkbox" (change)="changeShowName2ItemData(this.smiles)" [(ngModel)]="this.smiles.item_copy_show_cactvs_data">
                         <label class="form-check-label" for="show-name2smiles-copy-data">Show CACTVS data</label>
                     </div>  
                 </div>
@@ -148,7 +148,7 @@
                     <p>The following SMILES data has been copied in your clipboard:</p>
                 </div>
                 <div class="input-group">
-                <textarea id="name2smiles-copy-textarea" style="width:100%" class="form-control" (change)="changeContentSmilesTextarea()" [(ngModel)]="content_smiles_textarea" rows=10></textarea>
+                <textarea id="name2smiles-copy-textarea" style="width:100%" class="form-control" (change)="changeContentItemTextarea(this.smiles)" [(ngModel)]="this.smiles.content_item_textarea" rows=10></textarea>
                 </div>
             </div>
         </div>

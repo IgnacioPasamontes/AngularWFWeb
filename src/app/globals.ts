@@ -9,7 +9,6 @@ export class Globals {
   visible_project = '';
   current_main_project = '';
   operatorId = '';
-  actual_node: INode;
   change = false; // Tricki no realize WF change
   csrftoken_cookie_name = 'csrftoken';
   csrftoken_header_name = 'X-CSRFToken';

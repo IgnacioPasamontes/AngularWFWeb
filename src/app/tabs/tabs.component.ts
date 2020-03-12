@@ -39,7 +39,7 @@ export class TabsComponent implements OnInit {
         main_from_project = from_project.replace(
         new RegExp(this.globals.subproject_suffix_separator+'.*$'),
         ''
-      )
+        )
       if (main_from_project !== to_project) {
       
         this.deleteProject(main_from_project);

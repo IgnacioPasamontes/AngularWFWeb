@@ -5,7 +5,7 @@
             <div style="display:inline-block">
                 <div class="card card-body" style="max-width:100%;width:auto;border:0px;box-shadow:none">
                     <div class="row" style="margin-left:0px;margin-right:0px;">
-                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;"  [ngClass]="{'checked':this.checked.node13}" id="{{projectClass}}_id_13"    (dblclick)="nodeInfo_selected(projectName,13)">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;"  [ngClass]="{'checked':this.checked.node13}" id="{{projectClass}}_id_13"    (click)="nodeInfo_selected(mainProjectName,13)">
                             <div class="card-body">
                                 AOP known
                             </div>
@@ -18,7 +18,7 @@
             <div style="display:inline-block">
                 <div class="card-body card" style="max-width:100%;width:auto;border:0px;box-shadow:none">
                     <div class="row" style="margin-left:0px;margin-right:0px;">
-                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;" [ngClass]="{'checked':this.checked.node14}" id="{{projectClass}}_id_14"    (dblclick)="nodeInfo_selected(projectName,14)">
+                        <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;" [ngClass]="{'checked':this.checked.node14}" id="{{projectClass}}_id_14"    (click)="nodeInfo_selected(mainProjectName,14)">
                             <div class="card-body">
                                 Shared critical effects
                             </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="card parent" style="display:block;">
                 <div class="card-body" style="display:inline-block">
-                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node16}" id="{{projectClass}}_id_16" (dblclick)="nodeInfo_selected(projectName,16)">
+                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node16}" id="{{projectClass}}_id_16" (click)="nodeInfo_selected(mainProjectName,16)">
                         <div class="card-body">
                             Test for KEs<br>
                             and MIEs
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="card-body" style="display:inline-block">
-                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node17}" id="{{projectClass}}_id_17" (dblclick)="nodeInfo_selected(projectName,17)">
+                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node17}" id="{{projectClass}}_id_17" (click)="nodeInfo_selected(mainProjectName,17)">
                         <div class="card-body">
                                 Test for models mimicking<br>
                                 organ responses
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="card-body row justify-content-center" style="margin-left:0px;margin-right:0px;">
-                    <div class="card col-5 node {{projectClass}}" style="padding-left:0px;padding-right:0px;" [ngClass]="{'checked':this.checked.node19}" id="{{projectClass}}_id_19" (dblclick)="nodeInfo_selected(projectName,19)">
+                    <div class="card col-5 node {{projectClass}}" style="padding-left:0px;padding-right:0px;" [ngClass]="{'checked':this.checked.node19}" id="{{projectClass}}_id_19" (click)="nodeInfo_selected(mainProjectName,19)">
                         <div class="card-body">
                             Evaluation of medium
                             and high dose effects
@@ -59,7 +59,7 @@
         <div>
             <div class="card-body">
                 <div class="row" style="margin-left:0px;margin-right:0px;">
-                    <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node15}" id="{{projectClass}}_id_15"    (dblclick)="nodeInfo_selected(projectName,15)">
+                    <div class="card node {{projectClass}}" style="margin-left:0px;margin-right:0px;max-width:100%;width:100%" [ngClass]="{'checked':this.checked.node15}" id="{{projectClass}}_id_15"    (click)="nodeInfo_selected(mainProjectName,15)">
                         <div class="card-body">
                             Unclear / no shared<br> critical  lead effects
                         </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="card parent" style="display:block;">
                 <div class="card-body">
-                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node18}" id="{{projectClass}}_id_18" (dblclick)="nodeInfo_selected(projectName,18)">
+                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node18}" id="{{projectClass}}_id_18" (click)="nodeInfo_selected(mainProjectName,18)">
                         <div class="card-body">
                                 Broad testing: identify<br>
                                 potential hazard
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node20}" id="{{projectClass}}_id_20" (dblclick)="nodeInfo_selected(projectName,20)">
+                    <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node20}" id="{{projectClass}}_id_20" (click)="nodeInfo_selected(mainProjectName,20)">
                         <div class="card-body">
                                 Generate MoA<br>
                                 hypothesis
@@ -87,7 +87,7 @@
                 <p class="p-2">Untargeted<br>tests</p>
             </div>
             <div class="card-body">
-                <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node21}" id="{{projectClass}}_id_21" (dblclick)="nodeInfo_selected(projectName,21)">
+                <div class="card node {{projectClass}}" [ngClass]="{'checked':this.checked.node21}" id="{{projectClass}}_id_21" (click)="nodeInfo_selected(mainProjectName,21)">
                     <div class="card-body">
                             Run targeted tests
                             <br>

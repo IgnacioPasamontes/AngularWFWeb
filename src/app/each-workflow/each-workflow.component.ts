@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, AfterViewInit, OnDestroy , OnChanges, ViewChild} from '@angular/core';
 /* @import '~@angular/cdk/overlay-prebuilt.css';*/ /*uncomment if @angular/material is not used */
 import { Overlay } from '@angular/cdk/overlay';
-import { Portal, TemplatePortal } from '@angular/cdk/portal'; 
+import { Portal, ComponentPortal } from '@angular/cdk/portal'; 
 import { Globals } from '../globals';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { NodeInfoComponent } from '../node-info/node-info.component';
 import { NodeInfoService } from '../node-info/node-info.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OverlayComponent } from '../overlay/overlay.component';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
@@ -28,18 +28,9 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   @Input() projectName;
   @Input() visibleProject: string;
   @Input() change: boolean;
-  @ViewChild('portalOverlay', {static: false}) overlayPortal: TemplatePortal<any>;
-  actual_node = undefined;
   display = 'none';
 
-  output = '';
-  comments = '';
-  input: Array<any> = [];
-  resources: Array<any> = [];
-  description: string;
-  name: string;
-  project: number;
-  node_seq: number;
+  overlayPortal: ComponentPortal<any> = new ComponentPortal(OverlayComponent); 
   overlayRef: any;
   
   
@@ -92,13 +83,16 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   }
 
 
-  async updateCheckedNodes() {
+  updateCheckedNodes() {
     let nodes_info;
-    nodes_info = await this.service.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
-
-    for (const node of nodes_info) {
-      this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
-    }
+    let subscription = this.service.getProjectInfo(this.globals.current_user.projects[this.projectName]).subscribe( nodes_info => {
+        (<any>nodes_info).forEach( (node) => {
+          this.checked['node' + node['node_seq']] = node['executed'] === 'True' ? true : false;
+        })
+      },
+      error => {},
+      () => {subscription.unsubscribe();}
+    );
   }
 
   drawConnections() {
@@ -147,11 +141,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   }
 
   ngAfterViewInit() {
-    this.updateCheckedNodes();
     this.drawConnections();
-
-
-    
     
     //redraw connector lines when div.limit resizes
     const that = this;
@@ -236,10 +226,6 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     (<any>$('.' + this.projectName)).connections('update');
   }
 
-  onCloseHandled() {
-    this.display = 'none';
-  }
-
 
   openTD() {
     const td_projectName = this.projectName+this.globals.td_project_suffix;
@@ -253,9 +239,4 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     this.tabs.openProject(tk_projectName);
   }
 
-
-  getControl(index, fieldName) {
-
-    alert(index + " -- " + fieldName);
-  }
 }

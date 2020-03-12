@@ -44,6 +44,7 @@ import { Node1ProblemFormulationComponent } from './node1-problem-formulation/no
 import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
 import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
 import { TcCharacterizationComponent } from './tc-characterization/tc-characterization.component';
+import { OverlayComponent } from './overlay/overlay.component';
 
 import { KeysPipe } from './keys.pipe';
 
@@ -58,6 +59,7 @@ import { Node1ProblemFormulationService } from './node1-problem-formulation/node
 import { NodeInfoService } from './node-info/node-info.service';
 import { CookieService } from 'ngx-cookie-service';
 import { TcCharacterizationService } from './tc-characterization/tc-characterization.service';
+
 
 
 
@@ -85,6 +87,7 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     TkWorkflowComponent,
     TdWorkflowComponent,
     TcCharacterizationComponent,
+    OverlayComponent,
   ],
   imports: [
     BrowserModule,
@@ -128,7 +131,7 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     TcCharacterizationService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
-  entryComponents: [NodeInfoComponent],
+  entryComponents: [NodeInfoComponent, OverlayComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

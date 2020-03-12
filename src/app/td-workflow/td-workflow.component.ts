@@ -1,7 +1,13 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Globals } from '../globals';
+import { Overlay } from '@angular/cdk/overlay';
+import { Portal, ComponentPortal } from '@angular/cdk/portal'; 
+import { NodeInfoComponent } from '../node-info/node-info.component';
+import { NodeInfoService } from '../node-info/node-info.service';
+import { OverlayComponent } from '../overlay/overlay.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { ResizeSensor } from 'css-element-queries';
 import { EachWorkflowService } from '../each-workflow/each-workflow.service';
 
@@ -19,21 +25,14 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   @Input() visibleProject: string;
   @Input() change: boolean;
 
+  public Editor = ClassicEditor;
+
+  mainProjectName: string;
   projectClass: string; //also used for IDs
+  overlayPortal: ComponentPortal<any> = new ComponentPortal(OverlayComponent); 
+
 
   checked = {
-    'node1': false,
-    'node2': false,
-    'node3': false,
-    'node4': false,
-    'node5': false,
-    'node6': false,
-    'node7': false,
-    'node8': false,
-    'node9': false,
-    'node10': false,
-    'node11': false,
-    'node12': false,
     'node13': false,
     'node14': false,
     'node15': false,
@@ -43,22 +42,20 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     'node19': false,
     'node20': false,
     'node21': false,
-    'node22': false,
-    'node23': false,
-    'node24': false,
-    'node25': false,
-    'node26': false,
-    'node27': false,
-    'node28': false,
-    'node29': false,
-
   };
 
   constructor(public globals: Globals,
+              private dialog: MatDialog,
+              private node: NodeInfoService,
+              public overlay: Overlay,
               private eachworkflowservice: EachWorkflowService,
               ) { }
 
   ngOnInit() {
+    this.mainProjectName = this.projectName.replace(
+      new RegExp(this.globals.subproject_suffix_separator+'.*$'),
+      ''
+    );
     const td_class_name = this.projectName.replace(
       new RegExp(RegExpEscape(this.globals.td_project_suffix)+'$'),
       this.globals.td_class_suffix
@@ -76,15 +73,28 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
           this.drawConnections();
         }
         if (changes.hasOwnProperty('change')) {
-          //this.updateCheckedNodes();
+          this.updateCheckedNodes();
         }
       }
     }
   }
 
 
+
   ngOnDestroy() {
     (<any>$('.' + this.projectClass)).connections('remove');
+  }
+
+  updateCheckedNodes() {
+    let nodes_info;
+    let subscription = this.eachworkflowservice.getProjectInfo(this.globals.current_user.projects[this.mainProjectName]).subscribe( nodes_info => {
+        (<any>nodes_info).forEach( (node) => {
+          this.checked['node' + node['node_seq']] = node['executed'] === 'True' ? true : false;
+        })
+      },
+      error => {},
+      () => {subscription.unsubscribe();}
+    );
   }
 
   drawConnections() {
@@ -121,16 +131,8 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     });*/
   }
 
-  async updateCheckedNodes() {
-    let nodes_info;
-    nodes_info = await this.eachworkflowservice.getProjectInfoSync(this.globals.current_user.projects[this.projectName]);
-
-    for (const node of nodes_info) {
-      this.checked['node' + node.node_seq] = node.executed === 'True' ? true : false;
-    }
-  }
-
   ngAfterViewInit() {
+    this.updateCheckedNodes();
     this.drawConnections();
 
     //redraw connector lines when div.limit resizes
@@ -142,6 +144,61 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
      
     })
     
+  }
+
+  nodeInfo_selected(project: string, node_seq: number) {
+    let node_loading_overlayRef = this.overlay.create({
+      hasBackdrop: true,
+      scrollStrategy: this.overlay.scrollStrategies.block()
+    });
+    node_loading_overlayRef.attach(this.overlayPortal);
+    const project_id = this.globals.current_user.projects[project]; // GET ID PROJECT
+    let busy = this.node.getNodeBusy(project_id, node_seq);
+
+    if (busy) {
+      node_loading_overlayRef.dispose();
+      return;
+    }
+    
+    this.eachworkflowservice.getNodeInfo(project_id, node_seq).subscribe(
+      result => {
+        result['node_seq'] = node_seq;
+        if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
+          this.globals.node_csrf_token[project_id] = {} ;
+        }
+        if (result.hasOwnProperty('CSRF_TOKEN')) {
+          this.globals.node_csrf_token[project_id][node_seq] = result.CSRF_TOKEN;
+        } else {
+          this.globals.node_csrf_token[project_id][node_seq] = null;
+        }
+        const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
+        this.eachworkflowservice.getAssetFileAsText(add_molecule_icon_path).subscribe(
+          result_file_text => {
+            result['add_molecule_icon'] = result_file_text;
+            const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
+              width: '100%',
+              data: result,
+            });
+            dialogRef.afterOpened().subscribe(() => { node_loading_overlayRef.dispose(); });
+            dialogRef.afterClosed().subscribe(result => {
+              if (result === 'cancel' || result == undefined) {
+                this.node.setNodeAsBusy(project_id, node_seq,false);
+              } else if (result === 'OK') {
+                this.node.setNodeAsBusy(project_id, node_seq);
+              }
+            });
+          },
+          error => {
+            node_loading_overlayRef.dispose();
+            alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
+            
+          });
+      },
+      error => {
+        node_loading_overlayRef.dispose();
+        alert('Error getting node');
+      }
+    );
   }
 
   reDraw() {

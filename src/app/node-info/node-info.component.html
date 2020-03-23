@@ -1,8 +1,7 @@
 <h1 mat-dialog-title style="margin-bottom: 0px;" [innerHTML]="this.info.name"></h1>
 <div mat-dialog-content>
     <!--<div class="card">-->
-      <div style="padding-top: 0px;" class="card-body">
-         {{this.info.description}}
+      <div style="padding-top: 0px;" class="card-body" [innerHTML]="this.info.description">
       </div>
     <!--</div>-->
     <div class="card" *ngIf="this.info.inputs.length>0">
@@ -11,9 +10,7 @@
             <div class="card m-0" *ngFor="let info of this.info.inputs ; let i=index;"> 
                 <div class="card-header p-0">
                     
-                    <a class="btn m-0" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" >
-                        {{info.name}}
-                    </a> 
+                    <a class="btn m-0" data-toggle="collapse" href= "#accordion_{{ i }}" role="button" aria-expanded="false" [innerHTML]="info.name"></a> 
                    
                 </div>
                 <div class="collapse" id= "accordion_{{ i }}">

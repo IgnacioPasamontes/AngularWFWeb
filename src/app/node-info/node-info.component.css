@@ -39,7 +39,7 @@ i {
     cursor: pointer; 
 }
 .card-header .btn {
-    text-transform: capitalize;
+    text-transform: none;
 }
 table {
  width: 100%;   

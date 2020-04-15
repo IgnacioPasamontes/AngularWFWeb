@@ -24,9 +24,9 @@ export class LoginService {
 
     const httpOptions = {
       withCredentials: true
-    }
+    };
     const url: string = environment.baseUrl + 'user/';
-    return this.http.get(url,httpOptions);
+    return this.http.get(url, httpOptions);
 
   }
 
@@ -38,9 +38,9 @@ export class LoginService {
 
   const httpOptions = {
     withCredentials: true
-  }
+  };
   const url: string = environment.baseUrl + 'user/logout/';
-  return this.http.get(url,httpOptions);
+  return this.http.get(url, httpOptions);
 
 }
 

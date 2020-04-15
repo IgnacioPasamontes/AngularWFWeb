@@ -1,0 +1,21 @@
+#chembl_chembl_ids {
+    width: 100% !important;
+}
+
+#ms-chembl_chembl_ids {
+    width: 100% !important;
+}
+
+.ms-container {
+    width: 100% !important;
+    
+}
+
+.ms-list {
+    height: 100px !important;
+}
+
+.chembl-modal {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}

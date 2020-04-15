@@ -1,5 +1,5 @@
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -45,6 +45,8 @@ import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
 import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
 import { TcCharacterizationComponent } from './tc-characterization/tc-characterization.component';
 import { OverlayComponent } from './overlay/overlay.component';
+import { Name2casComponent } from './name2cas/name2cas.component';
+import { ChemblComponent } from './chembl/chembl.component';
 
 import { KeysPipe } from './keys.pipe';
 
@@ -59,6 +61,9 @@ import { Node1ProblemFormulationService } from './node1-problem-formulation/node
 import { NodeInfoService } from './node-info/node-info.service';
 import { CookieService } from 'ngx-cookie-service';
 import { TcCharacterizationService } from './tc-characterization/tc-characterization.service';
+import { Name2casService } from './name2cas/name2cas.service';
+import { ChemblService } from './chembl/chembl.service';
+
 
 
 
@@ -88,10 +93,13 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     TdWorkflowComponent,
     TcCharacterizationComponent,
     OverlayComponent,
+    Name2casComponent,
+    ChemblComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     AppRoutingModule,
     NgDragDropModule.forRoot(),
     CytoscapeModule,
@@ -129,6 +137,8 @@ import { TcCharacterizationService } from './tc-characterization/tc-characteriza
     NodeInfoService,
     Node1ProblemFormulationService,
     TcCharacterizationService,
+    Name2casService,
+    ChemblService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent, OverlayComponent],

@@ -1,0 +1,48 @@
+.block1 {
+    overflow: scroll;
+    display: block;
+    border: 1px solid #ccc;
+    width:100%;
+    height:100%;
+}
+    
+.block2 {
+    display: inline-block;
+    vertical-align: top;
+    overflow: visible;
+    border-right: 1px solid #a4a4a4;
+}
+
+.btn {
+    text-align: left;
+}
+
+#old_name2cas_cas {
+    width: 100% !important;
+    height:100% !important;
+    border : none !important;
+    margin-right:-5%;
+    overflow: visible;
+}
+
+#name2cas_cas {
+    width: 100% !important;
+}
+
+#ms-name2cas_cas {
+    width: 100% !important;
+}
+
+.ms-container {
+    width: 100% !important;
+    
+}
+
+.ms-list {
+    height: 100px !important;
+}
+
+.cas2name-modal {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}

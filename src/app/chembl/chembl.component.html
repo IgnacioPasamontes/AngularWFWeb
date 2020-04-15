@@ -1,0 +1,52 @@
+<div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+    <table style="width:100%;vertical-align:bottom">
+        <tr>
+
+                <td style="width:9rem">
+                    <label style="margin-bottom:0px" for="chembl_search_string" >SMILES:</label>
+                </td>
+                <td><input id="chembl_search_string" class="form-control" name="search_string" [(ngModel)]="chembl_search_string" type="text"></td>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="chemblIdFromSmilesButton()">Search</button>
+                    <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                </td>
+        <tr>
+
+                    <td style="width:9rem"><label style="margin-bottom:0px" for="chembl_chembl_ids" >ChEMBL ID(s):</label></td>
+                    <td style="width:auto">
+                            <select id="chembl_chembl_ids" size=5 class="form-control" name="selected_cas" [(ngModel)]="chembl_selected_item_int_id_list" multiple>
+                            <option *ngFor="let item of chembl_item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option>
+                            </select>
+                            
+                    </td>
+                    <td style="width:auto">
+                    </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="chemblDeleteSelectedItems()">Delete</button>
+            <button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="openCopy(content,true)">Copy in clipboard</button>
+            <button style="display:inline-block" class="btn" [disabled]="chembl_item_list.length === 0" (click)="openCopy(content,false)">Copy all in clipboard</button></td>
+        </tr>
+    </table>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="chembl-copy-clipboard-basic-title">ChEMBL(s)</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="input-group">
+                <p>The following ChEMBL have been copied in your clipboard:</p>
+            </div>
+            <div class="input-group">
+            <textarea id="chembl-copy-textarea" style="width:100%" class="form-control" (change)="chemblChangeContentItemTextarea()" [(ngModel)]="chembl_content_item_textarea" rows=10></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('close')">Close</button>
+    </div>
+</ng-template>

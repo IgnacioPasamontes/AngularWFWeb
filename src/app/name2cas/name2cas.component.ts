@@ -202,6 +202,8 @@ export class FromNameCACTVSInteface {
     },
     error => {
       alert("Error in CACTVS query");
+      this.from_name_running = false;
+      this.item_from_name_subscription.unsubscribe();
     },
     () => {
       this.from_name_running = false;

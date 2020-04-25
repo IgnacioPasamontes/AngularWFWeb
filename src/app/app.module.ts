@@ -54,6 +54,7 @@ import { ViewModeDirective } from './editable/view-mode.directive';
 import { EditModeDirective } from './editable/edit-mode.directive';
 import { EditableOnEnterDirective } from './editable/edit-on-enter.directive';
 
+import { httpInterceptorProviders } from './http-interceptors/index';
 import { LoginService } from './login/login.service';
 import { TabsService } from './tabs/tabs.service'
 import { EachWorkflowService } from './each-workflow/each-workflow.service';
@@ -129,6 +130,7 @@ import { ChemblService } from './chembl/chembl.service';
     }) // ToastrModule added
   ],
   providers: [
+    httpInterceptorProviders,
     Globals,
     LoginService,
     CookieService,

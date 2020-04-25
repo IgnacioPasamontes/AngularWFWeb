@@ -28,6 +28,7 @@
             <button style="display:inline-block" class="btn" [disabled]="chembl_item_list.length === 0" (click)="openCopy(content,false)">Copy all in clipboard</button></td>
         </tr>
     </table>
+    <div [innerHTML]="activity"></div>
 </div>
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -42,7 +43,7 @@
                 <p>The following ChEMBL have been copied in your clipboard:</p>
             </div>
             <div class="input-group">
-            <textarea id="chembl-copy-textarea" style="width:100%" class="form-control" (change)="chemblChangeContentItemTextarea()" [(ngModel)]="chembl_content_item_textarea" rows=10></textarea>
+            <textarea id="chembl_copy_textarea" style="width:100%" class="form-control" (change)="chemblChangeContentItemTextarea()" [(ngModel)]="chembl_content_item_textarea" rows=10></textarea>
             </div>
         </div>
     </div>

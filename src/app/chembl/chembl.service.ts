@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
 import { User } from '../user';
+
+import { TIMEOUT_HEADER } from '../http-interceptors/timeout-interceptor';
 @Injectable({
   providedIn: 'root'
 })
@@ -50,6 +52,18 @@ export class ChemblService {
       }
     });
     return chembl_ids;
+  }
+
+  chEMBLGetADMETActivityDataByCompoundId(chemblid: string) {
+    let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
+    const params = new HttpParams().append('format', 'json').append('assay_type', 'A').
+      append('molecule_chembl_id', chemblid);
+    return this.http.get(url, {params: params});
+  }
+
+  chEMBLGetADMETActivityDataNext(next: string) {
+    let url: string = 'https://www.ebi.ac.uk' + next;
+    return this.http.get(url);
   }
 
   arrayToItemList(array: Array<any>) {

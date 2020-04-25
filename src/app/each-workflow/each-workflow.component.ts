@@ -90,8 +90,8 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
           this.checked['node' + node['node_seq']] = node['executed'] === 'True' ? true : false;
         })
       },
-      error => {},
-      () => {subscription.unsubscribe();}
+      error => {subscription.unsubscribe(); },
+      () => {subscription.unsubscribe(); }
     );
   }
 
@@ -181,7 +181,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
       return;
     }
     
-    this.service.getNodeInfo(project_id, node_seq).subscribe(
+    const subs = this.service.getNodeInfo(project_id, node_seq).subscribe(
       result => {
         result['node_seq'] = node_seq;
         if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
@@ -193,7 +193,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
           this.globals.node_csrf_token[project_id][node_seq] = null;
         }
         const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
-        this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
+        const subs2 = this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
           result_file_text => {
             result['add_molecule_icon'] = result_file_text;
             const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
@@ -208,16 +208,20 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
                 this.node.setNodeAsBusy(project_id, node_seq);
               }
             });
+            subs2.unsubscribe();
           },
           error => {
             node_loading_overlayRef.dispose();
             alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
-            
-          });
+            subs2.unsubscribe();
+          }
+        );
+        subs.unsubscribe();
       },
       error => {
         node_loading_overlayRef.dispose();
         alert('Error getting node');
+        subs.unsubscribe();
       }
     );
   }

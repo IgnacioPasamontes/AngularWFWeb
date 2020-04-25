@@ -6,8 +6,8 @@
                     <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name:</label>
                 </td>
                 <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text"></td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running" (click)="itemsFromNameButton()">Search</button>
-                    <mat-spinner *ngIf="this.cas.from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running || this.smiles.from_name_running" (click)="itemsFromNameButton()">Search</button>
+                    <mat-spinner *ngIf="this.cas.from_name_running || this.smiles.from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
 
         </tr>

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-
+import { TIMEOUT_HEADER } from '../http-interceptors/timeout-interceptor';
 declare let escapeHtmlString: any;
 
 @Injectable({
@@ -16,7 +16,7 @@ export class Name2casService {
   cactus_webservice_URL = 'https://cactus.nci.nih.gov/chemical/structure/';
 
 
-  getFromName(search_string: string, search_output: string, search_type: string = null): Observable<any> {
+  getFromName(search_string: string, search_output: string, search_type: string = null, timeout: number = 60000): Observable<any> {
     const resolvers = {
       compound_name: 'name_by_opsin,name_by_cir',
       SMILES: 'smiles'
@@ -28,8 +28,10 @@ export class Name2casService {
     } else {
       params = new HttpParams();
     }
-
-    return this.http.get(url, {responseType: 'text', params: params});
+    const headers_obj: any = {};
+    headers_obj[TIMEOUT_HEADER] = String(timeout);
+    const headers = new HttpHeaders(headers_obj);
+    return this.http.get(url, {responseType: 'text', params: params, headers: headers});
   }
 
   cactusXMLparsed(parseString_result: any, include_input_type: boolean = false) {

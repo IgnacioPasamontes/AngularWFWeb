@@ -1,18 +1,23 @@
-import { Component, OnInit, Input, AfterViewInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, TemplateRef, OnDestroy } from '@angular/core';
 import { Name2casService } from './name2cas.service';import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseString } from 'xml2js';
 import { TestBed } from '@angular/core/testing';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgControlStatus } from '@angular/forms';
+import { AsyncSubject, Subject, BehaviorSubject } from 'rxjs';
+
 
 export class FromNameCACTVSInteface {
   constructor(cactus_output_key: string,
               binded_multiselect_id: string,
-              service: Name2casService) {
+              service: Name2casService,
+              show_cactvs_data: boolean = false) {
     this.cactus_output_key = cactus_output_key;
     this.binded_multiselect_id = binded_multiselect_id;
     this._service = service;
+    this.item_show_cactvs_data = show_cactvs_data,
+    this.item_copy_show_cactvs_data = show_cactvs_data;
   }
   public from_name_running: boolean = false;
   public from_name_executed: boolean = false;
@@ -20,8 +25,8 @@ export class FromNameCACTVSInteface {
   public item_list: Array<Object> = [];
   public item_set: Array<Object> = [];
   public item_text_dump: string;
-  public item_show_cactvs_data: boolean = true
-  public item_copy_show_cactvs_data: boolean = true;
+  public item_show_cactvs_data: boolean;
+  public item_copy_show_cactvs_data: boolean;
   public item_copy_copy_selection_only: boolean;
   public selected_item_int_id_list: Array<number> = [];
   public item_from_name_subscription: Subscription;
@@ -29,6 +34,28 @@ export class FromNameCACTVSInteface {
   public binded_multiselect_id: string;
   public cactus_output_key: string;
   private _service: Name2casService;
+
+  private static filterObjectListByKey(object_list: Array<Object>, key : string, values : Array<any>, inverted: boolean = false) {
+    let j_key = {};
+    values.forEach((value) => {
+      j_key[value] = 0;
+    })
+
+    let filtered_object_list = object_list.filter((value,index,array) => {
+      let is_in_j_key = j_key.hasOwnProperty(value[key]);
+      return inverted ? !is_in_j_key : is_in_j_key;
+    });
+    return filtered_object_list;
+  }
+
+  static filterListByIntId(item_list : Array<Object>, item_int_id_list: Array<number>, inverted: boolean = false) {
+    let item_int_id_list_number : Array<number> = [];
+    item_int_id_list.forEach((item_int_id) => {
+      item_int_id_list_number.push(Number(item_int_id));
+    });
+    return FromNameCACTVSInteface.filterObjectListByKey(item_list, 'int_id', item_int_id_list_number, inverted);
+  }
+
 
   removeItemDuplicates(item_list: Array<Object>) {
     let j = {};
@@ -139,37 +166,18 @@ export class FromNameCACTVSInteface {
     this.setItemList(this.removeItemDuplicates(this.item_list), true);
   }
 
-  private filterObjectListByKey(object_list: Array<Object>, key : string, values : Array<any>, inverted: boolean = false) {
-    let j_key = {};
-    values.forEach((value) => {
-      j_key[value] = 0;
-    })
 
-    let filtered_object_list = object_list.filter((value,index,array) => {
-      let is_in_j_key = j_key.hasOwnProperty(value[key]);
-      return inverted ? !is_in_j_key : is_in_j_key;
-    });
-    return filtered_object_list;
-  }
-
-  filterListByIntId(item_list : Array<Object>, item_int_id_list: Array<number>, inverted: boolean = false) {
-    let item_int_id_list_number : Array<number> = [];
-    item_int_id_list.forEach((item_int_id) => {
-      item_int_id_list_number.push(Number(item_int_id));
-    });
-    return this.filterObjectListByKey(item_list, 'int_id', item_int_id_list_number, inverted);
-  }
 
   deleteItemsByIntId(int_id_list: Array<number>,delete_same_value: Boolean = false) {
     if (!delete_same_value) {
-      this.setItemList(this.item_list = this.filterListByIntId(this.item_list, int_id_list, true));
+      this.setItemList(this.item_list = FromNameCACTVSInteface.filterListByIntId(this.item_list, int_id_list, true));
     } else {
-      let selected_item = this.filterListByIntId(this.item_list, int_id_list);
+      let selected_item = FromNameCACTVSInteface.filterListByIntId(this.item_list, int_id_list);
       let value_list : Array<string> = [];
       selected_item.forEach((item) => {
         value_list.push(item['value']);
       });
-      this.setItemList(this.filterObjectListByKey(this.item_list,'value',value_list,true));
+      this.setItemList(FromNameCACTVSInteface.filterObjectListByKey(this.item_list,'value',value_list,true));
     }
   }
 
@@ -177,31 +185,42 @@ export class FromNameCACTVSInteface {
     this.deleteItemsByIntId(this.selected_item_int_id_list, !this.item_show_cactvs_data);
   }
 
-  fromName(search_string: string) {
-    if (this.from_name_running) {return}
+  fromName(search_string: string, termination_subject$?: Subject<any>, subject_emitted_value?: any) {
+    if (this.from_name_running) {return; }
     this.from_name_running = true;
     this.setItemList([]);
-    this.item_from_name_subscription = this._service.getFromName(search_string,this.cactus_output_key,'compound_name').subscribe(result => {
-      parseString(result, function(err,result) {
+    this.item_from_name_subscription = this._service.getFromName(search_string, this.cactus_output_key,
+      ['compound_name', 'cas_number']).subscribe(result => {
+      parseString(result, function(err, result) {
         if (err !== null) {
           alert('Error while parsing CACTVS query');
           console.log('Error while parsing CACTVS query:');
           console.log(err);
           return;
         }
-        
+
         if (!result.hasOwnProperty('request')) {
-          alert("Error in CACTVS query");
-          console.log("Error in CACTVS query. Response:");
+          alert('Error in CACTVS query');
+          console.log('Error in CACTVS query. Response:');
           console.log(result);
         } else {
           this.setItemList(this._service.cactusXMLparsed(result));
           this.from_name_executed = true;
+          if (typeof termination_subject$ !== 'undefined' || termination_subject$ !== null) {
+            if (!(termination_subject$.closed || termination_subject$.isStopped || termination_subject$.hasError)) {
+              termination_subject$.next(subject_emitted_value);
+            }
+            if (!(termination_subject$.closed || termination_subject$.isStopped || termination_subject$.hasError)) {
+              termination_subject$.complete();
+            }
+
+
+          }
         }
       }.bind(this));
     },
     error => {
-      alert("Error in CACTVS query");
+      alert('Error in CACTVS query');
       this.from_name_running = false;
       this.item_from_name_subscription.unsubscribe();
     },
@@ -214,7 +233,7 @@ export class FromNameCACTVSInteface {
   updateTextDump(copy_selection_only: boolean = true, item_value_only: boolean = false) {
       let item_list: Array<Object>;
       if (copy_selection_only) {
-        item_list = this.filterListByIntId(this.item_list, this.selected_item_int_id_list);
+        item_list = FromNameCACTVSInteface.filterListByIntId(this.item_list, this.selected_item_int_id_list);
       } else {
         item_list = this.item_list;
       }
@@ -239,14 +258,19 @@ export class FromNameCACTVSInteface {
   templateUrl: './name2cas.component.html',
   styleUrls: ['./name2cas.component.css']
 })
-export class Name2casComponent implements OnInit, AfterViewInit {
+export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() info;
   search_string: string;
-  search_type: string = 'compound_name';
-  show_cactvs_data: boolean = true;
-  cas: FromNameCACTVSInteface = new FromNameCACTVSInteface("cas","name2cas_cas", this.service);
-  smiles: FromNameCACTVSInteface = new FromNameCACTVSInteface("smiles","name2smiles_smiles", this.service);
+  search_type: any = ['compound_name', 'cas_number'];
+  show_cactvs_data: boolean = false;
+  cas: FromNameCACTVSInteface = new FromNameCACTVSInteface("cas","name2cas_cas", this.service, this.show_cactvs_data);
+  smiles: FromNameCACTVSInteface = new FromNameCACTVSInteface("smiles","name2smiles_smiles", this.service, this.show_cactvs_data);
+  compound_name: string;
+  compound_name_int_id: number;
+  compound_synonyms: Array<Object> = [];
+  compound_name_executed: boolean = false;
+  compound_name_running: boolean = false;
   cactus_interfaces: Object = {
       cas: this.cas,
       smiles: this.smiles
@@ -260,11 +284,12 @@ export class Name2casComponent implements OnInit, AfterViewInit {
       ariaLabelledBy: 'name2smiles-copy-clipboard-basic-title',
       windowClass: 'smiles2name-modal'
     }
-  }
+  };
   copy_textarea_id_by_cactus_interface: Object = {
     cas: 'name2cas-copy-textarea',
     smiles: 'name2smiles-copy-textarea'
-  }
+  };
+  finished_cactvs_from_name_query$: Subject<string>;
 
   constructor(private service: Name2casService,
               private modalService: NgbModal) { }
@@ -282,15 +307,89 @@ export class Name2casComponent implements OnInit, AfterViewInit {
   }
 
   itemsFromNameButton() {
+    this.compound_synonyms = [];
+    this.compound_name = undefined;
+    this.compound_name_int_id = undefined;
+    if (this.finished_cactvs_from_name_query$ instanceof Subject) {
+      if (this.finished_cactvs_from_name_query$.closed || this.finished_cactvs_from_name_query$.isStopped ||
+          this.finished_cactvs_from_name_query$.hasError) {
+      this.finished_cactvs_from_name_query$.complete();
+      }
+      this.finished_cactvs_from_name_query$.unsubscribe();
+    }
+    this.finished_cactvs_from_name_query$ = new Subject<string>();
+
+    const subs = this.finished_cactvs_from_name_query$.subscribe(
+      interface_name => {
+        const default_value = {int_id: 0, value: this.search_string, html_rep: this.search_string, string_rep: this.search_string};
+        if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'CAS Registry Number') {
+          this.compound_name_running = true;
+          const  subs_synonyms = this.service.getFromName(this.search_string, 'names', 'cas', 120000).subscribe(
+            result => {
+              parseString(result, function(err, result) {
+                console.log(result);
+                console.log(err);
+                if (err !== null) {
+                  alert('Error while parsing CACTVS query');
+                  console.log('Error while parsing CACTVS query:');
+                  console.log(err);
+                  return;
+                }
+                if (!result.hasOwnProperty('request')) {
+                  alert('Error in CACTVS query');
+                  console.log('Error in CACTVS query. Response:');
+                  console.log(result);
+                } else {
+                  this.compound_synonyms = this.service.cactusXMLparsed(result);
+                  if (this.compound_synonyms.length === 0) {
+                    this.compound_synonyms.push(default_value);
+                  }
+                  this.compound_name_executed = true;
+                }
+                
+              }.bind(this));
+            },
+            error => {
+              alert('Error in CACTVS query');
+              this.compound_name_running = false;
+            },
+            () => {
+              this.compound_name_running = false;
+              subs_synonyms.unsubscribe();
+            });
+
+        } else if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'chemical name (CIR)' ||
+                   this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'IUPAC name (OPSIN)') {
+          this.compound_name = this.search_string;
+          this.compound_synonyms.push(default_value);
+          this.compound_name_int_id = 0;
+          this.compound_name_executed = true;
+          this.compound_name_running = false;
+        } else {
+          this.compound_name = this.search_string;
+          this.compound_synonyms.push(default_value);
+          this.compound_name_int_id = 0;
+          this.compound_name_executed = true;
+          this.compound_name_running = false;
+        }
+      },
+      error => {
+        this.compound_name_running = false;
+        subs.unsubscribe();
+        this.finished_cactvs_from_name_query$.complete();
+      }
+    );
     Object.keys(this.cactus_interfaces).forEach((interface_name) => {
-      this.cactus_interfaces[interface_name].fromName(this.search_string);
+      this.cactus_interfaces[interface_name].fromName(this.search_string, this.finished_cactvs_from_name_query$, interface_name);
     });
+
   }
 
   changeItemsShowCactvsData() {
     Object.keys(this.cactus_interfaces).forEach((interface_name) => {
       this.cactus_interfaces[interface_name].item_show_cactvs_data = this.show_cactvs_data;
-      this.cactus_interfaces[interface_name].item_copy_show_cactvs_data = Boolean(this.cactus_interfaces[interface_name].item_show_cactvs_data);
+      this.cactus_interfaces[interface_name].item_copy_show_cactvs_data =
+        Boolean(this.cactus_interfaces[interface_name].item_show_cactvs_data);
       this.cactus_interfaces[interface_name].deleteSelection();
     });
   }
@@ -299,16 +398,16 @@ export class Name2casComponent implements OnInit, AfterViewInit {
     let closeResult: string;
     let item: FromNameCACTVSInteface = this.cactus_interfaces[cactus_interface_name];
     let copy_textarea_id: string = this.copy_textarea_id_by_cactus_interface[cactus_interface_name];
-    let jquery_sel_copy_textarea_id: string = '#'+copy_textarea_id;
+    let jquery_sel_copy_textarea_id: string = '#' + copy_textarea_id;
     item.item_copy_copy_selection_only = copy_selection_only;
 
-    item.updateTextDump(copy_selection_only,!item.item_copy_show_cactvs_data); 
+    item.updateTextDump(copy_selection_only, !item.item_copy_show_cactvs_data); 
     item.content_item_textarea = item.item_text_dump;
     this.modalService.open(content, this.ngb_modal_opt_by_cactus_interface[cactus_interface_name]).result.then((result) => {
-      closeResult = 'Closed with: '+result;
+      closeResult = 'Closed with: ' + result;
       $(jquery_sel_copy_textarea_id).off('input');
     }, (reason) => {
-      //ModalDismissReasons contains reason possible values
+      // ModalDismissReasons contains reason possible values
       $(jquery_sel_copy_textarea_id).off('input');
     });
     setTimeout(() => {
@@ -319,8 +418,8 @@ export class Name2casComponent implements OnInit, AfterViewInit {
     },0);
     setTimeout(function(copy_textarea_id) {
       (<any>document.getElementById(copy_textarea_id)).select();
-      document.execCommand("copy");
-    }.bind(this, copy_textarea_id),0);
+      document.execCommand('copy');
+    }.bind(this, copy_textarea_id), 0);
   }
 
 
@@ -335,6 +434,12 @@ export class Name2casComponent implements OnInit, AfterViewInit {
       item.content_item_textarea = item.item_text_dump;
     }
   }
+  compoundNameChange($event: any) {
+    const item = FromNameCACTVSInteface.filterListByIntId(this.compound_synonyms, [this.compound_name_int_id])[0];
+    this.compound_name = item['value'];
+  }
+  ngOnDestroy() {
 
+  }
 
 }

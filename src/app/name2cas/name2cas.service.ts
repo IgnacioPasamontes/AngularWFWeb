@@ -16,15 +16,21 @@ export class Name2casService {
   cactus_webservice_URL = 'https://cactus.nci.nih.gov/chemical/structure/';
 
 
-  getFromName(search_string: string, search_output: string, search_type: string = null, timeout: number = 60000): Observable<any> {
+  getFromName(search_string: string, search_output: string, search_type: any = null, timeout: number = 60000): Observable<any> {
     const resolvers = {
       compound_name: 'name_by_opsin,name_by_cir',
+      cas_number: 'cas_number',
       SMILES: 'smiles'
     };
+    if (typeof search_type === 'string' || search_type instanceof String) {
+      search_type = [search_type];
+    }
+
     let params: HttpParams;
-    const url: string = this.cactus_webservice_URL + encodeURIComponent(search_string) + '/' + search_output+'/xml';
+    const url: string = this.cactus_webservice_URL + encodeURIComponent(search_string) + '/' + search_output + '/xml';
     if (search_type !== null) {
-      params = new HttpParams().append('resolver', resolvers[search_type]);
+      const resolvers_string: string = search_type.map(stype => resolvers[stype]).join(',');
+      params = new HttpParams().append('resolver', resolvers_string);
     } else {
       params = new HttpParams();
     }
@@ -63,13 +69,15 @@ export class Name2casService {
               item['html_rep'] = '<b>' + item.value + '</b>';
             } else if (typeof item.resolver === 'undefined') {
               item['string_rep'] += ', ' + input_type_string + 'source="NA":"' + item.classification + '"';
-              item['html_rep'] += ', ' + input_type_string + 'source="NA":"' + item.classification + '"';
+              item['html_rep'] += ', ' + escapeHtmlString(input_type_string) + 'source="NA":"' +
+               escapeHtmlString(item.classification) + '"';
             } else if (typeof item.classification === 'undefined') {
               item['string_rep'] += ', ' + input_type_string + 'source="' + item.resolver + '":"NA"';
-              item['html_rep'] += ', ' + input_type_string + 'source="' + item.resolver + '":"NA"';
+              item['html_rep'] += ', ' + escapeHtmlString(input_type_string) + 'source="' + escapeHtmlString(item.resolver) + '":"NA"';
             } else {
               item['string_rep'] += ', ' + input_type_string + 'source="' + item.resolver + '":"' + item.classification + '"';
-              item['html_rep'] += ', ' + input_type_string + 'source="' + item.resolver + '":"' + item.classification + '"';
+              item['html_rep'] += ', ' + escapeHtmlString(input_type_string) + 'source="' + escapeHtmlString(item.resolver) +
+               '":"' + escapeHtmlString(item.classification) + '"';
             }
 
             item_list.push(item);

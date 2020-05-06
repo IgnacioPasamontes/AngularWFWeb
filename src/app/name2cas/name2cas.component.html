@@ -3,10 +3,10 @@
         <tr>
 
                 <td style="width:9rem">
-                    <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name:</label>
+                    <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name <br>or CAS registry number:</label>
                 </td>
-                <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text"></td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running || this.smiles.from_name_running" (click)="itemsFromNameButton()">Search</button>
+                <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text" [disabled]="this.cas.from_name_running || this.smiles.from_name_running"></td>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running || this.smiles.from_name_running || this.compound_name_running" (click)="itemsFromNameButton()">Search</button>
                     <mat-spinner *ngIf="this.cas.from_name_running || this.smiles.from_name_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
 
@@ -19,6 +19,19 @@
                     <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
             </div><br></td>
             <td></td>
+        </tr>
+        <tr>
+            <td style="width:9rem"><label style="margin-bottom:0px" for="selected_compound_name" >Compound name:</label><br><br></td>
+            
+            <td style="width:auto"><mat-form-field><mat-select id="selected_compound_name" class="form-control" name="selected_compound_name" (selectionChange)="this.compoundNameChange($event)" [(ngModel)]="this.compound_name_int_id">
+                <ng-container *ngIf="this.show_cactvs_data"><mat-option *ngFor="let item of this.compound_synonyms" [value]="item.int_id" [innerHTML]="item.html_rep"></mat-option></ng-container>
+                <ng-container *ngIf="!this.show_cactvs_data"><mat-option *ngFor="let item of this.compound_synonyms" [value]="item.int_id" [innerText]="item.value"></mat-option></ng-container>
+            </mat-select>
+            </mat-form-field>
+            <br>
+            <br>
+            </td>
+
         </tr>
         <tr>
 

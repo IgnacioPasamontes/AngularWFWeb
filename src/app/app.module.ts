@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule, OverlayContainer, FullscreenOverlayContainer } from '@angular/cdk/overlay';
 
@@ -113,6 +114,7 @@ import { ChemblService } from './chembl/chembl.service';
     MatSortModule,
     MatButtonModule,
     MatInputModule,
+    MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,

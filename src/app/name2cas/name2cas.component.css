@@ -17,6 +17,11 @@
     text-align: left;
 }
 
+.mat-option {
+    overflow: auto;
+    text-overflow: unset;
+}
+
 #old_name2cas_cas {
     width: 100% !important;
     height:100% !important;

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, AfterViewInit, TemplateRef } from '@angular/c
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ChemblService } from './chembl.service';
 import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
-import { AsyncSubject, BehaviorSubject } from 'rxjs';
+import { AsyncSubject } from 'rxjs';
 
 
 @Component({
@@ -75,21 +75,21 @@ export class ChemblComponent implements OnInit, AfterViewInit {
           }
         });
       } catch(e) {
-        if (e !== BreakException) throw e;
+        if (e !== BreakException) {throw e; }
       }
     }
   }
 
   initializeMultiSelect() {
     const multiselect_id = this.binded_multiselect_id;
-    let jquery_select = '#'+ multiselect_id;
+    let jquery_select = '#' + multiselect_id;
     let jquery_select_ms = "#ms-" + multiselect_id;
     let selected_select_options = $(jquery_select).children();
     selected_select_options.removeAttr('selected');
     selected_select_options.prop('selected',false);
     let ms = $(jquery_select_ms); 
     $(jquery_select_ms).css('width','100%');
-    $(jquery_select_ms).find(".ms-list").css('height','100px');
+    $(jquery_select_ms).find(".ms-list").css('height', '100px');
   }
 
   updateSelectedItemsFromMultiselect() {
@@ -126,7 +126,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       j_key[value] = 0;
     })
 
-    let filtered_object_list = object_list.filter((value,index,array) => {
+    const filtered_object_list = object_list.filter((value, index, array) => {
       let is_in_j_key = j_key.hasOwnProperty(value[key]);
       return inverted ? !is_in_j_key : is_in_j_key;
     });
@@ -178,7 +178,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   parseChEMBLGetADMETActivityData(chembl_result: Object, activity_rows: Object[],
      chembl_activity_rows$: AsyncSubject<Object>, count: number = 0,
      limit: number = 1000000, fields: Array<string> = null) {
-    
+
     if (fields != null) {
       chembl_result['activities'].forEach(activity => {
         if (count > limit) {
@@ -230,6 +230,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   }
 
   chEMBLGetADMETActivityDataByCompoundId(chembl_id: string, fields: Array<string> = null, limit: number = 1000000, _count: number = 0) {
+
         let chembl_activity_rows$ = new AsyncSubject<Object>();
         let activity_rows: Object[] = [];
         const subs = this.service.chEMBLGetADMETActivityDataByCompoundId(chembl_id).subscribe(
@@ -243,7 +244,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
             chembl_activity_rows$.error(error);
           }
         );
-        return chembl_activity_rows$.asObservable();
+        return chembl_activity_rows$;
   }
 
   chemblIdFromSmilesButton() {
@@ -252,36 +253,63 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     const subscript = this.service.chemblSmilesToInChIKey(this.chembl_search_string).subscribe(
       result => {
         const unichem_subscript = this.service.uniChemGetSrcIdFromInChIKey(result.inchikey).subscribe(
-          <Array> (unichem_result) => {
+          <Array>(unichem_result) => {
             const chembl_ids = this.service.getChEMBLIDFromUniChemData(unichem_result);
             this.setItemList(this.service.arrayToItemList(chembl_ids));
             this.chembl_activity_rows = [];
-            const chembl_subs = this.chEMBLGetADMETActivityDataByCompoundId(chembl_ids[0], this.chembl_activity_fields).subscribe(
-              chembl_result => {
-                let activity_rows: string = '';
-                chembl_result["activities"].forEach(activity => {
+            const chembl_activity_rows_obj: Object = {};
+            let index: number = 0;
+            const chembl_activity$ = new AsyncSubject<string[]>();
+            const chembl_act_subs = chembl_activity$.subscribe(result => {
+              let activity_rows: string = '';
+              Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
+                this.chembl_activity_rows += chembl_activity_rows_obj[idx];
+                chembl_activity_rows_obj[idx].forEach(activity => {
                   activity_rows += '<tr>';
                   this.chembl_activity_fields.forEach(field => {
                     activity_rows += '<td>' + activity[field] + '</td>';
                   });
                   activity_rows += '</tr>';
                 });
-
-                this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th></tr>'
-                 + activity_rows + '</table>';
-              },
-              error => {
-                alert('Error retrieving data from ChEMBL');
-                this.chembl_running = false;
-                chembl_subs.unsubscribe();
-
-
-              },
-              () => {
-                this.chembl_running = false;
-                chembl_subs.unsubscribe();
-              }
+              });
+              this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th></tr>'
+               + activity_rows + '</table>';
+            },
+            error => {
+              alert('Error retrieving data from ChEMBL');
+              chembl_act_subs.unsubscribe();
+            },
+            () => {
+              chembl_act_subs.unsubscribe();
+            }
             );
+            let sucess_count: number = 0;
+            const chembl_ids_length = chembl_ids.length;
+            chembl_ids.forEach(chembl_id => {
+              const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
+              const chembl_subs = chembl_activity_rows$.subscribe(
+                chembl_result => {
+                  chembl_activity_rows_obj[index] = chembl_result['activities'];
+                  chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
+                  sucess_count++;
+                  if (chembl_ids_length >= sucess_count) {
+                    chembl_activity$.complete();
+                  }
+                },
+                error => {
+                  chembl_activity$.error(error);
+                  this.chembl_running = false;
+                  chembl_subs.unsubscribe();
+
+                },
+                () => {
+                  this.chembl_running = false;
+                  chembl_subs.unsubscribe();
+                }
+              );
+              index++;
+            });
+
           },
           error => {
             alert('Error retrieving data from UniChem');

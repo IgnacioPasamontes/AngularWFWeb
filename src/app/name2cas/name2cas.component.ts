@@ -322,55 +322,57 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
     const subs = this.finished_cactvs_from_name_query$.subscribe(
       interface_name => {
         const default_value = {int_id: 0, value: this.search_string, html_rep: this.search_string, string_rep: this.search_string};
-        if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'CAS Registry Number') {
-          this.compound_name_running = true;
-          const  subs_synonyms = this.service.getFromName(this.search_string, 'names', 'cas', 120000).subscribe(
-            result => {
-              parseString(result, function(err, result) {
-                console.log(result);
-                console.log(err);
-                if (err !== null) {
-                  alert('Error while parsing CACTVS query');
-                  console.log('Error while parsing CACTVS query:');
-                  console.log(err);
-                  return;
-                }
-                if (!result.hasOwnProperty('request')) {
-                  alert('Error in CACTVS query');
-                  console.log('Error in CACTVS query. Response:');
+        if (this.cactus_interfaces[interface_name].item_list.length > 0) {
+          if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'CAS Registry Number') {
+            this.compound_name_running = true;
+            const  subs_synonyms = this.service.getFromName(this.search_string, 'names', 'cas', 120000).subscribe(
+              result => {
+                parseString(result, function(err, result) {
                   console.log(result);
-                } else {
-                  this.compound_synonyms = this.service.cactusXMLparsed(result);
-                  if (this.compound_synonyms.length === 0) {
-                    this.compound_synonyms.push(default_value);
+                  console.log(err);
+                  if (err !== null) {
+                    alert('Error while parsing CACTVS query');
+                    console.log('Error while parsing CACTVS query:');
+                    console.log(err);
+                    return;
                   }
-                  this.compound_name_executed = true;
-                }
-                
-              }.bind(this));
-            },
-            error => {
-              alert('Error in CACTVS query');
-              this.compound_name_running = false;
-            },
-            () => {
-              this.compound_name_running = false;
-              subs_synonyms.unsubscribe();
-            });
+                  if (!result.hasOwnProperty('request')) {
+                    alert('Error in CACTVS query');
+                    console.log('Error in CACTVS query. Response:');
+                    console.log(result);
+                  } else {
+                    this.compound_synonyms = this.service.cactusXMLparsed(result);
+                    if (this.compound_synonyms.length === 0) {
+                      this.compound_synonyms.push(default_value);
+                    }
+                    this.compound_name_executed = true;
+                  }
+                  
+                }.bind(this));
+              },
+              error => {
+                alert('Error in CACTVS query');
+                this.compound_name_running = false;
+              },
+              () => {
+                this.compound_name_running = false;
+                subs_synonyms.unsubscribe();
+              });
 
-        } else if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'chemical name (CIR)' ||
-                   this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'IUPAC name (OPSIN)') {
-          this.compound_name = this.search_string;
-          this.compound_synonyms.push(default_value);
-          this.compound_name_int_id = 0;
-          this.compound_name_executed = true;
-          this.compound_name_running = false;
-        } else {
-          this.compound_name = this.search_string;
-          this.compound_synonyms.push(default_value);
-          this.compound_name_int_id = 0;
-          this.compound_name_executed = true;
-          this.compound_name_running = false;
+          } else if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'chemical name (CIR)' ||
+                    this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'IUPAC name (OPSIN)') {
+            this.compound_name = this.search_string;
+            this.compound_synonyms.push(default_value);
+            this.compound_name_int_id = 0;
+            this.compound_name_executed = true;
+            this.compound_name_running = false;
+          } else {
+            this.compound_name = this.search_string;
+            this.compound_synonyms.push(default_value);
+            this.compound_name_int_id = 0;
+            this.compound_name_executed = true;
+            this.compound_name_running = false;
+          }
         }
       },
       error => {

@@ -48,6 +48,7 @@ import { TcCharacterizationComponent } from './tc-characterization/tc-characteri
 import { OverlayComponent } from './overlay/overlay.component';
 import { Name2casComponent } from './name2cas/name2cas.component';
 import { ChemblComponent } from './chembl/chembl.component';
+import { CompoundComponent } from './compound/compound.component';
 
 import { KeysPipe } from './keys.pipe';
 
@@ -65,6 +66,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { TcCharacterizationService } from './tc-characterization/tc-characterization.service';
 import { Name2casService } from './name2cas/name2cas.service';
 import { ChemblService } from './chembl/chembl.service';
+import { CompoundService } from './compound/compound.service';
+import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
 
 
 
@@ -97,6 +100,7 @@ import { ChemblService } from './chembl/chembl.service';
     OverlayComponent,
     Name2casComponent,
     ChemblComponent,
+    CompoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -143,6 +147,8 @@ import { ChemblService } from './chembl/chembl.service';
     TcCharacterizationService,
     Name2casService,
     ChemblService,
+    CompoundService,
+    TcCompoundsService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent, OverlayComponent],

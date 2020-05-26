@@ -69,6 +69,7 @@
     
     <div class="card">
             <h5 class="card-header bg-light p-1">New knowledge</h5>
+            <app-compound *ngIf="this.info.node_seq == 2" [info]="this.info"  [ra_type]="'tc'"></app-compound>
             <ng-container [ngSwitch]="this.info.node_seq">
                 <app-node1-problem-formulation [Editor]="this.Editor" [Editor_config]="this.Editor_config_copy" [info]="this.info" *ngSwitchCase="1"></app-node1-problem-formulation>
                 <ng-container *ngSwitchDefault>

@@ -1,4 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Name2casComponent } from '../name2cas/name2cas.component';
+import { ChemblComponent } from '../chembl/chembl.component';
+import { Compound, CompoundService } from '../compound/compound.service';
+import { BehaviorSubject } from 'rxjs';
+import { TcCompoundsService } from './tc-compounds.service';
 
 @Component({
   selector: 'app-tc-characterization',
@@ -7,7 +12,35 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TcCharacterizationComponent implements OnInit {
 
-  @Input() info;
+  constructor(private compound_service: CompoundService,
+              private tc_compound: TcCompoundsService)  {}
 
-  ngOnInit() {}
+  @Input() info;
+  @ViewChild('name2cas', {static: false}) name2cas: Name2casComponent;
+  @ViewChild('chembl', {static: false}) chembl: ChemblComponent;
+
+  public resources_compound = new Compound();
+
+
+  ngOnInit() {
+    this.resources_compound.project = this.info.project;
+    this.resources_compound.ra_type = Compound.TARGET_COMPOUND;
+  }
+
+  saveCompound() {
+    this.resources_compound.name = this.name2cas.compound_name;
+    this.resources_compound.cas_rn = this.name2cas.cas.current_item['value'];
+    this.resources_compound.smiles = this.name2cas.smiles.current_item['value'];
+    const subs = this.compound_service.saveCompound(this.resources_compound).subscribe(result => {
+      this.tc_compound.getCompounds(this.info.project);
+      alert('Compound saved');
+    },
+    error => {
+      alert('Error saving the compound.');
+      subs.unsubscribe();
+    },
+    () => {
+      subs.unsubscribe();
+    });
+  }
 }

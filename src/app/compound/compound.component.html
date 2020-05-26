@@ -1,0 +1,20 @@
+<div class="card">
+    <h6 class="card-header bg-light p-1">{{ra_type_title}} compounds</h6>
+    <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+    <table class="table">
+        <tr>
+            <th>Compound #</th><th>Name</th><th>CAS registry #</th><th></th><th></th><th style="display: hidden;"></th>
+        </tr>
+
+        <tr *ngFor="let compound of (this.ra_compound_service.compounds$| async); index as i;">
+            <td>{{compound.int_id}}</td>
+            <td>{{compound.name}}</td>
+            <td>{{compound.cas_rn}}</td>
+            <td><button class="btn" [disabled]="running" (click)="deleteCompound(compound.int_id)">Delete</button></td>
+            <td><button class="btn" (click)="copySmiles(ra_type + '_compound_smiles_textarea_' + i)">Copy smiles</button>
+                <textarea class="invisible_textarea" [id]="ra_type + '_compound_smiles_textarea_' + i" [innerText]="compound.smiles"></textarea>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>

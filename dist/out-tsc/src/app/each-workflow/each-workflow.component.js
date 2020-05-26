@@ -158,7 +158,6 @@ let EachWorkflowComponent = class EachWorkflowComponent {
     }
     NodeCompleted(project_id, node_id) {
         this.service.saveNode(project_id, node_id, this.output, this.comments, this.globals.node_csrf_token[project_id][node_id]).subscribe(result => {
-            console.log(result);
         });
         this.globals.change = !this.globals.change;
         this.display = 'none';

@@ -48,3 +48,11 @@ body {
 #nam_title {
     text-align: right !important;
 }
+
+.invisible_textarea {
+    opacity: .01;
+    height:0;
+    position:absolute;
+    z-index: -1;
+    overflow: hidden;
+}

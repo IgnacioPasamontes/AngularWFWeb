@@ -1,8 +1,15 @@
 <div class="card">
     <h6 class="card-header bg-light p-1">Name2CAS/SMILES resolver</h6>
-    <app-name2cas [info]="this.info"></app-name2cas>
+    <app-name2cas #name2cas [info]="this.info"></app-name2cas>
+</div>
+<div class="card">
+    <div class="row justify-content-center" style="text-align: center;">
+        <div class="col-6">
+        <button type="button" class="btn btn-primary" (click)="saveCompound()">Save compound</button>
+        </div>
+    </div>
 </div>
 <div class="card">
     <h6 class="card-header bg-light p-1">ChEMBL resolver</h6>
-    <app-chembl [info]="this.info"></app-chembl>
+    <app-chembl #chembl [info]="this.info"></app-chembl>
 </div>

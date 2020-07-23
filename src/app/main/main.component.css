@@ -29,3 +29,27 @@
     margin-left: -900px;
     transition: all 0.1s;
 }*/
+
+
+a:hover{
+    cursor: pointer;
+}
+
+mwlResizable {
+    box-sizing: border-box; /*required for the enableGhostResize option to work*/
+}
+
+.rectangle {
+    position: relative;
+    top: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 150px;
+    background-color: #fd4140;
+    border: solid 1px #121621;
+    color: #121621;
+    margin: auto;
+}
+

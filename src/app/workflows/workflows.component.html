@@ -1,18 +1,16 @@
  <!-- Tab panes {Fade}  -->       
  <div class="container-fluid tab-content shadow bg-white rounded" id="pills-tabContent">
-    <div *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="tab-pane fade" [ngClass]="{'active show': project===this.globals.visible_project}" id="pills-{{project}}" role="tabpanel">
-        <ng-container [ngSwitch]="project.replace(this.subproject_suffix_separator_pattern, this.globals.subproject_suffix_separator)">
-            <app-tk-workflow [projectName]=project [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.tk_project_suffix"></app-tk-workflow>
-            <app-td-workflow [projectName]=project [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.td_project_suffix"></app-td-workflow>
-            <app-each-workflow *ngSwitchDefault [projectName]=project [visibleProject]=globals.visible_project [change]=globals.change></app-each-workflow>
-        </ng-container>
-            
-    </div>  
+
+        <div (scroll)="triggerWorkflowRedraw()" style="max-height: 80vh; overflow-y: auto" *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="tab-pane fade" [ngClass]="{'active show': project===this.globals.visible_project}" id="pills-{{project}}" role="tabpanel">
+            <ng-container  [ngSwitch]="project.replace(this.subproject_suffix_separator_pattern, this.globals.subproject_suffix_separator)">
+                <app-tk-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.tk_project_suffix"></app-tk-workflow>
+                <app-td-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.td_project_suffix"></app-td-workflow>
+                <app-each-workflow *ngSwitchDefault [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [workflow_resize_update]="workflow_resize_update" [redraw]="redraw_workflow" [projectName]=project [visibleProject]=globals.visible_project [change]=globals.change></app-each-workflow>
+            </ng-container>
+                
+        </div>
+
 </div>   
 
-<div *ngIf="this.globals.active_projects.length==0">
-        <div class="row shadow bg-white  justify-content-center" id="pills-tabContent">
-            <p class="font-italic pb-5">--Open a project--</p>
-        </div>
-</div>
+
 <!---->

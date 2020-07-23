@@ -86,8 +86,8 @@ export class LoginService {
     return this.http.get(url,{withCredentials: true});
   }
 
-  getPOSTHttpOptions() : any {
-    let HttpHeadersobj : any = {};
+  getPOSTHttpOptions(): Object {
+    const HttpHeadersobj: any = {};
     HttpHeadersobj[this.globals.csrftoken_header_name] = this.getCSRFToken();
     const httpOptions = {
       withCredentials: true,

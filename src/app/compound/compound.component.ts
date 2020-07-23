@@ -21,7 +21,6 @@ export class CompoundComponent implements OnInit {
 
 
   ra_type_title: string;
-  compounds$: Observable<Compound[]>;
   ra_compound_service: any;
   running: boolean = false;
 
@@ -35,7 +34,6 @@ export class CompoundComponent implements OnInit {
 
       case 'sc': {
         this.ra_compound_service = null;
-        this.compounds$ = null;
         break;
       }
       default : {
@@ -43,7 +41,7 @@ export class CompoundComponent implements OnInit {
         break;
       }
     }
-    this.tc_compounds.getCompounds(this.info.project);
+    this.ra_compound_service.getCompounds(this.info.project);
 
   }
 

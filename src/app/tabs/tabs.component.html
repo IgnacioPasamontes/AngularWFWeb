@@ -13,16 +13,4 @@
             </li>    
         </ul>
     </div>
-    
-    <div class="ml-auto">
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Projects
-            </button>
-            <div class="dropdown-menu" [ngClass]="{'disabled': objectKeys(this.globals.current_user.projects$ | async).length > 0 }">
-                <!--<div class="dropdown-divider"></div>-->
-                <a *ngFor="let name of objectKeys(this.globals.current_user.projects$ | async);" class="dropdown-item"  (click)="swapProject(this.globals.visible_project, name)"> {{name}} </a>
-            </div>
-        </div>
-    </div>
 </div>

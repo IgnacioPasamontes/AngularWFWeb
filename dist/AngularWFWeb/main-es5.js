@@ -930,15 +930,15 @@ var ChemblComponent = /** @class */ (function () {
                 }, function () {
                     chembl_act_subs.unsubscribe();
                 });
-                var sucess_count = 0;
+                var success_count = 0;
                 var chembl_ids_length = chembl_ids.length;
                 chembl_ids.forEach(function (chembl_id) {
                     var chembl_activity_rows$ = _this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, _this.chembl_activity_fields);
                     var chembl_subs = chembl_activity_rows$.subscribe(function (chembl_result) {
                         chembl_activity_rows_obj[index] = chembl_result['activities'];
                         chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
-                        sucess_count++;
-                        if (chembl_ids_length >= sucess_count) {
+                        success_count++;
+                        if (chembl_ids_length >= success_count) {
                             chembl_activity$.complete();
                         }
                     }, function (error) {

@@ -17,6 +17,28 @@ export class TabsService {
     private node : NodeInfoService,) { }
 
 
+
+  getMainProjectName(project: string) {
+    //remove final TD ot TK
+    let subproject_type = null;
+    let mainproject = project;
+    if (project === null || typeof project === 'undefined') {
+      return {project: mainproject, subproject_type: null};
+    }
+    const no_td_project = project.replace(new RegExp(this.globals.td_project_suffix+'$'),'');
+    if (project === no_td_project) {
+      const no_tk_project = project.replace(new RegExp(this.globals.tk_project_suffix+'$'),'');
+      if (no_tk_project !==  project) {
+        subproject_type = 'TK';
+        mainproject = no_td_project
+      }
+    } else {
+      subproject_type = 'TD';
+      mainproject = no_td_project;
+    }
+    return {project: mainproject, subproject_type: subproject_type};
+  }
+
   deleteProject(project: string) {
     
     const index = this.globals.active_projects.indexOf(project, 0);
@@ -27,19 +49,10 @@ export class TabsService {
     this.globals.previous_visible_project = this.globals.visible_project;
     this.globals.visible_project = this.globals.active_projects[0];
     this.updateConnections();
-    //remove final TD ot TK
-    let subproject_type = null;
-    const no_td_project = project.replace(new RegExp(this.globals.td_project_suffix+'$'),'');
-    if (project === no_td_project) {
-      const no_tk_project = project.replace(new RegExp(this.globals.tk_project_suffix+'$'),'');
-      if (no_tk_project !==  project) {
-        subproject_type = 'TK';
-      }
-    } else {
-      subproject_type = 'TD';
-      project = no_td_project;
-    }
-    this.node.freeBusyProject(this.globals.current_user.projects[project], subproject_type);
+
+    const obj = this.getMainProjectName(project);
+    this.node.freeBusyProject(this.globals.current_user.projects[obj.project], obj.subproject_type);
+    this.globals.current_main_project = this.getMainProjectName(this.globals.visible_project).project;
 
   }
 
@@ -50,8 +63,11 @@ export class TabsService {
     }
     this.globals.previous_visible_project = this.globals.visible_project;
     this.globals.visible_project = project;
+    this.globals.current_main_project = this.getMainProjectName(this.globals.visible_project).project;
     this.updateConnections();
   }
+
+
 
   getClassName(project_name: string) {
 

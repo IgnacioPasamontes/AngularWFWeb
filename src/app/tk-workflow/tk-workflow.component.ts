@@ -24,9 +24,11 @@ declare var $;
 export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
   @Input() projectName;
+  @Input() redraw: boolean;
   @Input() visibleProject: string;
   @Input() change: boolean;
-
+  @Input() resize_redraw: boolean;
+  @Input() workflow_resize_start: boolean;
 
   projectClass: string; //also used for IDs
   mainProjectName: string;
@@ -71,16 +73,40 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   ngOnChanges (changes) {
     if (this.visibleProject !== '') {
       if (this.projectName === this.visibleProject) {
-        if (changes.hasOwnProperty('visibleProject')) {
+        
+        if (changes.hasOwnProperty('visibleProject') || changes.hasOwnProperty('redraw')) {
           this.drawConnections();
+        }
+        if (changes.hasOwnProperty('resize_redraw')) {
+            this.removeConnections();
+            this.drawConnections();
+
         }
         if (changes.hasOwnProperty('change')) {
           this.updateCheckedNodes();
+        }
+        if (changes.hasOwnProperty('workflow_resize_start')) {
+          this.removeConnections(true, true);
+        }
+        if (changes.hasOwnProperty('workflow_resize_update')) {
+          this.removeConnections(true, true);
+          this.drawConnections(true);
         }
       }
     }
   }
 
+  removeConnections(resize_clone: boolean = false, hard: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+    (<any>$(jquery_selector_prefix).find('.' + this.projectClass)).connections('remove');
+    if (hard) {
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_workflow connection').remove();
+    }
+    
+  }
 
   ngOnDestroy() {
 
@@ -99,60 +125,83 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     );
   }
 
-  drawConnections() {
-    (<any>$('.' + this.projectClass)).connections('remove');
+  drawConnections(resize_clone: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+    setTimeout(() => {
+      (<any>$(jquery_selector_prefix).find('.' + this.projectClass)).connections('remove');
 
-    $('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_no').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_node_23_no, #' + this.projectClass + '_id_24').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_no').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_node_24_no, #' + this.projectClass + '_id_26').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_yes').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_node_24_yes, #' + this.projectClass + '_id_25').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_25, #' + this.projectClass + '_id_27').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_27, #' + this.projectClass + '_id_28').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_28, #' + this.projectClass + '_id_29').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_29, #' + this.projectClass + '_id_31').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_31, #' + this.projectClass + '_id_30').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_30, #' + this.projectClass + '_id_32').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_yes').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_node_23_yes, #' + this.projectClass + '_id_27').connections({
-      class: 'fast'
-    });
-    /*$('#' + this.projectClass + '_id_24, #' + this.projectClass + '_id_27').connections({
-      class: 'fast'
-    });*/
-    $('#' + this.projectClass + '_id_22, #' + this.projectClass + '_id_30').connections({
-      class: 'fast'
-    });
-    $('#' + this.projectClass + '_id_26, #' + this.projectClass + '_id_27').connections({
-      class: 'fast'
-    });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_no').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_node_23_no, #' + this.projectClass + '_id_24').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_no').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_node_24_no, #' + this.projectClass + '_id_26').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_24, #' + this.projectClass + '_node_24_yes').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_node_24_yes, #' + this.projectClass + '_id_25').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_25, #' + this.projectClass + '_id_27').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_27, #' + this.projectClass + '_id_28').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_28, #' + this.projectClass + '_id_29').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_29, #' + this.projectClass + '_id_31').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_31, #' + this.projectClass + '_id_30').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_30, #' + this.projectClass + '_id_32').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_23, #' + this.projectClass + '_node_23_yes').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_node_23_yes, #' + this.projectClass + '_id_27').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      /*$(jquery_selector_prefix).find('#' + this.projectClass + '_id_24, #' + this.projectClass + '_id_27').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });*/
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_22, #' + this.projectClass + '_id_30').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_id_26, #' + this.projectClass + '_id_27').connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
+      });
+    }, 0);
   }
 
   ngAfterViewInit() {

@@ -13,7 +13,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { ResizableModule } from 'angular-resizable-element';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -68,7 +68,9 @@ import { Name2casService } from './name2cas/name2cas.service';
 import { ChemblService } from './chembl/chembl.service';
 import { CompoundService } from './compound/compound.service';
 import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
+import { DatamatrixComponent } from './datamatrix/datamatrix.component';
 
+import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 
 
 
@@ -101,6 +103,8 @@ import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
     Name2casComponent,
     ChemblComponent,
     CompoundComponent,
+    DatamatrixComponent,
+    EscapeHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -133,7 +137,8 @@ import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
       timeOut: 3000,
       positionClass: 'toast-top-center',
       preventDuplicates: true,
-    }) // ToastrModule added
+    }), // ToastrModule added
+    ResizableModule
   ],
   providers: [
     httpInterceptorProviders,

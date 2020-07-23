@@ -1,4 +1,11 @@
 <app-navbar></app-navbar>
+<!-- <div class="rectangle"
+mwlResizable
+[ngStyle]="style"
+[resizeSnapGrid]="{ left: 50, right: 50 }"
+[enableGhostResize]="true"
+[resizeEdges]="{ bottom: true, right: true, top: true, left: true }"
+(resizeEnd)="onResizeEnd($event)"></div> -->
 <div class="container-fluid">
     <div class="d-flex flex-row">
         <div id="sidebar" class="d-flex flex-column col-lg-2 bg-light active">
@@ -10,9 +17,40 @@
                     <i class="fas fa-align-left"></i>
                     <h3><span>&#9776;</span></h3>
                 </button>
+                <div class="ml-auto">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" style="margin-bottom: 0; padding-bottom: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Projects
+                        </button>
+                        <div class="dropdown-menu" [ngClass]="{'disabled': objectKeys(this.globals.current_user.projects$ | async).length > 0 }">
+                            <!--<div class="dropdown-divider"></div>-->
+                            <a *ngFor="let name of objectKeys(this.globals.current_user.projects$ | async);" class="dropdown-item"  (click)="swapProject(this.globals.visible_project, name)"> {{name}} </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <app-tabs></app-tabs>
-            <app-workflows></app-workflows>   
+
+
+            <div class="d-md-flex h-md-100 align-items-center">
+                <div *ngIf="this.globals.active_projects.length > 0" id="resizible-workflows" class="" mwlResizable [enableGhostResize]="true"
+                 [resizeEdges]="{ bottom: false, right: true, top: false, left: this.globals.active_projects.length > 0 }"
+                 (resizeStart)="onResizeStart($event)"
+                 (resizeEnd)="onResizeEnd($event)"
+                 (resizing)="onResizing($event)"
+                 [ngStyle]="workflowStyle">
+                    <app-tabs></app-tabs>
+                    <app-workflows [workflow_resize_start]="workflow_resize_start"
+                     [redraw]="workflowRedraw" [workflow_resize_update]="workflow_resize_update"></app-workflows>
+                </div>
+                <div *ngIf="this.globals.active_projects.length==0" style="width: 100%">
+                    <div style="margin-left: 0px; margin-right: 0px;" class="row shadow bg-white  justify-content-center" >
+                        <p class="font-italic pb-5">--Open a project--</p>
+                    </div>
+                </div>
+                <div  id="app-datamatrix-container" *ngIf="this.globals.active_projects.length > 0" class="overflow-auto col">
+                    <app-datamatrix [workflow_scroll]="this.globals.workflow_scroll" [redraw]="datamatrixRedraw" [projectName]="this.globals.current_main_project"></app-datamatrix>
+                </div>
+            </div>  
                
         </div>
     </div>      

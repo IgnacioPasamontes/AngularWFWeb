@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit, TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ChemblService } from './chembl.service';
+import { Compound, CompoundService } from '../compound/compound.service';
+import { TcCompoundsService } from '../tc-characterization/tc-compounds.service';
 import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 import { AsyncSubject } from 'rxjs';
 
@@ -11,9 +13,16 @@ import { AsyncSubject } from 'rxjs';
   styleUrls: ['./chembl.component.css']
 })
 export class ChemblComponent implements OnInit, AfterViewInit {
+
+  static ra_abbr_to_ra_type: Object = {tc: Compound.TARGET_COMPOUND, sc: Compound.SOURCE_COMPOUND};
+
   @Input() info;
+  @Input() ra_type;
+  public ra_compound_service: any;
   public chembl_running: boolean = false;
+  public input_type_radio_value: string = 'smiles';
   public chembl_search_string: string;
+  public selected_compound_int_id: number;
   public chembl_item_list: Array<Object> = [];
   public chembl_selected_item_int_id_list: Array<number> = [];
   public binded_multiselect_id: string = 'chembl_chembl_ids';
@@ -22,7 +31,12 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public chembl_item_copy_copy_selection_only: boolean;
   public chembl_content_item_textarea: any;
   public activity: string = '';
-  public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units', 'assay_description'];
+  public activity_compound: Compound;
+  public activity_chembl_ids: Array<string>;
+  public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units',
+   'assay_description', 'value', 'units', 'assay_chembl_id'];
+  public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
+  'assay_description'];
   public chembl_activity_rows: Array<Object> = [];
   public ngb_modal_opt: Object = {
     ariaLabelledBy: 'chembl-copy-clipboard-basic-title',
@@ -32,10 +46,27 @@ export class ChemblComponent implements OnInit, AfterViewInit {
 
   constructor(
       private service: ChemblService,
-      private modalService: NgbModal) { }
+      private modalService: NgbModal,
+      public tc_compounds: TcCompoundsService) { }
 
   ngOnInit() {
 
+    switch (this.ra_type) {
+      case 'tc': {
+        this.ra_compound_service = this.tc_compounds;
+        break;
+      }
+
+      case 'sc': {
+        this.ra_compound_service = null;
+        break;
+      }
+      default : {
+        alert('Invalid CompoundComponent RA type.');
+        break;
+      }
+    }
+    this.ra_compound_service.getCompounds(this.info.project);
   }
 
   ngAfterViewInit() {
@@ -247,26 +278,32 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         return chembl_activity_rows$;
   }
 
-  chemblIdFromSmilesButton() {
+  chemblIdFromSmilesButton(reset_activity_compound: boolean = true) {
     this.chembl_running = true;
     this.setItemList([]);
+    this.activity_chembl_ids = undefined;
+    if (reset_activity_compound) {
+      this.activity_compound = undefined;
+    }
+    this.chembl_activity_rows = [];
+    this.activity = '';
     const subscript = this.service.chemblSmilesToInChIKey(this.chembl_search_string).subscribe(
       result => {
         const unichem_subscript = this.service.uniChemGetSrcIdFromInChIKey(result.inchikey).subscribe(
           <Array>(unichem_result) => {
             const chembl_ids = this.service.getChEMBLIDFromUniChemData(unichem_result);
+            this.activity_chembl_ids = chembl_ids;
             this.setItemList(this.service.arrayToItemList(chembl_ids));
-            this.chembl_activity_rows = [];
             const chembl_activity_rows_obj: Object = {};
             let index: number = 0;
             const chembl_activity$ = new AsyncSubject<string[]>();
             const chembl_act_subs = chembl_activity$.subscribe(result => {
               let activity_rows: string = '';
               Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
-                this.chembl_activity_rows += chembl_activity_rows_obj[idx];
+                this.chembl_activity_rows.push(chembl_activity_rows_obj[idx]);
                 chembl_activity_rows_obj[idx].forEach(activity => {
                   activity_rows += '<tr>';
-                  this.chembl_activity_fields.forEach(field => {
+                  this.chembl_displayed_activity_fields.forEach(field => {
                     activity_rows += '<td>' + activity[field] + '</td>';
                   });
                   activity_rows += '</tr>';
@@ -283,7 +320,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
               chembl_act_subs.unsubscribe();
             }
             );
-            let sucess_count: number = 0;
+            let success_count: number = 0;
             const chembl_ids_length = chembl_ids.length;
             chembl_ids.forEach(chembl_id => {
               const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
@@ -291,8 +328,8 @@ export class ChemblComponent implements OnInit, AfterViewInit {
                 chembl_result => {
                   chembl_activity_rows_obj[index] = chembl_result['activities'];
                   chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
-                  sucess_count++;
-                  if (chembl_ids_length >= sucess_count) {
+                  success_count++;
+                  if (chembl_ids_length >= success_count) {
                     chembl_activity$.complete();
                   }
                 },
@@ -332,6 +369,33 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     );
   }
 
+  chemblIdFromCompoundButton() {
+    this.chembl_running = true;
+    const old_chembl_search_string: string = this.chembl_search_string;
+    let activity_compound: Compound;
+    const BreakException = {};
+    try {
+      this.ra_compound_service.compounds$.getValue().forEach(compound => {
+        if (compound.int_id === this.selected_compound_int_id) {
+          activity_compound = compound;
+          throw BreakException;
+        }
+      });
+    } catch (e) {
+      if (e !== BreakException) { throw e; }
+    }
+    if (typeof activity_compound !== 'undefined') {
+      this.chembl_search_string = activity_compound.smiles;
+      this.activity_compound = activity_compound;
+      this.chemblIdFromSmilesButton(false);
+      this.chembl_search_string = old_chembl_search_string;
+    } else {
+      alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
+      this.chembl_running = false;
+    }
+
+  }
+
   openCopy(content: TemplateRef<any>, copy_selection_only: boolean = true) {
     let closeResult: string;
     let copy_textarea_id: string = 'chembl_copy_textarea';
@@ -365,5 +429,26 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     }
   }
 
+  compoundChange() {
 
+  }
+
+  typeof(variable: any) {
+    return typeof variable;
+  }
+
+  saveActivityButton() {
+    const subs = this.service.saveChemblData(this.activity_compound, this.chembl_activity_rows)
+    .subscribe(result => {
+      alert('ChEMBL data saved.');
+
+    },
+    error => {
+      alert('Error while saving ChEMBL data.');
+      subs.unsubscribe();
+    },
+    () => {
+      subs.unsubscribe();
+    });
+  }
 }

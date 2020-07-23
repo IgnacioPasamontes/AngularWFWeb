@@ -22,8 +22,11 @@ declare var $;
 export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
   @Input() projectName;
+  @Input() redraw: boolean;
   @Input() visibleProject: string;
   @Input() change: boolean;
+  @Input() resize_redraw: boolean;
+  @Input() workflow_resize_start: boolean;
 
   public Editor = ClassicEditor;
 
@@ -69,17 +72,40 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   ngOnChanges (changes) {
     if (this.visibleProject !== '') {
       if (this.projectName === this.visibleProject) {
-        if (changes.hasOwnProperty('visibleProject')) {
+        
+        if (changes.hasOwnProperty('visibleProject') || changes.hasOwnProperty('redraw')) {
           this.drawConnections();
+        }
+        if (changes.hasOwnProperty('resize_redraw')) {
+            this.removeConnections();
+            this.drawConnections();
+
         }
         if (changes.hasOwnProperty('change')) {
           this.updateCheckedNodes();
+        }
+        if (changes.hasOwnProperty('workflow_resize_start')) {
+          this.removeConnections(true, true);
+        }
+        if (changes.hasOwnProperty('workflow_resize_update')) {
+          this.removeConnections(true, true);
+          this.drawConnections(true);
         }
       }
     }
   }
 
-
+  removeConnections(resize_clone: boolean = false, hard: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+    (<any>$(jquery_selector_prefix).find('.' + this.projectClass)).connections('remove');
+    if (hard) {
+      $(jquery_selector_prefix).find('#' + this.projectClass + '_workflow connection').remove();
+    }
+    
+  }
 
   ngOnDestroy() {
     (<any>$('.' + this.projectClass)).connections('remove');
@@ -97,38 +123,54 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     );
   }
 
-  drawConnections() {
-    (<any>$('.' + this.projectClass)).connections('remove');
+  drawConnections(resize_clone: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+    setTimeout(() => {
 
-    $('#' + this.projectClass + '_id_13, #' + this.projectClass + '_id_16').connections({
-      class: 'fast'
+    (<any>$(jquery_selector_prefix).find('.' + this.projectClass)).connections('remove');
+
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_13, #' + this.projectClass + '_id_16').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_14, #' + this.projectClass + '_id_17').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_14, #' + this.projectClass + '_id_17').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_15, #' + this.projectClass + '_id_18').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_15, #' + this.projectClass + '_id_18').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_16, #' + this.projectClass + '_id_19').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_16, #' + this.projectClass + '_id_19').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_17, #' + this.projectClass + '_id_19').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_17, #' + this.projectClass + '_id_19').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_18, #' + this.projectClass + '_id_20').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_18, #' + this.projectClass + '_id_20').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_21').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_21').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
 
     
-    /*$('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_13').connections({
-      class: 'fast'
+    /*$(jquery_selector_prefix).find('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_13').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
-    $('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_14').connections({
-      class: 'fast'
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_14').connections({
+      class: 'fast',
+      within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });*/
+    }, 0);
   }
 
   ngAfterViewInit() {

@@ -6,7 +6,7 @@
             <th>Compound #</th><th>Name</th><th>CAS registry #</th><th></th><th></th><th style="display: hidden;"></th>
         </tr>
 
-        <tr *ngFor="let compound of (this.ra_compound_service.compounds$| async); index as i;">
+        <tr *ngFor="let compound of (this.ra_compound_service.compounds$ | async); index as i;">
             <td>{{compound.int_id}}</td>
             <td>{{compound.name}}</td>
             <td>{{compound.cas_rn}}</td>

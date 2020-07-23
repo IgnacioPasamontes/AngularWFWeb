@@ -907,15 +907,15 @@ let ChemblComponent = class ChemblComponent {
                 }, () => {
                     chembl_act_subs.unsubscribe();
                 });
-                let sucess_count = 0;
+                let success_count = 0;
                 const chembl_ids_length = chembl_ids.length;
                 chembl_ids.forEach(chembl_id => {
                     const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
                     const chembl_subs = chembl_activity_rows$.subscribe(chembl_result => {
                         chembl_activity_rows_obj[index] = chembl_result['activities'];
                         chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
-                        sucess_count++;
-                        if (chembl_ids_length >= sucess_count) {
+                        success_count++;
+                        if (chembl_ids_length >= success_count) {
                             chembl_activity$.complete();
                         }
                     }, error => {

@@ -27,6 +27,7 @@
     "@ckeditor/ckeditor5-editor-balloon": "^15.0.0",
     "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "angular-datatables": "^8.0.0",
+    "angular-resizable-element": "^3.3.2",
     "bootstrap": "^4.4.1",
     "bootstrap-material-design": "^4.1.2",
     "bootstrap-material-design-icons": "^2.2.0",

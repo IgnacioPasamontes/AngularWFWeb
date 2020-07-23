@@ -26,8 +26,13 @@ declare var $: JQueryStatic;
 export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
   @Input() projectName;
+  @Input() redraw: boolean;
   @Input() visibleProject: string;
   @Input() change: boolean;
+  @Input() resize_redraw: boolean;
+  @Input() workflow_resize_update: boolean;
+  @Input() workflow_resize_start: boolean;
+
   display = 'none';
 
   overlayPortal: ComponentPortal<any> = new ComponentPortal(OverlayComponent); 
@@ -56,7 +61,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   constructor(public globals: Globals,
     private dialog: MatDialog,
     private node: NodeInfoService,
-    private tabs : TabsService,
+    private tabs: TabsService,
     private service: EachWorkflowService,
     public overlay: Overlay) { }
 
@@ -69,11 +74,23 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     if (this.visibleProject !== '') {
       if (this.projectName === this.visibleProject) {
         
-        if (changes.hasOwnProperty('visibleProject')) {
+        if (changes.hasOwnProperty('visibleProject') || changes.hasOwnProperty('redraw')) {
           this.drawConnections();
+        }
+        if (changes.hasOwnProperty('resize_redraw')) {
+            this.removeConnections();
+            this.drawConnections();
+
         }
         if (changes.hasOwnProperty('change')) {
           this.updateCheckedNodes();
+        }
+        if (changes.hasOwnProperty('workflow_resize_start')) {
+          this.removeConnections(true, true);
+        }
+        if (changes.hasOwnProperty('workflow_resize_update')) {
+          this.removeConnections(true, true);
+          this.drawConnections(true);
         }
       }
     }
@@ -95,49 +112,79 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     );
   }
 
-  drawConnections() {
-    (<any>$('.' + this.projectName)).connections('remove');
+  removeConnections(resize_clone: boolean = false, hard: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+    (<any>$(jquery_selector_prefix).find('.' + this.projectName)).connections('remove');
+    if (hard) {
+      $(jquery_selector_prefix).find('#' + this.projectName + '_workflow connection').remove();
+    }
+    
+  }
 
-    (<any>$('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_2, #' + this.projectName + '_id_3')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_3, #' + this.projectName + '_id_4')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_4, #' + this.projectName + '_id_5')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_5, #' + this.projectName + '_id_6')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_6, #' + this.projectName + '_id_7')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_7, #' + this.projectName + '_id_8')).connections({
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_9')).connections({
-      from: '#' + this.projectName + '_id_8',
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_10')).connections({
-      from: '#' + this.projectName + '_id_8',
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_11')).connections({
-      from: '#' + this.projectName + '_id_9',
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_11')).connections({
-      from: '#' + this.projectName + '_id_10',
-      class: 'fast'
-    });
-    (<any>$('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12')).connections({
-      class: 'fast'
-    });
+  drawConnections(resize_clone: boolean = false) {
+    let jquery_selector_prefix: string = "body ";
+    if (resize_clone) {
+      jquery_selector_prefix = ":not(.resize-active) ";
+    }
+
+    setTimeout(() => {
+      (<any>$(jquery_selector_prefix).find('.' + this.projectName)).connections('remove');
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_1, #' + this.projectName + '_id_2')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_2, #' + this.projectName + '_id_3')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_3, #' + this.projectName + '_id_4')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_4, #' + this.projectName + '_id_5')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_5, #' + this.projectName + '_id_6')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_6, #' + this.projectName + '_id_7')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_7, #' + this.projectName + '_id_8')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_9')).connections({
+        from: '#' + this.projectName + '_id_8',
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_10')).connections({
+        from: '#' + this.projectName + '_id_8',
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_11')).connections({
+        from: '#' + this.projectName + '_id_9',
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_11')).connections({
+        from: '#' + this.projectName + '_id_10',
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_11, #' + this.projectName + '_id_12')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
+    }, 0);
   }
 
   ngAfterViewInit() {
@@ -145,10 +192,10 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     
     //redraw connector lines when div.limit resizes
     const that = this;
-    $(".limit").each(function(){
+    $(".limit").each(function() {
       let resize_sensor = new ResizeSensor(this, function () {
         that.reDraw();
-      })
+      });
      
     })
 
@@ -232,13 +279,13 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   openTD() {
-    const td_projectName = this.projectName+this.globals.td_project_suffix;
+    const td_projectName = this.projectName + this.globals.td_project_suffix;
     (<any>$('.card')).connections('remove');
     this.tabs.openProject(td_projectName);
   }
 
   openTK() {
-    const tk_projectName = this.projectName+this.globals.tk_project_suffix;
+    const tk_projectName = this.projectName + this.globals.tk_project_suffix;
     (<any>$('.card')).connections('remove');
     this.tabs.openProject(tk_projectName);
   }

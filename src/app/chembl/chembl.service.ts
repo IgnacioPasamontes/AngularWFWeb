@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
 import { User } from '../user';
+import { LoginService } from '../login/login.service';
+import { Compound, CompoundService } from '../compound/compound.service';
 
 import { TIMEOUT_HEADER } from '../http-interceptors/timeout-interceptor';
 @Injectable({
@@ -15,7 +17,8 @@ export class ChemblService {
 
   constructor(private http: HttpClient,
     private cookieService: CookieService,
-    public globals: Globals) { }
+    public globals: Globals,
+    private loginService: LoginService) { }
 
   encodeBoolean(bool: boolean) {
     if (bool) {
@@ -76,4 +79,11 @@ export class ChemblService {
     return item_list;
   }
 
+  saveChemblData(compound: Compound, data: Array<Object>): Observable<any> {
+    const url: string = environment.baseUrl + 'project/' + compound.project.toString() + '/compound/' + 
+    Compound.ra_type_abbrev_to_value_dict[compound.ra_type] + '/' + compound.int_id.toString() + '/chembl_save/';
+    let options: Object = this.loginService.getPOSTHttpOptions();
+    options['headers'] = options['headers'].append('Content-Type', 'application/json');
+    return this.http.post(url, JSON.stringify(data[0]), options);
+  }
 }

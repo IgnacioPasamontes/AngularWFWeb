@@ -23,5 +23,5 @@ npm install smiles-drawer --save
 npm install --save @ng-bootstrap/ng-bootstrap
 npm install @types/xml2js --save-dev
 npm install --save @types/jquery --save-dev
-
+npm install --save angular-resizable-element
 

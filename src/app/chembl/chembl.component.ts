@@ -34,7 +34,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public activity_compound: Compound;
   public activity_chembl_ids: Array<string>;
   public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units',
-   'assay_description', 'value', 'units', 'assay_chembl_id'];
+   'assay_description', 'value', 'units', 'assay_chembl_id', 'text_value', 'activity_comment', 'pchembl_value'];
   public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
   'assay_description'];
   public chembl_activity_rows: Array<Object> = [];

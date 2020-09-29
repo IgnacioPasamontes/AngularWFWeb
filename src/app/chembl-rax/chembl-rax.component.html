@@ -1,0 +1,138 @@
+<div class="card">
+    <h6 class="card-header bg-light p-1">ChEMBL substructure search</h6>
+    <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+        <table style="width:100%;vertical-align:bottom">
+            <tr>
+                <ng-container [ngSwitch]="input_type_radio_value">
+                    <ng-container *ngSwitchCase="'smiles'">
+                        <td style="width:9rem">
+                            <label style="margin-bottom:0px" for="chembl_search_string" >SMILES:</label>
+                        </td>
+                        <td>
+                            <br>
+                            <input id="chembl_search_string" required class="form-control" name="search_string" [(ngModel)]="chembl_search_string" type="text" (change)="chemblSearchStringChange($event)">
+                            <br>
+
+                        </td>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="raxFromSmilesButton()">Search</button>
+                            <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        </td>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'compound'">
+                        <td style="width:9rem">
+                            <br>
+                            <label style="margin-bottom:0px" for="selected_compound" >Compound:</label><br><br>
+                        </td>
+                        <td style="width:auto">
+                            <mat-form-field>
+                                <mat-select id="selected_compound" required class="form-control" name="selected_compound_name" (selectionChange)="this.compoundChange($event)" [(ngModel)]="this.selected_compound_int_id">
+                                    <mat-option *ngFor="let compound of (ra_compound_service.compounds$ | async)" [value]="compound.int_id" [innerHTML]="compound.int_id.toString()+': '+compound.name"></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <br>
+                        </td>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="raxFromCompoundButton()">Search</button>
+                            <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        </td>
+                    </ng-container>
+                </ng-container>
+            </tr>    
+            <tr>
+                <td style="width:9rem"></td>
+                <td>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="input_type_radio1" name="input_type_radio" ng-control="input_type_radio" class="custom-control-input" [value]="'smiles'" [(ngModel)]="input_type_radio_value" >
+                        <label class="custom-control-label" for="input_type_radio1">SMILES</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="input_type_radio2" name="input_type_radio" ng-control="input_type_radio" class="custom-control-input" (change)="this.ra_compound_service.getCompounds(this.info.project)" [value]="'compound'" [(ngModel)]="input_type_radio_value">
+                        <label class="custom-control-label" for="input_type_radio2">Saved compound</label>
+                    </div>
+                    <br>                  
+                </td>
+
+            </tr>
+            <tr>
+
+
+                <td style="width:9rem">
+                    <label style="margin-bottom:0px" for="chembl_search_string">Page size:</label>
+                    <img [ngbTooltip]="page_size_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+                </td>
+                <td>
+                    <br>
+                    <input style="width:9rem" id="chembl_search_string" min="0" class="form-control" name="page_size" [(ngModel)]="chembl_substructure_search_page_size" type="number">
+                    <br>
+
+                </td>
+                <td></td>
+
+            </tr>
+            <tr *ngIf="chembl_substructure_search_total_count !== null && typeof(chembl_substructure_search_total_count) !== 'undefined'">
+
+
+                <td style="width:9rem">
+                </td>
+                <td>
+                    <label *ngIf="chembl_substructure_search_count < chembl_substructure_search_total_count" style="margin-bottom:0px" >{{chembl_substructure_search_count}} compounds downloaded out of {{chembl_substructure_search_total_count}}.</label>
+                    <label *ngIf="chembl_substructure_search_count === chembl_substructure_search_total_count" style="margin-bottom:0px" >{{chembl_substructure_search_count}} compounds found.</label>
+                </td>
+                <td></td>
+                
+            </tr>
+            <tr>
+                <td style="width:9rem">
+                    <label style="margin-bottom: 0px; white-space: pre-wrap" for="chembl_search_string" >Similarity<br>cutoff (%):</label>
+                </td>
+                <td>
+                    <br>
+                    <input style="width:9rem" class="form-control" required min="0" max="100" name="rdkit_similarity_cutoff" [(ngModel)]="rdkit_similarity_cutoff" type="number">
+                    <br>
+
+                </td>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || chembl_substructure_search_result_compounds.length === 0" (click)="filterBySimilarityButton()">Filter</button>
+                    <mat-spinner *ngIf="rdkit_similarity_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                </td>
+            </tr>
+            <ng-container  *ngIf="chembl_substructure_search_filtered_compounds.length > 0">
+            <tr>
+
+
+                <td style="width:9rem">
+                </td>
+                <td>
+                    <label style="margin-bottom:0px" >{{chembl_substructure_search_filtered_compounds.length}} compounds with similarity >= {{last_rdkit_similarity_cutoff}}%.</label>
+                </td>
+                <td></td>
+                
+            </tr>
+            <tr>
+                <td style="width:9rem">
+                </td>
+                <td>
+
+                </td>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="save_running || chembl_substructure_search_filtered_compounds.length === 0" (click)="saveButton()">Save</button>
+                    <mat-spinner *ngIf="save_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:9rem">
+                </td>
+                <td>
+
+                </td>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.chembl_running || object_keys(this.chembl_activity_rows_compound).length === 0" (click)="saveActivities()">Save activities</button>
+                    <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                </td>
+            </tr>
+            </ng-container>
+            <tr><td><br></td><td><br></td><td><br></td></tr>
+        </table>
+    </div>
+</div>
+<ng-template #page_size_help>
+    <p style="text-align: left;"><b>Number of molecule entries per query page:</b> <br> Larger values might improve search speed, 
+    but increase the probability of connection errors for exceeding request execution 
+    time limit.</p>
+</ng-template>

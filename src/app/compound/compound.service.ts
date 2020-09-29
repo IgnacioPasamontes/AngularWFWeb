@@ -16,6 +16,9 @@ export class Compound {
           this[field] = compound_obj[field];
         }
       });
+      if (!compound_obj.hasOwnProperty('chembl_id')) {
+        this['chembl_id'] = null;
+      }
     }
   }
 
@@ -23,13 +26,26 @@ export class Compound {
   public static SOURCE_COMPOUND: number = 1;
   public static ra_type_abbrev_to_value_dict: Object = {0: 'tc', 1: 'sc'};
   public static data_fields: Array<string> = ['smiles', 'cas_rn', 'name',
-  'project', 'int_id', 'ra_type'];
+  'project', 'int_id', 'ra_type', 'chembl_id'];
+
   public smiles: string;
   public cas_rn: string;
   public name: string;
   public project: number;
   public int_id: number;
   public ra_type: number;
+  public chembl_id: string = null;
+
+  static getObject( compound: Compound, undef = false) {
+    const obj: Object = {};
+    Compound.data_fields.forEach(field => {
+      if ( typeof this[field] !== 'undefined' || undef ) {
+        obj[field] = this[field];
+      }
+    });
+    return obj;
+  }
+
 
   getObject(undef = false) {
     const obj: Object = {};
@@ -116,6 +132,34 @@ export class CompoundService {
       return this.http.post(url, formData, this.loginService.getPOSTHttpOptions());
     } else {
       return this.http.put(url, formData, this.loginService.getPOSTHttpOptions());
+    }
+  }
+
+  saveCompounds(compounds: Compound[], ra_type: number, project: number, create_new = true): Observable<any> {
+    let compound_objs: Object[] = [];
+    let compound_obj: Object;
+
+    compounds.forEach(compound => {
+
+      if (typeof compound.getObject === 'function') {
+        compound_obj = compound.getObject(false);
+      } else if (typeof compound === 'object') {
+        compound_obj = compound;
+      } else {
+        compound_obj = Compound.getObject(compound, false); 
+      }
+      compound_objs.push(compound_obj);
+    });
+
+    const data = JSON.stringify(compound_objs);
+    const options = this.loginService.getPOSTHttpOptions();
+    options['headers'] = options['headers'].append('Content-Type', 'application/json');
+    const url: string = environment.baseUrl  + 'project/' + project + '/compound/' +
+     Compound.ra_type_abbrev_to_value_dict[ra_type] + '/multiple/';
+    if (create_new) {
+      return this.http.post(url, data, options);
+    } else {
+      return this.http.put(url, data, options);
     }
   }
 

@@ -33,10 +33,8 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public activity: string = '';
   public activity_compound: Compound;
   public activity_chembl_ids: Array<string>;
-  public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units',
-   'assay_description', 'value', 'units', 'assay_chembl_id', 'text_value', 'activity_comment', 'pchembl_value'];
-  public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
-  'assay_description'];
+  public chembl_activity_fields: Array<string> = this.service.chembl_activity_fields;
+  public chembl_displayed_activity_fields = this.service.chembl_displayed_activity_fields;
   public chembl_activity_rows: Array<Object> = [];
   public ngb_modal_opt: Object = {
     ariaLabelledBy: 'chembl-copy-clipboard-basic-title',
@@ -207,8 +205,8 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   }
 
   parseChEMBLGetADMETActivityData(chembl_result: Object, activity_rows: Object[],
-     chembl_activity_rows$: AsyncSubject<Object>, count: number = 0,
-     limit: number = 1000000, fields: Array<string> = null) {
+    chembl_activity_rows$: AsyncSubject<Object>, count: number = 0,
+    limit: number = 1000000, fields: Array<string> = null) {
 
     if (fields != null) {
       chembl_result['activities'].forEach(activity => {
@@ -300,7 +298,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
             const chembl_act_subs = chembl_activity$.subscribe(result => {
               let activity_rows: string = '';
               Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
-                this.chembl_activity_rows.push(chembl_activity_rows_obj[idx]);
+                this.chembl_activity_rows = this.chembl_activity_rows.concat(chembl_activity_rows_obj[idx]);
                 chembl_activity_rows_obj[idx].forEach(activity => {
                   activity_rows += '<tr>';
                   this.chembl_displayed_activity_fields.forEach(field => {

@@ -76,21 +76,28 @@
 
                 <td style="width:9rem"><label style="margin-bottom:0px" for="name2smiles_smiles" >SMILES:</label></td>
                 <td style="width:auto">
-                        <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="this.smiles.selected_item_int_id_list" multiple>
-                        <ng-container *ngIf="this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
-                        <ng-container *ngIf="!this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_set" [ngValue]="item.int_id">{{item.value}}</option></ng-container>
-                        </select>
-                        
+                    <div class="">
+                        <div class="form-check">
+                            <input class="form-check-input" id="show-smiles" type="checkbox" [(ngModel)]="this.show_smiles">
+                            <label class="form-check-label" for="show-smiles">Show SMILES.</label>
+                        </div> 
+                        <app-molecule-picker *ngIf="!this.show_smiles" [identifier]="'tc'" [smiles]="this.smiles.item_set"></app-molecule-picker>
+                    </div>
+                    <div [style.display]="this.sanitizer.bypassSecurityTrustStyle(this.show_smiles ? 'block' : 'none')">
+                            <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="this.smiles.selected_item_int_id_list" multiple>
+                            <ng-container *ngIf="this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
+                            <ng-container *ngIf="!this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_set" [ngValue]="item.int_id">{{item.value}}</option></ng-container>
+                            </select>
+                    </div>
                 </td>
                 <td style="width:8rem">
                 </td>
         </tr>
-        <tr>
+        <tr *ngIf="this.show_smiles">
             <td><button class="btn" [disabled]="this.smiles.item_list.length === 0 || !this.smiles.item_show_cactvs_data" (click)="this.smiles.removeItemValueDuplicates();">Remove duplicates</button><br></td>
             <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="this.smiles.selected_item_int_id_list.length === 0" (click)="this.smiles.deleteSelectedItems()">Delete</button>
             <button style="display:inline-block" class="btn" [disabled]="this.smiles.selected_item_int_id_list.length === 0" (click)="openCopy(contentSmiles,'smiles',true)">Copy in clipboard</button>
             <button style="display:inline-block" class="btn" [disabled]="this.smiles.item_list.length === 0" (click)="openCopy(contentSmiles,'smiles',false)">Copy all in clipboard</button></td>
-
         </tr>
     </table>
 </div>
@@ -138,7 +145,7 @@
 </ng-template>
 <ng-template #contentSmiles let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="name2smiles-copy-clipboard-basic-title">SMILES registry number(s)</h4>
+            <h4 class="modal-title" id="name2smiles-copy-clipboard-basic-title">SMILES</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('close')">
             <span aria-hidden="true">&times;</span>
             </button>

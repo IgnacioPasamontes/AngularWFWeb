@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, TemplateRef, OnDestroy } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser'
+
 import { Name2casService } from './name2cas.service';import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseString } from 'xml2js';
@@ -271,6 +273,7 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
   compound_synonyms: Array<Object> = [];
   compound_name_executed: boolean = false;
   compound_name_running: boolean = false;
+  public show_smiles: Boolean;
   cactus_interfaces: Object = {
       cas: this.cas,
       smiles: this.smiles
@@ -292,7 +295,8 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
   finished_cactvs_from_name_query$: Subject<string>;
 
   constructor(private service: Name2casService,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal,
+              protected sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     Object.keys(this.cactus_interfaces).forEach((interf) => {

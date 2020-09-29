@@ -13,6 +13,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ResizableModule } from 'angular-resizable-element';
 
 import { MatTableModule } from '@angular/material/table';
@@ -49,8 +50,11 @@ import { OverlayComponent } from './overlay/overlay.component';
 import { Name2casComponent } from './name2cas/name2cas.component';
 import { ChemblComponent } from './chembl/chembl.component';
 import { CompoundComponent } from './compound/compound.component';
+import { DatamatrixComponent } from './datamatrix/datamatrix.component';
+import { ChemblRaxComponent } from './chembl-rax/chembl-rax.component';
 
 import { KeysPipe } from './keys.pipe';
+import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
 
 import { ViewModeDirective } from './editable/view-mode.directive';
 import { EditModeDirective } from './editable/edit-mode.directive';
@@ -68,9 +72,10 @@ import { Name2casService } from './name2cas/name2cas.service';
 import { ChemblService } from './chembl/chembl.service';
 import { CompoundService } from './compound/compound.service';
 import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
-import { DatamatrixComponent } from './datamatrix/datamatrix.component';
+import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
+import { MoleculePickerComponent } from './molecule-picker/molecule-picker.component';
 
-import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
+
 
 
 
@@ -104,7 +109,9 @@ import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
     ChemblComponent,
     CompoundComponent,
     DatamatrixComponent,
-    EscapeHtmlPipe
+    EscapeHtmlPipe,
+    ChemblRaxComponent,
+    MoleculePickerComponent
   ],
   imports: [
     BrowserModule,
@@ -131,6 +138,7 @@ import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
     MatProgressSpinnerModule,
     CKEditorModule,
     NgbModalModule,
+    NgbTooltipModule,
     OverlayModule,
     PortalModule,
     ToastrModule.forRoot({
@@ -154,9 +162,10 @@ import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
     ChemblService,
     CompoundService,
     TcCompoundsService,
+    ChemblRaxService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
-  entryComponents: [NodeInfoComponent, OverlayComponent],
+  entryComponents: [NodeInfoComponent, OverlayComponent, MoleculePickerComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

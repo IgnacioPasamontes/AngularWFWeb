@@ -15,6 +15,10 @@ import { TIMEOUT_HEADER } from '../http-interceptors/timeout-interceptor';
 })
 export class ChemblService {
 
+  public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units',
+  'assay_description', 'value', 'units', 'assay_chembl_id', 'text_value', 'activity_comment', 'pchembl_value'];
+  public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
+  'assay_description'];
   constructor(private http: HttpClient,
     private cookieService: CookieService,
     public globals: Globals,
@@ -84,6 +88,6 @@ export class ChemblService {
     Compound.ra_type_abbrev_to_value_dict[compound.ra_type] + '/' + compound.int_id.toString() + '/chembl_save/';
     let options: Object = this.loginService.getPOSTHttpOptions();
     options['headers'] = options['headers'].append('Content-Type', 'application/json');
-    return this.http.post(url, JSON.stringify(data[0]), options);
+    return this.http.post(url, JSON.stringify(data), options);
   }
 }

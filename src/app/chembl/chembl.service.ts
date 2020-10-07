@@ -61,6 +61,16 @@ export class ChemblService {
     return chembl_ids;
   }
 
+  chEMBLGetMoleculeFromCompoundId(chemblid: string) {
+    let url: string = 'https://www.ebi.ac.uk/chembl/api/data/molecule/' + chemblid + '/';
+    const params = new HttpParams().append('format', 'json');
+    return this.http.get(url);
+  }
+
+  getChEMBLSMILESFromMoleculeData(data: Object) {
+    return data['molecule']['molecule_structures']['canonical_smiles'];
+  }
+
   chEMBLGetADMETActivityDataByCompoundId(chemblid: string) {
     let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
     const params = new HttpParams().append('format', 'json').append('assay_type', 'A').

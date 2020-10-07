@@ -74,16 +74,24 @@
     <table style="width:100%;vertical-align:bottom">
         <tr>
 
-                <td style="width:9rem"><label style="margin-bottom:0px" for="name2smiles_smiles" >SMILES:</label></td>
+            <td style="width:9rem"></td>
+            <td style="width:auto">
+                <div class="form-check card-block mt4">
+                    <input class="form-check-input" id="show-smiles" type="checkbox" [(ngModel)]="this.show_smiles">
+                    <label class="form-check-label" for="show-smiles">Show SMILES.</label>
+                </div> 
+            </td>
+            <td style="width:8rem">
+            </td>
+        </tr>            
+        <tr>
+
+                <td style="width:9rem"><label style="margin-bottom:0px" for="name2smiles_smiles" >Structures:</label></td>
                 <td style="width:auto">
                     <div class="">
-                        <div class="form-check">
-                            <input class="form-check-input" id="show-smiles" type="checkbox" [(ngModel)]="this.show_smiles">
-                            <label class="form-check-label" for="show-smiles">Show SMILES.</label>
-                        </div> 
-                        <app-molecule-picker *ngIf="!this.show_smiles" [identifier]="'tc'" [smiles]="this.smiles.item_set"></app-molecule-picker>
+                        <app-molecule-picker *ngIf="!this.show_smiles" [identifier]="'tc'" [smiles]="this.smiles.item_set" [selection]="this.smiles.selected_item_int_id_list" (selected)="moleculeSelected($event)"></app-molecule-picker>
                     </div>
-                    <div [style.display]="this.sanitizer.bypassSecurityTrustStyle(this.show_smiles ? 'block' : 'none')">
+                    <div class="panel-body card-block" [style.display]="this.sanitizer.bypassSecurityTrustStyle(this.show_smiles ? 'block' : 'none')">
                             <select id="name2smiles_smiles" size=5 class="form-control" name="selected_smiles" [(ngModel)]="this.smiles.selected_item_int_id_list" multiple>
                             <ng-container *ngIf="this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
                             <ng-container *ngIf="!this.smiles.item_show_cactvs_data"><option *ngFor="let item of this.smiles.item_set" [ngValue]="item.int_id">{{item.value}}</option></ng-container>

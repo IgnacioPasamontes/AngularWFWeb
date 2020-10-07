@@ -28,6 +28,18 @@ export class TcCharacterizationComponent implements OnInit {
   }
 
   saveCompound() {
+    if (typeof this.name2cas.compound_name === 'undefined') {
+      alert('Please select a name for the compound.');
+      return;
+    }
+    if (typeof this.name2cas.cas.current_item === 'undefined') {
+      alert('Please select a CAS registry number for the compound.');
+      return;
+    }
+    if (typeof this.name2cas.smiles.current_item === 'undefined') {
+      alert('Please select an struture for the compound.');
+      return;
+    }
     this.resources_compound.name = this.name2cas.compound_name;
     this.resources_compound.cas_rn = this.name2cas.cas.current_item['value'];
     this.resources_compound.smiles = this.name2cas.smiles.current_item['value'];

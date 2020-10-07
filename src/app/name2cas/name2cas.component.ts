@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit, TemplateRef, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser'
 
-import { Name2casService } from './name2cas.service';import { Subscription } from 'rxjs';
+import { Name2casService } from './name2cas.service';
+import { Subscription } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { parseString } from 'xml2js';
 import { TestBed } from '@angular/core/testing';
@@ -14,12 +15,14 @@ export class FromNameCACTVSInteface {
   constructor(cactus_output_key: string,
               binded_multiselect_id: string,
               service: Name2casService,
-              show_cactvs_data: boolean = false) {
+              show_cactvs_data: boolean = false,
+              multiselect: boolean = false) {
     this.cactus_output_key = cactus_output_key;
     this.binded_multiselect_id = binded_multiselect_id;
     this._service = service;
     this.item_show_cactvs_data = show_cactvs_data,
     this.item_copy_show_cactvs_data = show_cactvs_data;
+    this.multiselect = multiselect;
   }
   public from_name_running: boolean = false;
   public from_name_executed: boolean = false;
@@ -36,6 +39,7 @@ export class FromNameCACTVSInteface {
   public binded_multiselect_id: string;
   public cactus_output_key: string;
   private _service: Name2casService;
+  public multiselect: boolean;
 
   private static filterObjectListByKey(object_list: Array<Object>, key : string, values : Array<any>, inverted: boolean = false) {
     let j_key = {};
@@ -91,6 +95,27 @@ export class FromNameCACTVSInteface {
 
   }
 
+  updateMultiSelectSelection() {
+    if (typeof this.binded_multiselect_id !== 'undefined' && this.binded_multiselect_id !== null) {
+      const jquery_select = '#'+this.binded_multiselect_id;
+      const values: string[] = [];
+      const selected_int_id_num: number = this.selected_item_int_id_list.length;
+      if (selected_int_id_num > 0) {
+        const int_id_2_val = this.getIntIdsFromMultiselect();
+        this.selected_item_int_id_list.forEach((int_id) => {
+          values.push(int_id_2_val[int_id]);
+        });
+      }
+      setTimeout(function() {
+        (<any>$(jquery_select)).multiSelect('deselect_all');
+        if (selected_int_id_num > 0) {
+          (<any>$(jquery_select)).multiSelect('select', values);
+        }
+      }.bind(this, jquery_select, values),0);
+    }
+
+  }
+
   getSelectedFromMultiselect() {
     if (typeof this.binded_multiselect_id !== 'undefined' && this.binded_multiselect_id !== null) {
       const jquery_select = '#' + this.binded_multiselect_id;
@@ -99,6 +124,19 @@ export class FromNameCACTVSInteface {
         selected_cas_int_id_list.push(Number((<string>$(this).val()).replace(/^[0-9]+:\s+/,''))+0);
       });
       return selected_cas_int_id_list;
+    }
+  }
+
+  getIntIdsFromMultiselect() {
+    if (typeof this.binded_multiselect_id !== 'undefined' && this.binded_multiselect_id !== null) {
+      const jquery_select = '#' + this.binded_multiselect_id;
+      const int_id_2_val: Object = {};
+      $(jquery_select).children("option").each(function() {
+        const val: string = (<string>$(this).val());
+        const int_id: number = (Number(val.replace(/^[0-9]+:\s+/,''))+0);
+        int_id_2_val[int_id] = val;
+      });
+      return int_id_2_val;
     }
   }
 
@@ -120,7 +158,13 @@ export class FromNameCACTVSInteface {
   }
 
   updateSelectedItemsFromMultiselect() {
-    this.selected_item_int_id_list =  this.getSelectedFromMultiselect();
+    const int_id_list = this.getSelectedFromMultiselect();
+    const int_id_2_val = this.getIntIdsFromMultiselect();
+    if (!this.multiselect && int_id_list.length > 1) {
+      this.updateMultiSelectSelection();
+      return;
+    }
+    this.selected_item_int_id_list = int_id_list;
     this.setCurrentItemIntId();
   }
 
@@ -444,6 +488,19 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
     const item = FromNameCACTVSInteface.filterListByIntId(this.compound_synonyms, [this.compound_name_int_id])[0];
     this.compound_name = item['value'];
   }
+
+  moleculeSelected(molecules) {
+    console.log('selecting');
+    const int_ids: Array<number> = [];
+    molecules.forEach(mol => {
+      int_ids.push(mol.int_id);
+    });
+    console.log(int_ids);
+    this.smiles.selected_item_int_id_list = int_ids;
+    this.smiles.setCurrentItemIntId();
+    this.smiles.updateMultiSelectSelection();
+  }
+
   ngOnDestroy() {
 
   }

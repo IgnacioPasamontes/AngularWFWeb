@@ -55,19 +55,22 @@
 
                     <td style="width:9rem"><label style="margin-bottom:0px" for="chembl_chembl_ids" >ChEMBL ID(s):</label></td>
                     <td style="width:auto">
-                            <select id="chembl_chembl_ids" size=5 class="form-control" name="selected_cas" [(ngModel)]="chembl_selected_item_int_id_list" multiple>
+                        <div class="">
+                            <app-molecule-picker [identifier]="'tc_chembl'" [smiles]="this.chembl_smiles_items" [selection]="this.chembl_selected_item_int_id_list" (selected)="moleculeSelected($event)" [multiple]="true" [show_labels]="true"></app-molecule-picker>
+                        </div>
+<!--                             <select id="chembl_chembl_ids" size=5 class="form-control" name="selected_cas" [(ngModel)]="chembl_selected_item_int_id_list" multiple>
                             <option *ngFor="let item of chembl_item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option>
-                            </select>
+                            </select> -->
                             
                     </td>
                     <td style="width:auto">
                     </td>
         </tr>
         <tr>
-            <td></td>
-            <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="chemblDeleteSelectedItems()">Delete</button>
+            <td><button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="retrieveActivityData($event)">Retrieve</button></td>
+            <!-- <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="chemblDeleteSelectedItems()">Delete</button>
             <button style="display:inline-block" class="btn" [disabled]="chembl_selected_item_int_id_list.length === 0" (click)="openCopy(content,true)">Copy in clipboard</button>
-            <button style="display:inline-block" class="btn" [disabled]="chembl_item_list.length === 0" (click)="openCopy(content,false)">Copy all in clipboard</button></td>
+            <button style="display:inline-block" class="btn" [disabled]="chembl_item_list.length === 0" (click)="openCopy(content,false)">Copy all in clipboard</button></td> -->
         </tr>
     </table>
     <div>

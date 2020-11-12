@@ -30,6 +30,8 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public chembl_item_text_dump: string;
   public chembl_item_copy_copy_selection_only: boolean;
   public chembl_content_item_textarea: any;
+  public chembl_smiles: Object = {};
+  public chembl_smiles_items: Array<Object> = [];
   public activity: string = '';
   public activity_compound: Compound;
   public activity_chembl_ids: Array<string>;
@@ -284,65 +286,36 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       this.activity_compound = undefined;
     }
     this.chembl_activity_rows = [];
+    this.chembl_smiles = {};
     this.activity = '';
     const subscript = this.service.chemblSmilesToInChIKey(this.chembl_search_string).subscribe(
       result => {
         const unichem_subscript = this.service.uniChemGetSrcIdFromInChIKey(result.inchikey).subscribe(
           <Array>(unichem_result) => {
             const chembl_ids = this.service.getChEMBLIDFromUniChemData(unichem_result);
-            this.activity_chembl_ids = chembl_ids;
             this.setItemList(this.service.arrayToItemList(chembl_ids));
-            const chembl_activity_rows_obj: Object = {};
-            let index: number = 0;
-            const chembl_activity$ = new AsyncSubject<string[]>();
-            const chembl_act_subs = chembl_activity$.subscribe(result => {
-              let activity_rows: string = '';
-              Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
-                this.chembl_activity_rows = this.chembl_activity_rows.concat(chembl_activity_rows_obj[idx]);
-                chembl_activity_rows_obj[idx].forEach(activity => {
-                  activity_rows += '<tr>';
-                  this.chembl_displayed_activity_fields.forEach(field => {
-                    activity_rows += '<td>' + activity[field] + '</td>';
-                  });
-                  activity_rows += '</tr>';
-                });
-              });
-              this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th></tr>'
-               + activity_rows + '</table>';
-            },
-            error => {
-              alert('Error retrieving data from ChEMBL');
-              chembl_act_subs.unsubscribe();
-            },
-            () => {
-              chembl_act_subs.unsubscribe();
-            }
-            );
-            let success_count: number = 0;
             const chembl_ids_length = chembl_ids.length;
             chembl_ids.forEach(chembl_id => {
-              const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
-              const chembl_subs = chembl_activity_rows$.subscribe(
-                chembl_result => {
-                  chembl_activity_rows_obj[index] = chembl_result['activities'];
-                  chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
-                  success_count++;
-                  if (chembl_ids_length >= success_count) {
-                    chembl_activity$.complete();
-                  }
-                },
-                error => {
-                  chembl_activity$.error(error);
-                  this.chembl_running = false;
-                  chembl_subs.unsubscribe();
+              const chembl_smiles_sub = this.service.chEMBLGetMoleculeFromCompoundId(chembl_id).subscribe(molecule_result => {
+                this.chembl_smiles[chembl_id] = this.service.getChEMBLSMILESFromMoleculeData(molecule_result);
+                if (Object.keys(this.chembl_smiles).length === this.chembl_item_list.length) {
+                  const items: Object[] = [];
+                  this.chembl_item_list.forEach( item => {
+                    items.push({'int_id': item['int_id'], 'value': this.chembl_smiles[item['value']], label: item['value']});
+                  });
+                  this.chembl_smiles_items = items;
 
-                },
-                () => {
-                  this.chembl_running = false;
-                  chembl_subs.unsubscribe();
                 }
+
+              },
+              error => {
+                alert('Cannot retrieve SMILES from ChEMBL entries.')
+                chembl_smiles_sub.unsubscribe();
+              },
+              () => {
+                chembl_smiles_sub.unsubscribe();
+              }
               );
-              index++;
             });
 
           },
@@ -391,6 +364,64 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
       this.chembl_running = false;
     }
+
+  }
+
+  retrieveActivityData($event) {
+
+    const chembl_ids = this.activity_chembl_ids;
+    const chembl_activity_rows_obj: Object = {};
+    let index: number = 0;
+    const chembl_activity$ = new AsyncSubject<string[]>();
+    const chembl_act_subs = chembl_activity$.subscribe(result => {
+      let activity_rows: string = '';
+      Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
+        this.chembl_activity_rows = this.chembl_activity_rows.concat(chembl_activity_rows_obj[idx]);
+        chembl_activity_rows_obj[idx].forEach(activity => {
+          activity_rows += '<tr>';
+          this.chembl_displayed_activity_fields.forEach(field => {
+            activity_rows += '<td>' + activity[field] + '</td>';
+          });
+          activity_rows += '</tr>';
+        });
+      });
+      this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th></tr>'
+       + activity_rows + '</table>';
+    },
+    error => {
+      alert('Error retrieving data from ChEMBL');
+      chembl_act_subs.unsubscribe();
+    },
+    () => {
+      chembl_act_subs.unsubscribe();
+    }
+    );
+    let success_count: number = 0;
+    const chembl_ids_length = chembl_ids.length;
+    chembl_ids.forEach(chembl_id => {
+      const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
+      const chembl_subs = chembl_activity_rows$.subscribe(
+        chembl_result => {
+          chembl_activity_rows_obj[index] = chembl_result['activities'];
+          chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
+          success_count++;
+          if (chembl_ids_length >= success_count) {
+            chembl_activity$.complete();
+          }
+        },
+        error => {
+          chembl_activity$.error(error);
+          this.chembl_running = false;
+          chembl_subs.unsubscribe();
+
+        },
+        () => {
+          this.chembl_running = false;
+          chembl_subs.unsubscribe();
+        }
+      );
+      index++;
+    });
 
   }
 
@@ -448,5 +479,26 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     () => {
       subs.unsubscribe();
     });
+  }
+
+  moleculeSelected(molecules) {
+    console.log('selecting');
+    const int_ids: Array<number> = [];
+    molecules.forEach(mol => {
+      int_ids.push(mol.int_id);
+    });
+    console.log(int_ids);
+    this.chembl_selected_item_int_id_list = int_ids;
+    this.setCurrentItemIntId();
+    const selected_item = this.filterListByIntId(this.chembl_item_list, this.chembl_selected_item_int_id_list);
+    const items = {};
+    selected_item.forEach(item => {
+      items[item['int_id']] = item['value'];
+    });
+    const chembl_ids: string[] = [];
+    Object.keys(items).sort((a, b) => Number(a) - Number(b)).forEach(int_id => {
+      chembl_ids.push(items[int_id]);
+    });
+    this.activity_chembl_ids = chembl_ids;
   }
 }

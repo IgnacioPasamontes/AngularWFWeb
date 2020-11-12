@@ -17,6 +17,7 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
   @Input() selection: number[];
   @Input() identifier: string;
   @Input() multiple: boolean;
+  @Input() show_labels: boolean;
 
   @Output() selected = new EventEmitter<Object[]>();
 
@@ -35,6 +36,7 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
   public initialized_view: boolean = false;
   public selected_smiles: string;
   public multiple_int: boolean = false;
+  public show_labels_int: boolean = false;
   public json: Object = {
     "questions": [
         {
@@ -51,6 +53,9 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
   ngOnInit() {
     if (typeof this.multiple !== 'undefined' && this.multiple !== null) {
       this.multiple_int = this.multiple;
+    }
+    if (typeof this.show_labels !== 'undefined' && this.show_labels !== null) {
+      this.show_labels_int = this.show_labels;
     }
     this.canvas_id = this.canvas_id_prefix + this.identifier;
     this.data_element_id = this.data_element_id_prefix + this.identifier;
@@ -115,7 +120,12 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
       let choices: Object[] = [];
       this.smiles.forEach(mol => {
         const link = this.generateMoleculeImage(mol['value']);
-        choices.push({value: mol['int_id'], imageLink: link});
+        const obj = {value: mol['int_id'], imageLink: link};
+
+        if (this.show_labels_int && mol.hasOwnProperty('label')) {
+          obj['text'] = mol['label'];
+        }
+        choices.push(obj);
       });
       this.json['questions'][0]['choices'] = choices;
       this.survey_model = new Survey.Model(this.json);
@@ -132,6 +142,8 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
       this.survey_model.showQuestionNumbers = "off";
       this.survey_model.showNavigationButtons = false;
       this.survey_model.multiSelect = this.multiple_int;
+      const q = this.survey_model.getQuestionByName('choosemolecule');
+      q.showLabel = this.show_labels_int;
       this.survey
       .SurveyNG
       .render(this.survey_element_id, {model: this.survey_model, onValueChanged: this.surveySaveValue});

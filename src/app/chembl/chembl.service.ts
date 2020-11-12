@@ -68,7 +68,13 @@ export class ChemblService {
   }
 
   getChEMBLSMILESFromMoleculeData(data: Object) {
-    return data['molecule']['molecule_structures']['canonical_smiles'];
+    let data2: Object;
+    if (data.hasOwnProperty('molecule')) {
+      data2 = data['molecule'];
+    } else {
+      data2 = data;
+    }
+    return data2['molecule_structures']['canonical_smiles'];
   }
 
   chEMBLGetADMETActivityDataByCompoundId(chemblid: string) {

@@ -1,6 +1,16 @@
  <!-- Tab panes {Fade}  -->       
  <div class="container-fluid tab-content shadow bg-white rounded" id="pills-tabContent">
-
+        <div class="row">
+                <div class="card-body">
+                    <div class="row" style="margin-left:0px;margin-right:0px;">
+                        <div class="card report-button" style="margin-left:0px;margin-right:0px;"  (click)="true">
+                            <div class="card-body">
+                                Generate report
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
         <div (scroll)="triggerWorkflowRedraw()" style="max-height: 80vh; overflow-y: auto" *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="tab-pane fade" [ngClass]="{'active show': project===this.globals.visible_project}" id="pills-{{project}}" role="tabpanel">
             <ng-container  [ngSwitch]="project.replace(this.subproject_suffix_separator_pattern, this.globals.subproject_suffix_separator)">
                 <app-tk-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.tk_project_suffix"></app-tk-workflow>

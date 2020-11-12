@@ -1,3 +1,12 @@
 .pills-tabContent {
     overflow-y: scroll;
 }
+
+.report-button {
+    background-color:#FFB266;
+    cursor: pointer;
+    color: whitesmoke;
+    box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
+}

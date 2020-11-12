@@ -74,6 +74,7 @@ import { CompoundService } from './compound/compound.service';
 import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
 import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
 import { MoleculePickerComponent } from './molecule-picker/molecule-picker.component';
+import { ReportComponent } from './report/report.component';
 
 
 
@@ -111,7 +112,8 @@ import { MoleculePickerComponent } from './molecule-picker/molecule-picker.compo
     DatamatrixComponent,
     EscapeHtmlPipe,
     ChemblRaxComponent,
-    MoleculePickerComponent
+    MoleculePickerComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,

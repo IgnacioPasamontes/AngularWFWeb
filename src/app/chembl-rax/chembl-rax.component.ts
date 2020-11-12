@@ -39,6 +39,7 @@ export class ChemblRaxComponent implements OnInit {
   public save_running: boolean = false;
   public saved_compounds: Compound[] = [];
   public chembl_activity_rows_compound: Object = {};
+  public chembl_activity_errors: string = '';
 
 
   constructor(private modalService: NgbModal,
@@ -57,6 +58,7 @@ export class ChemblRaxComponent implements OnInit {
     this.chembl_running = true;
     this.chembl_substructure_search_total_count = null;
     this.chembl_substructure_search_result_compounds = [];
+    this.chembl_activity_errors = '';
     const subscript = this.service.chemblSmilesStandarize(this.chembl_search_string).subscribe(
       result => {
         const std_smiles = result.smiles;
@@ -88,14 +90,14 @@ export class ChemblRaxComponent implements OnInit {
             console.log(chembl_compounds);
             this.chembl_substructure_search_result_compounds = chembl_compounds;
             console.log(this.chembl_substructure_search_result_compounds);
-            const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+/*             const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
             const url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
             hiddenElement.target = '_blank';
             hiddenElement.download = 'myFile.txt';
             hiddenElement.click();
-            window.URL.revokeObjectURL(url);
+            window.URL.revokeObjectURL(url); */
             this.chembl_running = false;
           },
           error => {
@@ -104,14 +106,14 @@ export class ChemblRaxComponent implements OnInit {
             console.log(error);
             this.chembl_substructure_search_result_compounds = chembl_compounds;
             console.log(this.chembl_substructure_search_result_compounds);
-            const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+/*             const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
             const url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
             hiddenElement.target = '_blank';
             hiddenElement.download = 'myFile.txt';
             hiddenElement.click();
-            window.URL.revokeObjectURL(url);
+            window.URL.revokeObjectURL(url); */
             this.chembl_running = false;
           },
           () => {
@@ -400,6 +402,7 @@ export class ChemblRaxComponent implements OnInit {
     this.save_running = true;
     const compounds: Compound[] = [];
     this.saved_compounds = [];
+    this.chembl_activity_errors = '';
     this.chembl_substructure_search_filtered_compounds.forEach(chembl_compound => {
       compounds.push(chembl_compound.compound);
     });
@@ -462,6 +465,7 @@ export class ChemblRaxComponent implements OnInit {
   }
 
   saveActivities() {
+    this.chembl_activity_errors = '';
     console.log(this.chembl_activity_rows_compound);
     Object.keys(this.chembl_activity_rows_compound).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
       const compound = this.chembl_activity_rows_compound[idx]['compound'];
@@ -472,6 +476,7 @@ export class ChemblRaxComponent implements OnInit {
         },
         error => {
           console.log('Error while saving ChEMBL data. For molecule: ' + compound.chembl_id);
+          this.chembl_activity_errors += 'Error while saving ChEMBL data. For molecule: ' + compound.chembl_id;
           this.chembl_running = false;
           subs.unsubscribe();
         },

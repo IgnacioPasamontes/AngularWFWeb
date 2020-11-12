@@ -51,6 +51,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() projectName;
   @Input() redraw;
   @Input() workflow_scroll;
+  @Input() change;
   public project_number: number;
   public ra_type_2_abbrev: Object = {};
   public displayedColumns: string[];
@@ -63,6 +64,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   public heatmap_div_reset: boolean = true;
   public heatmap_bokeh_document_timestamp: number;
   public scroll_refreshing: boolean = false;
+  public response: string = '';
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -93,7 +95,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
 
 
   ngOnChanges(changes) {
-    if (changes.hasOwnProperty('projectName')) {
+    if (changes.hasOwnProperty('projectName') || changes.hasOwnProperty('change')) {
       console.log('hola:');
       console.log(this.projectName);
       this.deleteHeatmap();
@@ -137,6 +139,11 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
         this.heatmap = result.item;
         this.heatmap_bkp = result.item;
         this.heatmap_id = result.heatmap_div_id;
+        if (result.status === 'No data') {
+          this.response = 'No data';
+        } else {
+          this.response = '';
+        }
 /*           this.heatmap = result.div;
           this.heatmap_bkp = result.div;
           this.heatmap_scripts = result.scripts; */

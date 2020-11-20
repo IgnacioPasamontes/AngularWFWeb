@@ -34,9 +34,10 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   @Input() workflow_resize_start: boolean;
 
   display = 'none';
-
+  connectors: boolean = false;
   overlayPortal: ComponentPortal<any> = new ComponentPortal(OverlayComponent); 
   overlayRef: any;
+  show_titles: boolean = true;
   
   
 
@@ -125,6 +126,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   }
 
   drawConnections(resize_clone: boolean = false) {
+    if (!this.connectors) { return };
     let jquery_selector_prefix: string = "body ";
     if (resize_clone) {
       jquery_selector_prefix = ":not(.resize-active) ";
@@ -192,9 +194,15 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     
     //redraw connector lines when div.limit resizes
     const that = this;
-    $(".limit").each(function() {
+    const limit = $(".limit");
+    limit.each(function() {
       let resize_sensor = new ResizeSensor(this, function () {
         that.reDraw();
+        if (limit.width() < 315) {
+          that.show_titles = false;
+        } else {
+          that.show_titles = true;
+        }
       });
      
     })

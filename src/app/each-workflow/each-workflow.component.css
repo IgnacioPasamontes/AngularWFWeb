@@ -1,4 +1,7 @@
-
+table tr td {
+    text-align: center;
+    vertical-align: middle;
+}
 .fast {
     border: 3px solid #051;
     opacity: 0.5;
@@ -22,10 +25,15 @@
 .card.parent {
     background-color: #D8D8D8;
 }
+tr.parent {
+    background-color: #D8D8D8;
+}
 .card.parent2 {
     background-color:#7030A0;
 }
-
+tr.parent2 {
+    background-color:#7030A0;
+}
 .backdrop{ 
 
 background-color:rgba(0,0,0,0.6);

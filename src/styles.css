@@ -45,9 +45,7 @@ body {
     -webkit-box-sizing: content-box !important;
 }
 
-#nam_title {
-    text-align: right !important;
-}
+
 
 .invisible_textarea {
     opacity: .01;

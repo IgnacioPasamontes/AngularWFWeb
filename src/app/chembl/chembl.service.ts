@@ -19,6 +19,29 @@ export class ChemblService {
   'assay_description', 'value', 'units', 'assay_chembl_id', 'text_value', 'activity_comment', 'pchembl_value'];
   public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
   'assay_description'];
+  public chembl_calculated_pc_dict = {
+    'mw_freebase':                   {'standard_type': "MW",                            'assay_description': "Molecular Weight", 'standard_units':"g/mol", 'units':"g/mol"},                                                                            
+    'rtb':                           {'standard_type': "#Rot. Bonds",                   'assay_description': "Number of Rotatable Bonds", 'standard_units': null, 'units': null},                                                        
+    'alogp':                         {'standard_type': "ALogP",                         'assay_description': "ALogP", 'standard_units': null, 'units': null},                                                                                     
+    'psa':                           {'standard_type': "PSA",                           'assay_description': "Polar Surface Area", 'standard_units':"Å2", 'units':"Å2"},                                                                       
+    'molecular_species':             {'standard_type': "Mol. Species",                  'assay_description': "Molecular Species", 'standard_units': null, 'units': null, 'data_type': 'text'},                                                                         
+    'hba':                           {'standard_type': "HBA",                           'assay_description': "Hydrogen Bond Acceptors (number)", 'standard_units': null, 'units': null},                                                            
+    'hbd':                           {'standard_type': "HBD",                           'assay_description': "Hydrogen Bond Donors (number)", 'standard_units': null, 'units': null},                                                              
+    'num_ro5_violations':            {'standard_type': "#Ro5 Violations",               'assay_description': "number of Rule of 5 Violations", 'standard_units': null, 'units': null},                                                            
+    'hba_lipinski':                  {'standard_type': "HBA (Lipinski)",                'assay_description': "Lipinski's Hydrogen Bond Acceptors (number)", 'standard_units': null, 'units': null},                                             
+    'hbd_lipinski':                  {'standard_type': "HBD (Lipinski)",                'assay_description': "Lipinski's Hydrogen Bond Donors (number)" , 'standard_units': null, 'units': null},                                                 
+    'num_lipinski_ro5_violations':   {'standard_type': "#Ro5 Violations (Lipinski)",    'assay_description': "Number of Lipinski's Rule of 5 Violations", 'standard_units': null, 'units': null},                                       
+    'cx_most_apka':                  {'standard_type': "CX Acidic pKa",                 'assay_description': "The most Acidic ACDlabs v12.01 calculated CX pKa", 'standard_units': null, 'units': null},                                         
+    'cx_most_bpka':                  {'standard_type': "CX Basic pKa",                  'assay_description': "The most Basic ACDlabs v12.01 calculated CX pKa", 'standard_units': null, 'units': null},                                             
+    'cx_logp':                       {'standard_type': "CX LogP",                       'assay_description': "ACDlabs v12.01 calculated CX LogP", 'standard_units': null, 'units': null},                                                     
+    'cx_logd':                       {'standard_type': "CX LogD pH7.4",                 'assay_description': "ACDlabs v12.01 calculated CX LogD pH7.4", 'standard_units': null, 'units': null},                                                   
+    'aromatic_rings':                {'standard_type': "Aromatic Rings",                'assay_description': "Aromatic Rings (number)", 'standard_units': null, 'units': null},                                                                  
+    'heavy_atoms':                   {'standard_type': "Heavy Atoms",                   'assay_description': "Heavy Atoms (number)", 'standard_units': null, 'units': null},                                                                     
+    'qed_weighted':                  {'standard_type': "QED Weighted",                  'assay_description': "Quantitative Estimate of Druglikeness (Weighted)", 'standard_units': null, 'units': null},                                       
+    'ro3_pass':                      {'standard_type': "Ro3 Pass",                      'assay_description': "Indicates whether the compound passes the rule-of-three of Fragment-based lead discovery", 'standard_units': null, 'units': null}   
+    
+  };
+  public chembl_ro3_pass_dict = {'N':0,'Y':1};
   constructor(private http: HttpClient,
     private cookieService: CookieService,
     public globals: Globals,
@@ -77,9 +100,57 @@ export class ChemblService {
     return data2['molecule_structures']['canonical_smiles'];
   }
 
+  getChEMBLCalculatedPCFromMoleculeData(data: Object) {
+    let data2: Object;
+    if (data.hasOwnProperty('molecule')) {
+      data2 = data['molecule'];
+    } else {
+      data2 = data;
+    }
+    const pcs = data2['molecule_properties'];
+    let new_data: Array<Object> = [];
+
+    Object.keys(this.chembl_calculated_pc_dict).forEach(pc => {
+      const pc_dict = this.chembl_calculated_pc_dict;
+      console.log('hello:'+pc);
+      let activity: Object = {
+        'standard_type': pc_dict[pc]['standard_type'],
+        'standard_value': pcs[pc],
+        'value': pcs[pc],
+        'standard_units': pc_dict[pc]['standard_units'],
+        'units': pc_dict[pc]['standard_units'],
+        'assay_description': pc_dict[pc]['assay_description'],
+        'assay_chembl_id': pc,
+        'assay_type': 'calculated_pc',
+        'activity_comment': null,
+        'text_value': null,
+      };
+
+      if (pc_dict[pc]['data_type'] === 'text') {
+        activity['value'] = null;
+        activity['standard_value'] = null;
+        activity['text_value'] = pcs[pc];
+      }
+      if (pc === 'ro3_pass') {
+        activity['value'] = this.chembl_ro3_pass_dict[pcs[pc]];
+        activity['standard_value'] = this.chembl_ro3_pass_dict[pcs[pc]];
+      }
+      new_data.push(activity);
+    });
+
+    return new_data;
+  }
+
   chEMBLGetADMETActivityDataByCompoundId(chemblid: string) {
     let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
     const params = new HttpParams().append('format', 'json').append('assay_type', 'A').
+      append('molecule_chembl_id', chemblid);
+    return this.http.get(url, {params: params});
+  }
+
+  chEMBLGetPCActivityDataByCompoundId(chemblid: string) {
+    let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
+    const params = new HttpParams().append('format', 'json').append('assay_type', 'P').
       append('molecule_chembl_id', chemblid);
     return this.http.get(url, {params: params});
   }

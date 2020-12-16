@@ -21,6 +21,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public ra_compound_service: any;
   public chembl_running: boolean = false;
   public input_type_radio_value: string = 'smiles';
+
   public chembl_search_string: string;
   public selected_compound_int_id: number;
   public chembl_item_list: Array<Object> = [];
@@ -35,6 +36,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public activity: string = '';
   public activity_compound: Compound;
   public activity_chembl_ids: Array<string>;
+  public chembl_calculated_pc_row_chemblid: Object = {};
   public chembl_activity_fields: Array<string> = this.service.chembl_activity_fields;
   public chembl_displayed_activity_fields = this.service.chembl_displayed_activity_fields;
   public chembl_activity_rows: Array<Object> = [];
@@ -219,6 +221,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         this.chembl_activity_fields.forEach(field => {
           activity_row[field] = activity[field];
         });
+        activity_row['assay_type'] = 'A';
         activity_rows.push(activity_row);
         count++;
       });
@@ -298,6 +301,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
             chembl_ids.forEach(chembl_id => {
               const chembl_smiles_sub = this.service.chEMBLGetMoleculeFromCompoundId(chembl_id).subscribe(molecule_result => {
                 this.chembl_smiles[chembl_id] = this.service.getChEMBLSMILESFromMoleculeData(molecule_result);
+                this.chembl_calculated_pc_row_chemblid[chembl_id] = this.service.getChEMBLCalculatedPCFromMoleculeData(molecule_result);
                 if (Object.keys(this.chembl_smiles).length === this.chembl_item_list.length) {
                   const items: Object[] = [];
                   this.chembl_item_list.forEach( item => {
@@ -399,6 +403,9 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     let success_count: number = 0;
     const chembl_ids_length = chembl_ids.length;
     chembl_ids.forEach(chembl_id => {
+      chembl_activity_rows_obj[index] = this.chembl_calculated_pc_row_chemblid[chembl_id];
+      index++;
+
       const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
       const chembl_subs = chembl_activity_rows$.subscribe(
         chembl_result => {

@@ -23,7 +23,10 @@
         <td>
             <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node2}" id="{{projectName}}_id_2" (click)="nodeInfo_selected(projectName,2)">
                 <div class="card-body">
-                2.TC Characterization
+                <span [ngbTooltip]="tc2_help">2.TC Characterization</span>
+                <ng-template #tc2_help>
+                    <p>2.Target Compound Characterization</p>
+                </ng-template>
                 </div>
             </div>
         </td>
@@ -39,7 +42,10 @@
         </td>
         <td>
             <div *ngIf="show_titles" id="tc_title" class="m-1" style="margin-right:0px;">
-                <div style="padding-right:0px;" class="" >TC Characterization</div>
+                <div style="padding-right:0px;" class="" ><span [ngbTooltip]="tc_title_help">TC Characterization</span></div>
+                <ng-template #tc_title_help>
+                    <p>Target Compound Characterization</p>
+                </ng-template>
             </div>
         </td>
     </tr>
@@ -47,8 +53,11 @@
         <td>
             <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node4}" id="{{projectName}}_id_4" (click)="nodeInfo_selected(projectName,4)">
                 <div class="card-body">
-                Initial RAX hypothesis
+                    <span [ngbTooltip]="irax_help">Initial RAX hypothesis</span>
                 </div>
+                <ng-template #irax_help>
+                    <p>Initial Read-Across hypothesis</p>
+                </ng-template>
             </div>
         </td>
         <td></td>
@@ -65,8 +74,11 @@
         <td>    
             <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node5}" id="{{projectName}}_id_5"    (click)="nodeInfo_selected(projectName,5)">
                 <div class="card-body">
-                    3.SCs identification
+                    <span [ngbTooltip]="sc3_help">3.SCs identification</span>
                 </div>
+                <ng-template #sc3_help>
+                    <p>3.Source Compound identification</p>
+                </ng-template>
             </div>
         <td></td>
     </tr>
@@ -74,8 +86,11 @@
         <td>
         <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node6}" id="{{projectName}}_id_6"    (click)="nodeInfo_selected(projectName,6)">
             <div class="card-body">
-                4.SCs evaluation
+                <span [ngbTooltip]="sc4_help">4.SCs evaluation</span>
             </div>
+            <ng-template #sc4_help>
+                <p>4.Source Compound evaluation</p>
+            </ng-template>
         </div>
         <td></td>
     </tr>
@@ -83,9 +98,12 @@
         <td>
         <div class="card node {{projectName}}"  [ngClass]="{'checked':this.checked.node7}" id="{{projectName}}_id_7"    (click)="nodeInfo_selected(projectName,7)">
             <div class="card-body">
-                Overarching<br>
-                RAX hypothesis
+                <span [ngbTooltip]="orax_help">Overarching<br>
+                RAX hypothesis</span>
             </div>
+            <ng-template #orax_help>
+                <p>Overarching Read-Across hypothesis</p>
+            </ng-template>
         </div>
         <td></td>
     </tr>
@@ -101,16 +119,26 @@
         <td>
             <div class="card node {{projectName}}" [ngClass]="{'checked':this.checked.node8}"  id="{{projectName}}_id_8"   (click)="nodeInfo_selected(projectName,8)">
                 <div style="padding-left:3rem;padding-right:3rem;" class="card-body">
-                NAM testing<br>
+                <span [ngbTooltip]="NAMt_help">
+                NAMs testing<br>
                 and evaluation<br>
                 (in vitro & in silico)
+                </span>
                 </div>
+                <ng-template #NAMt_help>
+                    <p> New Approach Methodologies testing
+                        and evaluation
+                        (in vitro & in silico)</p>
+                </ng-template>
             </div>
         </td>
         <td>
             <div *ngIf="show_titles" id="nam_title" class="m-1" style="color:rgb(245,245,245);margin-right:0px;">
-                <div class="" >NAM based knowledge</div>
+                <div class="" [ngbTooltip]="NAMk_help">NAMs based knowledge</div>
             </div>
+            <ng-template #NAMk_help>
+                <p> New Approach Methodologies based knowledge</p>
+            </ng-template>
         </td>
     </tr>
     <tr class="parent2">
@@ -118,7 +146,7 @@
         <table><tr>
         <td>    
             <div style="box-sizing:content-box" class="card node {{projectName}} text-center" [ngClass]="{'checked':this.checked.node9}" id="{{projectName}}_id_9"   (click)="openTK()">
-                <div class="card-body">
+                <div [ngbTooltip]="tk_help" class="card-body">
                 TK
                 </div>
             </div>
@@ -126,11 +154,17 @@
         <td> 
         
             <div style="box-sizing:content-box" class="card node {{projectName}} justify-content-end text-center" [ngClass]="{'checked':this.checked.node10}" id="{{projectName}}_id_10"   (click)="openTD()">
-                <div class="card-body">
+                <div [ngbTooltip]="td_help" class="card-body">
                 TD
                 </div>
             </div>
         </td>
+        <ng-template #tk_help>
+            <p>Toxicokynetics</p>
+        </ng-template>
+        <ng-template #td_help>
+            <p>Toxicodynamics</p>
+        </ng-template>
         </tr></table>
         </td>
         <td></td>

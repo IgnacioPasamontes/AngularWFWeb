@@ -48,6 +48,7 @@
                         <input type="radio" id="input_type_radio2" name="input_type_radio" ng-control="input_type_radio" class="custom-control-input" (change)="this.ra_compound_service.getCompounds(this.info.project)" [value]="'compound'" [(ngModel)]="input_type_radio_value">
                         <label class="custom-control-label" for="input_type_radio2">Saved compound</label>
                     </div>
+                    <img [ngbTooltip]="smiles_compound_selector_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
                     <br>                  
                 </td>
 
@@ -83,6 +84,8 @@
             <tr>
                 <td style="width:9rem">
                     <label style="margin-bottom: 0px; white-space: pre-wrap" for="chembl_search_string" >Similarity<br>cutoff (%):</label>
+                    <img [ngbTooltip]="similarity_cutoff_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+
                 </td>
                 <td>
                     <br>
@@ -132,8 +135,16 @@
         <p [innerHTML]="chembl_activity_errors"></p>
     </div>
 </div>
+<ng-template #smiles_compound_selector_help>
+    <p style="text-align: left;">Choose between perfoming a substructural search of the above specified SMILES or
+         of a previously saved Target Compound.</p>
+</ng-template>
 <ng-template #page_size_help>
     <p style="text-align: left;"><b>Number of molecule entries per query page:</b> <br> Larger values might improve search speed, 
     but increase the probability of connection errors for exceeding request execution 
     time limit.</p>
+</ng-template>
+<ng-template #similarity_cutoff_help>
+    <p style="text-align: left;"><b>Similarity cutoff:</b> <br> cutoff percentage of similarity, between the results from substructural search and the above specified SMILES or
+        the selected previously saved Target Compound, for filtering the results the results from substructural search.</p>
 </ng-template>

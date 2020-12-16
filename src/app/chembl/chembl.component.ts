@@ -20,8 +20,8 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   @Input() ra_type;
   public ra_compound_service: any;
   public chembl_running: boolean = false;
-  public input_type_radio_value: string = 'smiles';
-
+  public input_type_radio_value: string = 'compound';
+  public input_type_radio_show: boolean = false;
   public chembl_search_string: string;
   public selected_compound_int_id: number;
   public chembl_item_list: Array<Object> = [];

@@ -3,7 +3,8 @@
         <tr>
 
                 <td style="width:9rem">
-                    <label style="margin-bottom:0px" for="name2cas_search_string" >Compound name <br>or CAS registry number:</label>
+                    <label style="display:inline; margin-bottom:0px" for="name2cas_search_string" >Compound name <br>or CAS registry number:</label>
+                    <img [ngbTooltip]="search_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
                 </td>
                 <td><input id="name2cas_search_string" class="form-control" name="search_string" [(ngModel)]="search_string" type="text" [disabled]="this.cas.from_name_running || this.smiles.from_name_running"></td>
                 <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.cas.from_name_running || this.smiles.from_name_running || this.compound_name_running" (click)="itemsFromNameButton()">Search</button>
@@ -21,7 +22,9 @@
             <td></td>
         </tr>
         <tr>
-            <td style="width:9rem"><label style="margin-bottom:0px" for="selected_compound_name" >Compound name:</label><br><br></td>
+            <td style="width:9rem"><label style="display:inline; margin-bottom:0px" for="selected_compound_name" >Compound<br>name:</label>
+                <img [ngbTooltip]="name_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+                <br><br></td>
             
             <td style="width:auto"><mat-form-field><mat-select id="selected_compound_name" class="form-control" name="selected_compound_name" (selectionChange)="this.compoundNameChange($event)" [(ngModel)]="this.compound_name_int_id">
                 <ng-container *ngIf="this.show_cactvs_data"><mat-option *ngFor="let item of this.compound_synonyms" [value]="item.int_id" [innerHTML]="item.html_rep"></mat-option></ng-container>
@@ -178,4 +181,10 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('close')">Close</button>
         </div>
+</ng-template>
+<ng-template #search_help>
+    <p style="text-align: left;">Retreive compound definition searching by CAS registry number or compound name.</p>
+</ng-template>
+<ng-template #name_help>
+    <p style="text-align: left;">Select a name for the compound.</p>
 </ng-template>

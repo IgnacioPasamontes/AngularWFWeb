@@ -4,7 +4,7 @@
       <div style="padding-top: 0px;" class="card-body" [innerHTML]="this.info.description">
       </div>
     <!--</div>-->
-    <div class="card" *ngIf="this.info.inputs.length>0">
+<!--     <div class="card" *ngIf="this.info.inputs.length>0">
         <h5 class="card-header bg-light p-1">Previous knowledge</h5>
         <div class="card-body p-0">
             <div class="card m-0" *ngFor="let info of this.info.inputs ; let i=index;"> 
@@ -32,15 +32,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     
         
         
     <div class="card">
-        <h5 class="card-header bg-light p-1">Resources</h5>
         <ng-container [ngSwitch]="this.info.node_seq">
-            <app-tc-characterization [info]="this.info" *ngSwitchCase="2"></app-tc-characterization>
-            <app-chembl-rax [info]="this.info" *ngSwitchCase="4"></app-chembl-rax>
+            <ng-container *ngSwitchCase="2">
+                <h5 [ngbTooltip]="tc_h5_help" class="card-header bg-light p-1">TC definition</h5>
+                <app-tc-characterization [info]="this.info"></app-tc-characterization>
+            </ng-container>
+            <ng-template #tc_h5_help>
+                <p>Target Compound definition</p>
+            </ng-template>
+            <ng-container *ngSwitchCase="4">
+                <h5 class="card-header bg-light p-1">Resources</h5>
+                <app-chembl-rax [info]="this.info"></app-chembl-rax>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+                <h5 class="card-header bg-light p-1">Resources</h5>
+            </ng-container>
         </ng-container>
         
         <div *ngIf="this.info.resources.length > 0" class="card" style="margin-bottom:0px">

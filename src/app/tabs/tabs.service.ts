@@ -30,7 +30,7 @@ export class TabsService {
       const no_tk_project = project.replace(new RegExp(this.globals.tk_project_suffix+'$'),'');
       if (no_tk_project !==  project) {
         subproject_type = 'TK';
-        mainproject = no_td_project
+        mainproject = no_tk_project;
       }
     } else {
       subproject_type = 'TD';

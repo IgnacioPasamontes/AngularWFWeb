@@ -6,6 +6,7 @@ import { Globals } from '../globals';
 import { DatamatrixService } from './datamatrix.service';
 import { Compound, CompoundService } from '../compound/compound.service';
 import { ResizeSensor } from 'css-element-queries';
+import { DatamatrixTabsService } from '../datamatrix-tabs/datamatrix-tabs.service';
 
 declare var $: JQueryStatic;
 declare var Bokeh: any;
@@ -48,6 +49,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
 
+  @Input() datamatrix_tabs_active_tab_name;
   @Input() projectName;
   @Input() redraw;
   @Input() workflow_scroll;
@@ -69,7 +71,8 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   constructor(public globals: Globals,
-              private service: DatamatrixService) { }
+              private service: DatamatrixService,
+              public datamatrix_tabs: DatamatrixTabsService) { }
 
   ngOnInit() {
     this.heatmap_id = 'heatmap_datamatrix_bio_activity_project_' + this.project_number.toString();
@@ -92,10 +95,10 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
     }); */
   }
 
-
+  // || changes.hasOwnProperty('datamatrix_tabs_active_tab_name')
 
   ngOnChanges(changes) {
-    if (changes.hasOwnProperty('projectName') || changes.hasOwnProperty('change')) {
+    if (changes.hasOwnProperty('projectName')  || changes.hasOwnProperty('change')) {
       console.log('hola:');
       console.log(this.projectName);
       this.deleteHeatmap();
@@ -135,6 +138,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
         this.columnsToDisplay = this.displayedColumns.slice();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort; */
+      this.heatmap = '';
       const subs = this.service.getMatrixHeatmap(this.project_number).subscribe(result => {
         this.heatmap = result.item;
         this.heatmap_bkp = result.item;

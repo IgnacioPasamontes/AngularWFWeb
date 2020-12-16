@@ -1,0 +1,34 @@
+.nav-pills > li .close {
+    margin: -2px 0 0 10px;
+    font-size: 18px;
+}
+
+a:hover{
+    cursor: pointer;
+}
+div {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+ul li {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+ul li a {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+ul li.nav-item a.nav-link.active.show{
+
+    background-color: white;
+}
+
+.btn {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

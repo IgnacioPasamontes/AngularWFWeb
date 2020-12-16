@@ -32,7 +32,7 @@ mwlResizable
 
 
             <div class="d-md-flex h-md-100 align-items-center">
-                <div *ngIf="this.globals.active_projects.length > 0" id="resizible-workflows" class="" mwlResizable [enableGhostResize]="true"
+                <div style="" *ngIf="this.globals.active_projects.length > 0" id="resizible-workflows" class="" mwlResizable [enableGhostResize]="true"
                  [resizeEdges]="{ bottom: false, right: true, top: false, left: this.globals.active_projects.length > 0 }"
                  (resizeStart)="onResizeStart($event)"
                  (resizeEnd)="onResizeEnd($event)"
@@ -48,7 +48,8 @@ mwlResizable
                     </div>
                 </div>
                 <div  id="app-datamatrix-container" *ngIf="this.globals.active_projects.length > 0" class="overflow-auto col">
-                    <app-datamatrix [workflow_scroll]="this.globals.workflow_scroll" [redraw]="datamatrixRedraw" [projectName]="this.globals.current_main_project" [change]="this.globals.change"></app-datamatrix>
+                    <app-datamatrix-tabs></app-datamatrix-tabs>
+                    <app-datamatrix [datamatrix_tabs_active_tab_name]="this.datamatrix_tabs.active_tab_name" [workflow_scroll]="this.globals.workflow_scroll" [redraw]="datamatrixRedraw" [projectName]="this.globals.current_main_project" [change]="this.globals.change"></app-datamatrix>
                 </div>
             </div>  
                

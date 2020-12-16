@@ -5,6 +5,8 @@ import { LoginService } from '../login/login.service';
 import { Subscription } from 'rxjs';
 import { TabsService } from '../tabs/tabs.service';
 import { ResizeEvent } from 'angular-resizable-element';
+import { DatamatrixTabsService } from '../datamatrix-tabs/datamatrix-tabs.service';
+
 
 
 @Component({
@@ -29,7 +31,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(public globals: Globals,
               private login: LoginService,
               private router: Router,
-              private tabs: TabsService) { }
+              private tabs: TabsService,
+              public datamatrix_tabs: DatamatrixTabsService) { }
 
   ngOnInit() {
     this.workflowStyle = this.workflowStyleInit;

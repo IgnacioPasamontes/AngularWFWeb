@@ -52,6 +52,9 @@ import { ChemblComponent } from './chembl/chembl.component';
 import { CompoundComponent } from './compound/compound.component';
 import { DatamatrixComponent } from './datamatrix/datamatrix.component';
 import { ChemblRaxComponent } from './chembl-rax/chembl-rax.component';
+import { MoleculePickerComponent } from './molecule-picker/molecule-picker.component';
+import { ReportComponent } from './report/report.component';
+import { DatamatrixTabsComponent } from './datamatrix-tabs/datamatrix-tabs.component';
 
 import { KeysPipe } from './keys.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
@@ -73,8 +76,9 @@ import { ChemblService } from './chembl/chembl.service';
 import { CompoundService } from './compound/compound.service';
 import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
 import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
-import { MoleculePickerComponent } from './molecule-picker/molecule-picker.component';
-import { ReportComponent } from './report/report.component';
+import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service';
+
+
 
 
 
@@ -113,7 +117,8 @@ import { ReportComponent } from './report/report.component';
     EscapeHtmlPipe,
     ChemblRaxComponent,
     MoleculePickerComponent,
-    ReportComponent
+    ReportComponent,
+    DatamatrixTabsComponent
   ],
   imports: [
     BrowserModule,
@@ -165,6 +170,7 @@ import { ReportComponent } from './report/report.component';
     CompoundService,
     TcCompoundsService,
     ChemblRaxService,
+    DatamatrixTabsService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent, OverlayComponent, MoleculePickerComponent],

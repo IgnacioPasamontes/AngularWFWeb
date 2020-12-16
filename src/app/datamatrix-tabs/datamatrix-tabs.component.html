@@ -1,0 +1,14 @@
+
+<div class="d-flex flex-row">
+    <div>
+        
+        <ul class="nav nav-pills" id="datamatrix-tabs-tab" role="tablist">
+            <li *ngFor="let tab of this.service.tabs; let i = index" class="nav-item" (click)="showTab(i)">
+
+                <a class="nav-link" [ngClass]="{'active show': this.service.active_tab_index == i}" data-toggle="pill" href="#pills-{{i}}" role="tab" aria-controls="datamatrix-tabs-1" aria-selected="true">
+                        {{tab}}
+                    </a>
+            </li>    
+        </ul>
+    </div>
+</div>

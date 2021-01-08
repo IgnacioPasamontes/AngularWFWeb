@@ -26,6 +26,10 @@ export class TimeoutInterceptor implements HttpInterceptor {
     if (req.headers.has(TIMEOUT_HEADER)) {
         req = req.clone({ headers: req.headers.delete(TIMEOUT_HEADER)});
     }
+    if (timeoutValueNumeric === 0) {
+      console.log('no-timeout');
+      return next.handle(req)
+    }
     return next.handle(req).pipe(timeout(timeoutValueNumeric));
   }
 }

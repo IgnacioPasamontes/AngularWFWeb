@@ -6,6 +6,7 @@ import { TcCompoundsService } from '../tc-characterization/tc-compounds.service'
 import { ChemblRaxService, ChEMBLCompound } from './chembl-rax.service';
 import { AsyncSubject, Observable } from 'rxjs';
 import { data as example_data } from './example.js';
+import { data as example_pc_data } from './example_pc.js';
 @Component({
   selector: 'app-chembl-rax',
   templateUrl: './chembl-rax.component.html',
@@ -16,13 +17,14 @@ export class ChemblRaxComponent implements OnInit {
 
   @Input() info;
   public ra_compound_service: any;
+  public chembl_substructure_running: boolean = false;
   public chembl_running: boolean = false;
   public input_type_radio_value: string = 'smiles';
   public chembl_search_string: string;
   public selected_compound_int_id: number;
   public rax_compounds_found: number = null;
   public tc_compound: Compound;
-
+  public chembl_calculated_pc_row_chemblid: Object = {};
   public chembl_activity_fields: Array<string> = this.chembl.chembl_activity_fields;
   public chembl_displayed_activity_fields = this.chembl.chembl_displayed_activity_fields;
   public substructure_compound: Compound;
@@ -51,10 +53,17 @@ export class ChemblRaxComponent implements OnInit {
   ngOnInit() {
     this.ra_compound_service = this.tc_compounds;
     this.ra_compound_service.getCompounds(this.info.project);
+
+    (<Object[]>example_data).forEach((value, index) => {
+      example_data[index]["compound"]["project"] = this.info.project;
+    })
+
     this.chembl_substructure_search_result_compounds = example_data;
+    this.chembl_calculated_pc_row_chemblid = example_pc_data;
   }
 
   raxFromSmilesButton(reset_activity_compound: boolean = true) {
+    this.chembl_substructure_running = true;
     this.chembl_running = true;
     this.chembl_substructure_search_total_count = null;
     this.chembl_substructure_search_result_compounds = [];
@@ -89,32 +98,54 @@ export class ChemblRaxComponent implements OnInit {
             });
             console.log(chembl_compounds);
             this.chembl_substructure_search_result_compounds = chembl_compounds;
-            console.log(this.chembl_substructure_search_result_compounds);
-/*             const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
-            const url = window.URL.createObjectURL(blob);
+
+/*             console.log(this.chembl_substructure_search_result_compounds);
+            let blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+            let url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
             hiddenElement.target = '_blank';
             hiddenElement.download = 'myFile.txt';
             hiddenElement.click();
+            window.URL.revokeObjectURL(url);
+            blob = new Blob([JSON.stringify(this.chembl_calculated_pc_row_chemblid)], {type: "octet/stream"});
+            url = window.URL.createObjectURL(blob);
+            hiddenElement = document.createElement('a');
+            hiddenElement.href = url;
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'myFile_pc.txt';
+            hiddenElement.click();
             window.URL.revokeObjectURL(url); */
+
             this.chembl_running = false;
+            this.chembl_substructure_running = false;
           },
           error => {
             alert('Error retrieving ChEMBL substructures.');
             console.log('Error retrieving ChEMBL substructures:');
             console.log(error);
             this.chembl_substructure_search_result_compounds = chembl_compounds;
-            console.log(this.chembl_substructure_search_result_compounds);
-/*             const blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
-            const url = window.URL.createObjectURL(blob);
+
+/*             console.log(this.chembl_substructure_search_result_compounds);
+            let blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+            let url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
             hiddenElement.target = '_blank';
             hiddenElement.download = 'myFile.txt';
             hiddenElement.click();
+            window.URL.revokeObjectURL(url);
+            blob = new Blob([JSON.stringify(this.chembl_calculated_pc_row_chemblid)], {type: "octet/stream"});
+            url = window.URL.createObjectURL(blob);
+            hiddenElement = document.createElement('a');
+            hiddenElement.href = url;
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'myFile_pc.txt';
+            hiddenElement.click();
             window.URL.revokeObjectURL(url); */
+
             this.chembl_running = false;
+            this.chembl_substructure_running = false;
           },
           () => {
             subscript2.unsubscribe();
@@ -124,6 +155,7 @@ export class ChemblRaxComponent implements OnInit {
       error => {
         alert('Error standardizing or converting SMILES to InChiKey');
         this.chembl_running = false;
+        this.chembl_substructure_running = false;
       },
       () => {
         subscript.unsubscribe();
@@ -133,6 +165,7 @@ export class ChemblRaxComponent implements OnInit {
   }
 
   raxFromCompoundButton() {
+    this.chembl_substructure_running = true;
     this.chembl_running = true;
     const old_chembl_search_string: string = this.chembl_search_string;
     const tc_compound: Compound = this.substructure_compound;
@@ -144,6 +177,7 @@ export class ChemblRaxComponent implements OnInit {
       this.chembl_search_string = old_chembl_search_string;
     } else {
       alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
+      this.chembl_substructure_running = false;
       this.chembl_running = false;
     }
   }
@@ -204,6 +238,7 @@ export class ChemblRaxComponent implements OnInit {
       molecule_row['molecule_structures'] = {
         'canonical_smiles': molecule.molecule_structures.canonical_smiles
       };
+      this.chembl_calculated_pc_row_chemblid[molecule.molecule_chembl_id] = this.chembl.getChEMBLCalculatedPCFromMoleculeData(molecule);
 
 /*         let chembl_id: string = molecule.molecule_chembl_id;
       let compound_obj: Object = {};
@@ -258,6 +293,7 @@ export class ChemblRaxComponent implements OnInit {
 
     let chembl_molecule_rows$ = new AsyncSubject<Object>();
     let molecule_rows: Object[] = [];
+    this.chembl_calculated_pc_row_chemblid = {};
     const subs = (<Observable<Object>>this.service.chEMBLSearchSubstructure(smiles, page_size)).subscribe(
       chembl_result => {
         this.parseChEMBLMoleculeData(chembl_result, molecule_rows, chembl_molecule_rows$, _count, limit);
@@ -274,9 +310,9 @@ export class ChemblRaxComponent implements OnInit {
     return chembl_molecule_rows$;
   }
 
-  parseChEMBLGetADMETActivityData(chembl_result: Object, activity_rows: Object[],
+  parseChEMBLGetActivityPCData(chembl_result: Object, activity_rows: Object[],
     chembl_activity_rows$: AsyncSubject<Object>, idx: number, count: number = 0,
-    limit: number = 1000000, fields: Array<string> = null) {
+    limit: number = 1000000, fields: Array<string> = null, assay_type = 'A') {
 
     if (fields != null) {
       chembl_result['activities'].forEach(activity => {
@@ -287,6 +323,7 @@ export class ChemblRaxComponent implements OnInit {
         this.chembl_activity_fields.forEach(field => {
           activity_row[field] = activity[field];
         });
+        activity_row['assay_type'] = assay_type;
         activity_rows.push(activity_row);
         count++;
       });
@@ -308,7 +345,7 @@ export class ChemblRaxComponent implements OnInit {
         if (typeof next !== 'undefined' && next !== null) {
           const subs = this.chembl.chEMBLGetADMETActivityDataNext(next).subscribe(
             chembl_result2 => {
-              this.parseChEMBLGetADMETActivityData(chembl_result2, activity_rows, chembl_activity_rows$, idx, count, limit, fields);
+              this.parseChEMBLGetActivityPCData(chembl_result2, activity_rows, chembl_activity_rows$, idx, count, limit, fields, assay_type);
               subs.unsubscribe();
             },
             error => {
@@ -332,13 +369,13 @@ export class ChemblRaxComponent implements OnInit {
     }
   }
 
-  chEMBLGetADMETActivityDataByCompoundId(chembl_id: string, idx: number , fields: Array<string> = null, limit: number = 1000000, _count: number = 0) {
+  chEMBLGetActivityPCDataByCompoundId(chembl_id: string, idx: number , fields: Array<string> = null, limit: number = 1000000, _count: number = 0, assay_type = 'A') {
 
         let chembl_activity_rows$ = new AsyncSubject<Object>();
         let activity_rows: Object[] = [];
-        const subs = this.chembl.chEMBLGetADMETActivityDataByCompoundId(chembl_id).subscribe(
+        const subs = this.chembl.chEMBLGetActivityPCDataByCompoundId(chembl_id, assay_type).subscribe(
           chembl_result => {
-            this.parseChEMBLGetADMETActivityData(chembl_result, activity_rows, chembl_activity_rows$, idx, _count, limit, fields);
+            this.parseChEMBLGetActivityPCData(chembl_result, activity_rows, chembl_activity_rows$, idx, _count, limit, fields, assay_type);
             subs.unsubscribe();
           },
           error => {
@@ -377,7 +414,6 @@ export class ChemblRaxComponent implements OnInit {
             });
             this.chembl_substructure_search_filtered_compounds = compounds;
             this.last_rdkit_similarity_cutoff = this.rdkit_similarity_cutoff;
-            console.log(compounds);
             this.rdkit_similarity_running = false;
             subs2.unsubscribe();
           },
@@ -440,52 +476,77 @@ export class ChemblRaxComponent implements OnInit {
       this.chembl_activity_rows_compound[idx]['compound'] = compound;
       this.chembl_activity_rows_compound[idx]['chembl_activity_rows'] = [];
       const chembl_id = compound.chembl_id;
-      const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, idx, this.chembl.chembl_activity_fields);
-      const chembl_subs = chembl_activity_rows$.subscribe(
+      if (this.chembl_calculated_pc_row_chemblid[chembl_id] !== null && typeof this.chembl_calculated_pc_row_chemblid[chembl_id] !== 'undefined') {
+        this.chembl_activity_rows_compound[idx]['chembl_activity_rows'] = this.chembl_activity_rows_compound[idx]['chembl_activity_rows'].concat(this.chembl_calculated_pc_row_chemblid[chembl_id]);
+      }
+      const chembl_ADMETActivity_rows$ = this.chEMBLGetActivityPCDataByCompoundId(chembl_id, idx, this.chembl.chembl_activity_fields, undefined, undefined, 'A');
+      const chembl_subs = chembl_ADMETActivity_rows$.subscribe(
         chembl_result => {
           let chembl_activity_rows: Object[] = this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'];
           chembl_activity_rows = chembl_activity_rows.concat(chembl_result['activities']);
           this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'] = chembl_activity_rows;
-          success_count++;
-
-        },
-        error => {
-          chembl_subs.unsubscribe();
-          chembl_activity_downloaded$.next('error');
-        },
-        () => {
-          chembl_activity_downloaded$.next('completed');
-          chembl_subs.unsubscribe();
-        }
-      );
+          const chembl_pc_rows$ = this.chEMBLGetActivityPCDataByCompoundId(chembl_id, idx, this.chembl.chembl_activity_fields,undefined,
+            undefined, 'P');
+          const chembl_subs2 = chembl_pc_rows$.subscribe(
+            chembl_result2 => {
+            chembl_activity_rows = chembl_activity_rows.concat(chembl_result2['activities']);          
+            this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'] = chembl_activity_rows;
+            success_count++;
+            this.chembl_running = false;
+            },
+            error => {
+              this.chembl_running = false;
+              chembl_subs2.unsubscribe();
+              chembl_activity_downloaded$.next('error');
+            },
+            () => {
+              chembl_activity_downloaded$.next('completed');
+              chembl_subs2.unsubscribe();
+            });
+          },
+          error => {
+            chembl_subs.unsubscribe();
+          },
+          () => {
+            chembl_subs.unsubscribe();
+          }
+        );
       idx++;
     });
-    this.chembl_running = false;
+    
 
   }
 
   saveActivities() {
+    this.chembl_running = true;
     this.chembl_activity_errors = '';
     console.log(this.chembl_activity_rows_compound);
+    const project = this.info.project;
+    const ra_type = Compound.SOURCE_COMPOUND;
+    const data_list: Array<Object[]> = [];
+    const compounds: Compound[] = [];
+
     Object.keys(this.chembl_activity_rows_compound).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
       const compound = this.chembl_activity_rows_compound[idx]['compound'];
       const chembl_activity_rows = this.chembl_activity_rows_compound[idx]['chembl_activity_rows'];
-      if (chembl_activity_rows.length > 0) {
-        const subs = this.chembl.saveChemblData(compound, chembl_activity_rows).subscribe(result => {
-          this.chembl_running = false;
-        },
-        error => {
-          console.log('Error while saving ChEMBL data. For molecule: ' + compound.chembl_id);
-          this.chembl_activity_errors += 'Error while saving ChEMBL data. For molecule: ' + compound.chembl_id;
-          this.chembl_running = false;
-          subs.unsubscribe();
-        },
-        () => {
-          subs.unsubscribe();
-        });
+      if (chembl_activity_rows.length > 0 && chembl_activity_rows !== null && typeof chembl_activity_rows !== 'undefined') {
+        compounds.push(compound);
+        data_list.push(chembl_activity_rows);
       }
     });
-
+    const subs = this.chembl.saveChemblDataMultiple(project,ra_type,compounds, data_list).subscribe(result => {
+      this.chembl_running = false;
+      alert('Actvities saves succesfully.');
+    },
+    error => {
+      console.log('Error while saving ChEMBL data');
+      this.chembl_activity_errors += 'Error while saving ChEMBL data.';
+      this.chembl_running = false;
+      subs.unsubscribe();
+    },
+    () => {
+      subs.unsubscribe();
+    });
   }
 
   typeof(variable) {

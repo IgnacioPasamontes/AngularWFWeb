@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class DatamatrixTabsService {
 
-  public tabs: Array<string> = ['Activities','TEST'];
+  public tabs: Array<string> = ['Activities','TEST','PC'];
   public active_tab_index: number = 0;
   public active_tab_name: string;
 

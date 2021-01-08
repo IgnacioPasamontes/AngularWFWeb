@@ -24,8 +24,8 @@ export class DatamatrixService {
     Compound.ra_type_abbrev_to_value_dict[ra_type] + '/datamatrix/';
     return this.http.get(url, {withCredentials: true});
   }
-  getMatrixHeatmap(project: number): Observable<any> {
-    const url: string = environment.baseUrl + 'project/' + project.toString() + '/datamatrix/heatmap/json/';
+  getMatrixHeatmap(project: number, heatmap_name: string): Observable<any> {
+    const url: string = environment.baseUrl + 'project/' + project.toString() + '/datamatrix/heatmap/json/'+heatmap_name+'/';
     return this.http.get(url, {withCredentials: true});
   }
 }

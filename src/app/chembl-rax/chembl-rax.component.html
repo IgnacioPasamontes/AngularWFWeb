@@ -14,8 +14,8 @@
                             <br>
 
                         </td>
-                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="raxFromSmilesButton()">Search</button>
-                            <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || chembl_running || chembl_substructure_running" (click)="raxFromSmilesButton()">Search</button>
+                            <mat-spinner *ngIf="chembl_substructure_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                         </td>
                     </ng-container>
                     <ng-container *ngSwitchCase="'compound'">
@@ -31,8 +31,8 @@
                             </mat-form-field>
                             <br>
                         </td>
-                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="raxFromCompoundButton()">Search</button>
-                            <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_substructure_running" (click)="raxFromCompoundButton()">Search</button>
+                            <mat-spinner *ngIf="chembl_substructure_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                         </td>
                     </ng-container>
                 </ng-container>
@@ -93,7 +93,7 @@
                     <br>
 
                 </td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || chembl_substructure_search_result_compounds.length === 0" (click)="filterBySimilarityButton()">Filter</button>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || chembl_substructure_search_result_compounds.length === 0 || chembl_running" (click)="filterBySimilarityButton()">Filter</button>
                     <mat-spinner *ngIf="rdkit_similarity_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>
@@ -115,7 +115,7 @@
                 <td>
 
                 </td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="save_running || chembl_substructure_search_filtered_compounds.length === 0" (click)="saveButton()">Save</button>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]=" rdkit_similarity_running || save_running || chembl_substructure_search_filtered_compounds.length === 0 || chembl_running || chembl_substructure_running" (click)="saveButton()">Save</button>
                     <mat-spinner *ngIf="save_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>
@@ -125,7 +125,7 @@
                 <td>
 
                 </td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="this.chembl_running || object_keys(this.chembl_activity_rows_compound).length === 0" (click)="saveActivities()">Save activities</button>
+                <td style="width:10rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || object_keys(this.chembl_activity_rows_compound).length === 0 || chembl_running || chembl_substructure_running" (click)="saveActivities()">Save activities</button>
                     <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>

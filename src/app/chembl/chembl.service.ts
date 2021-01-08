@@ -109,10 +109,14 @@ export class ChemblService {
     }
     const pcs = data2['molecule_properties'];
     let new_data: Array<Object> = [];
+    const pc_dict = this.chembl_calculated_pc_dict;
 
     Object.keys(this.chembl_calculated_pc_dict).forEach(pc => {
-      const pc_dict = this.chembl_calculated_pc_dict;
-      console.log('hello:'+pc);
+      
+
+      if (pcs[pc] === null || typeof pcs[pc] === 'undefined') {
+          return;
+      }
       let activity: Object = {
         'standard_type': pc_dict[pc]['standard_type'],
         'standard_value': pcs[pc],
@@ -126,14 +130,16 @@ export class ChemblService {
         'text_value': null,
       };
 
+
+
       if (pc_dict[pc]['data_type'] === 'text') {
         activity['value'] = null;
         activity['standard_value'] = null;
         activity['text_value'] = pcs[pc];
       }
       if (pc === 'ro3_pass') {
-        activity['value'] = this.chembl_ro3_pass_dict[pcs[pc]];
-        activity['standard_value'] = this.chembl_ro3_pass_dict[pcs[pc]];
+          activity['value'] = this.chembl_ro3_pass_dict[pcs[pc]];
+          activity['standard_value'] = this.chembl_ro3_pass_dict[pcs[pc]];
       }
       new_data.push(activity);
     });
@@ -141,19 +147,13 @@ export class ChemblService {
     return new_data;
   }
 
-  chEMBLGetADMETActivityDataByCompoundId(chemblid: string) {
+  chEMBLGetActivityPCDataByCompoundId(chemblid: string, assay_type: string = 'A') {
     let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
-    const params = new HttpParams().append('format', 'json').append('assay_type', 'A').
+    const params = new HttpParams().append('format', 'json').append('assay_type', assay_type).
       append('molecule_chembl_id', chemblid);
     return this.http.get(url, {params: params});
   }
 
-  chEMBLGetPCActivityDataByCompoundId(chemblid: string) {
-    let url: string = 'https://www.ebi.ac.uk/chembl/api/data/activity';
-    const params = new HttpParams().append('format', 'json').append('assay_type', 'P').
-      append('molecule_chembl_id', chemblid);
-    return this.http.get(url, {params: params});
-  }
 
   chEMBLGetADMETActivityDataNext(next: string) {
     let url: string = 'https://www.ebi.ac.uk' + next;
@@ -176,5 +176,22 @@ export class ChemblService {
     let options: Object = this.loginService.getPOSTHttpOptions();
     options['headers'] = options['headers'].append('Content-Type', 'application/json');
     return this.http.post(url, JSON.stringify(data), options);
+  }
+
+  saveChemblDataMultiple(project: number, ra_type: number, compounds: Compound[], data_list: Array<Object[]>): Observable<any> {
+    const url: string = environment.baseUrl + 'project/' + project.toString() + '/compound/' + 
+    Compound.ra_type_abbrev_to_value_dict[ra_type] + '/multiple/chembl_save/';
+    let options: Object = this.loginService.getPOSTHttpOptions();
+    options['headers'] = options['headers'].append('Content-Type', 'application/json');
+    options['headers'] = options['headers'].append('ng_timeout', '0');
+    const data_json: Object[] = [];
+    for (let i = 0; i < compounds.length; i++) {
+      if (compounds[i] === null || typeof compounds[i] === 'undefined' || data_list[i] === null
+       ||typeof data_list[i]  === 'undefined') {
+         continue;
+       }
+      data_json.push({int_id:compounds[i].int_id,data: data_list[i]});
+    }
+    return this.http.post(url, JSON.stringify(data_json), options);
   }
 }

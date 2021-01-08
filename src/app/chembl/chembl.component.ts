@@ -5,6 +5,7 @@ import { Compound, CompoundService } from '../compound/compound.service';
 import { TcCompoundsService } from '../tc-characterization/tc-compounds.service';
 import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 import { AsyncSubject } from 'rxjs';
+import { CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY } from '@angular/cdk/overlay/typings/overlay-directives';
 
 
 @Component({
@@ -208,9 +209,9 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     });
   }
 
-  parseChEMBLGetADMETActivityData(chembl_result: Object, activity_rows: Object[],
+  parseChEMBLGetActivityPCData(chembl_result: Object, activity_rows: Object[],
     chembl_activity_rows$: AsyncSubject<Object>, count: number = 0,
-    limit: number = 1000000, fields: Array<string> = null) {
+    limit: number = 1000000, fields: Array<string> = null, assay_type: string ='A') {
 
     if (fields != null) {
       chembl_result['activities'].forEach(activity => {
@@ -221,7 +222,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         this.chembl_activity_fields.forEach(field => {
           activity_row[field] = activity[field];
         });
-        activity_row['assay_type'] = 'A';
+        activity_row['assay_type'] = assay_type;
         activity_rows.push(activity_row);
         count++;
       });
@@ -243,7 +244,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         if (typeof next !== 'undefined' && next !== null) {
           const subs = this.service.chEMBLGetADMETActivityDataNext(next).subscribe(
             chembl_result2 => {
-              this.parseChEMBLGetADMETActivityData(chembl_result2, activity_rows, chembl_activity_rows$, count, limit, fields);
+              this.parseChEMBLGetActivityPCData(chembl_result2, activity_rows, chembl_activity_rows$, count, limit, fields);
               subs.unsubscribe();
             },
             error => {
@@ -263,23 +264,23 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     }
   }
 
-  chEMBLGetADMETActivityDataByCompoundId(chembl_id: string, fields: Array<string> = null, limit: number = 1000000, _count: number = 0) {
+  chEMBLGetActivityPCDataByCompoundId(chembl_id: string, fields: Array<string> = null, limit: number = 1000000, _count: number = 0, assay_type: string ='A') {
 
-        let chembl_activity_rows$ = new AsyncSubject<Object>();
-        let activity_rows: Object[] = [];
-        const subs = this.service.chEMBLGetADMETActivityDataByCompoundId(chembl_id).subscribe(
-          chembl_result => {
-            this.parseChEMBLGetADMETActivityData(chembl_result, activity_rows, chembl_activity_rows$, _count, limit, fields);
-            subs.unsubscribe();
-          },
-          error => {
-            alert('Error retrieving data from ChEMBL.');
-            subs.unsubscribe();
-            chembl_activity_rows$.error(error);
-          }
-        );
-        return chembl_activity_rows$;
-  }
+    let chembl_activity_rows$ = new AsyncSubject<Object>();
+    let activity_rows: Object[] = [];
+    const subs = this.service.chEMBLGetActivityPCDataByCompoundId(chembl_id, assay_type).subscribe(
+      chembl_result => {
+        this.parseChEMBLGetActivityPCData(chembl_result, activity_rows, chembl_activity_rows$, _count, limit, fields, assay_type);
+        subs.unsubscribe();
+      },
+      error => {
+        alert('Error retrieving data from ChEMBL.');
+        subs.unsubscribe();
+        chembl_activity_rows$.error(error);
+      }
+    );
+    return chembl_activity_rows$;
+}
 
   chemblIdFromSmilesButton(reset_activity_compound: boolean = true) {
     this.chembl_running = true;
@@ -290,6 +291,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     }
     this.chembl_activity_rows = [];
     this.chembl_smiles = {};
+    this.chembl_calculated_pc_row_chemblid = {};
     this.activity = '';
     const subscript = this.service.chemblSmilesToInChIKey(this.chembl_search_string).subscribe(
       result => {
@@ -381,15 +383,18 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       let activity_rows: string = '';
       Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
         this.chembl_activity_rows = this.chembl_activity_rows.concat(chembl_activity_rows_obj[idx]);
+        console.log(idx+':');
+        console.log(chembl_activity_rows_obj[idx]);
         chembl_activity_rows_obj[idx].forEach(activity => {
           activity_rows += '<tr>';
           this.chembl_displayed_activity_fields.forEach(field => {
             activity_rows += '<td>' + activity[field] + '</td>';
           });
+          activity_rows += '<td>' + activity['assay_type'] + '</td>';
           activity_rows += '</tr>';
         });
       });
-      this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th></tr>'
+      this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th><th>Assay type</th></tr>'
        + activity_rows + '</table>';
     },
     error => {
@@ -405,16 +410,35 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     chembl_ids.forEach(chembl_id => {
       chembl_activity_rows_obj[index] = this.chembl_calculated_pc_row_chemblid[chembl_id];
       index++;
-
-      const chembl_activity_rows$ = this.chEMBLGetADMETActivityDataByCompoundId(chembl_id, this.chembl_activity_fields);
-      const chembl_subs = chembl_activity_rows$.subscribe(
+      const chembl_ADMETActivity_rows$ = this.chEMBLGetActivityPCDataByCompoundId(chembl_id, this.chembl_activity_fields,undefined,
+        undefined, 'A');
+      const chembl_subs = chembl_ADMETActivity_rows$.subscribe(
         chembl_result => {
-          chembl_activity_rows_obj[index] = chembl_result['activities'];
-          chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
-          success_count++;
-          if (chembl_ids_length >= success_count) {
-            chembl_activity$.complete();
-          }
+          let activ_rows: Object[] = chembl_result['activities'];
+          const chembl_pc_rows$ = this.chEMBLGetActivityPCDataByCompoundId(chembl_id, this.chembl_activity_fields,undefined,
+            undefined, 'P');
+          const chembl_subs2 = chembl_pc_rows$.subscribe(
+            chembl_result2 => {
+              activ_rows = activ_rows.concat(chembl_result2['activities']);
+              console.log(activ_rows);
+              chembl_activity_rows_obj[index] = activ_rows;
+              chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
+              success_count++;
+              if (chembl_ids_length >= success_count) {
+                chembl_activity$.complete();
+              }
+            },
+            error => {
+              chembl_activity$.error(error);
+              this.chembl_running = false;
+              chembl_subs2.unsubscribe();
+            },
+            () => {
+              this.chembl_running = false;
+              chembl_subs2.unsubscribe();
+
+            }
+          );
         },
         error => {
           chembl_activity$.error(error);
@@ -423,7 +447,6 @@ export class ChemblComponent implements OnInit, AfterViewInit {
 
         },
         () => {
-          this.chembl_running = false;
           chembl_subs.unsubscribe();
         }
       );

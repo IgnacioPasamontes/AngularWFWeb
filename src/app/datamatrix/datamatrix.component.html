@@ -1,13 +1,22 @@
 <div class="container-fluid tab-content shadow bg-white rounded" id="datamatrix-tabs-tabContent">
-    <!-- <ng-container [ngSwitch]="this.datamatrix_tabs.active_tab_name"> -->
-        <!-- <ng-container *ngSwitchCase="'Activities'"> -->
-        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Activities' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset" [id]="heatmap_id">
-        <p [innerText]="response"></p>
-        <div *ngIf="!response && !heatmap" class="container h-100">
-            <div class="row justify-content-center align-items-center h-100">
-                    <div>
-                        <mat-spinner ProgressSpinnerMode="indeterminate" diameter="100"></mat-spinner>
-                    </div>
+        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Activities' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['bioactivity']" [id]="heatmap_id['bioactivity']">
+            <p [innerText]="response['bioactivity']"></p>
+            <div *ngIf="!response['bioactivity'] && !heatmap['bioactivity']" class="container h-100">
+                <div class="row justify-content-center align-items-center h-100">
+                        <div>
+                            <mat-spinner ProgressSpinnerMode="indeterminate" diameter="100"></mat-spinner>
+                        </div>
+                </div>
+            </div>
+        </div>    
+        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'PC' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['pc']" [id]="heatmap_id['pc']">
+            <p [innerText]="response['pc']"></p>
+            <div *ngIf="!response['pc'] && !heatmap['pc']" class="container h-100">
+                <div class="row justify-content-center align-items-center h-100">
+                        <div>
+                            <mat-spinner ProgressSpinnerMode="indeterminate" diameter="100"></mat-spinner>
+                        </div>
+                </div>
             </div>
         </div>
         <!-- <div style="max-height: 80vh; overflow-y:auto" [innerHTML]="heatmap | keepHtml"> -->
@@ -23,10 +32,8 @@
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
-        </div>
-        <!-- </ng-container> -->
-        <!-- <ng-container *ngSwitchCase="'TEST'"> -->
+
             <div [style.display]="this.datamatrix_tabs.active_tab_name === 'TEST' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto">Test</div>
-        <!-- </ng-container> -->
+
     <!-- </ng-container> -->
 </div>

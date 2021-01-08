@@ -59,14 +59,15 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   public displayedColumns: string[];
   public dataSource: MatTableDataSource<Object>;
   public columnsToDisplay: string[];
-  public heatmap: string = '';
-  public heatmap_bkp: string = '';
-  public heatmap_scripts: string[] = [];
-  public heatmap_id: string = '';
-  public heatmap_div_reset: boolean = true;
-  public heatmap_bokeh_document_timestamp: number;
-  public scroll_refreshing: boolean = false;
-  public response: string = '';
+  public heatmaps: string[] = ['bioactivity','pc'];
+  public heatmap: Object = {};
+  public heatmap_bkp: Object = {};  
+  //public heatmap_scripts: string[] = [];
+  public heatmap_id: Object = {}; 
+  public heatmap_div_reset: Object = {};
+  //public heatmap_bokeh_document_timestamp: number;
+  //public scroll_refreshing: boolean = false;
+  public response: Object = {};
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -75,7 +76,13 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
               public datamatrix_tabs: DatamatrixTabsService) { }
 
   ngOnInit() {
-    this.heatmap_id = 'heatmap_datamatrix_bio_activity_project_' + this.project_number.toString();
+    this.heatmaps.forEach( heatmap_name => {
+      this.heatmap_id[heatmap_name] = 'heatmap_datamatrix_'+heatmap_name+'_project_' + this.project_number.toString();
+      this.response[heatmap_name] = '';
+      this.heatmap[heatmap_name] = '';
+      this.heatmap_bkp[heatmap_name] = '';
+      this.heatmap_div_reset[heatmap_name] = true;
+    });
     this.ra_type_2_abbrev[Compound.TARGET_COMPOUND] = 'tc';
     this.ra_type_2_abbrev[Compound.SOURCE_COMPOUND] = 'sc';
 
@@ -99,9 +106,9 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes) {
     if (changes.hasOwnProperty('projectName')  || changes.hasOwnProperty('change')) {
-      console.log('hola:');
-      console.log(this.projectName);
-      this.deleteHeatmap();
+      this.heatmaps.forEach( heatmap_name => {
+        this.deleteHeatmap(heatmap_name);
+      });
       this.project_number = this.globals.current_user.projects[this.projectName];
       if (typeof this.project_number === 'undefined') { return; }
 /*       const subs = this.service.getMatrixData(this.project_number, Compound.TARGET_COMPOUND)
@@ -138,27 +145,31 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
         this.columnsToDisplay = this.displayedColumns.slice();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort; */
-      this.heatmap = '';
-      const subs = this.service.getMatrixHeatmap(this.project_number).subscribe(result => {
-        this.heatmap = result.item;
-        this.heatmap_bkp = result.item;
-        this.heatmap_id = result.heatmap_div_id;
-        if (result.status === 'No data') {
-          this.response = 'No data';
-        } else {
-          this.response = '';
-        }
-/*           this.heatmap = result.div;
-          this.heatmap_bkp = result.div;
-          this.heatmap_scripts = result.scripts; */
-        this.drawHeatmap();
-      },
-      error => {
-        alert('Error retriving data matrix.');
-        subs.unsubscribe();
-      },
-      () => {
-        subs.unsubscribe();
+      this.heatmaps.forEach( heatmap_name => {
+        this.heatmap[heatmap_name] = '';
+        this.response[heatmap_name] = '';
+        const subs = this.service.getMatrixHeatmap(this.project_number,heatmap_name).subscribe(result => {
+          this.heatmap[heatmap_name] = result.item;
+          this.heatmap_bkp[heatmap_name] = result.item;
+          this.heatmap_id[heatmap_name] = result.heatmap_div_id;
+          if (result.status === 'No data') {
+            this.response[heatmap_name] = 'No data';
+          } else {
+            this.response[heatmap_name] = '';
+          }
+  /*           this.heatmap = result.div;
+            this.heatmap_bkp = result.div;
+            this.heatmap_scripts = result.scripts; */
+          this.drawHeatmap(heatmap_name);
+        },
+        error => {
+          alert('Error retriving data matrix.');
+          this.response[heatmap_name] = 'Error retriving data matrix.';
+          subs.unsubscribe();
+        },
+        () => {
+          subs.unsubscribe();
+      });
       });
     }
 
@@ -177,10 +188,9 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
     } */
   }
 
-  drawHeatmap() {
-    const something = Bokeh.embed.embed_item(this.heatmap);
-    console.log('something');
-    console.log(something);
+  drawHeatmap(heatmap_name) {
+    Bokeh.embed.embed_item(this.heatmap[heatmap_name]);
+
 /*     this.heatmap = this.heatmap_bkp;
     setTimeout(() => {
       this.heatmap_scripts.forEach( (script) => {
@@ -189,11 +199,11 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
     }, 0); */
   }
 
-  deleteHeatmap() {
-    this.heatmap_div_reset = false;
+  deleteHeatmap(heatmap_name) {
+    this.heatmap_div_reset[heatmap_name] = false;
     let doc_to_delete: Array<number> = [];
     Bokeh.documents.forEach( (doc, index) => {
-      if (doc._title === this.heatmap_id) {
+      if (doc._title === this.heatmap_id[heatmap_name]) {
         doc.clear();
         doc_to_delete.push(index);
       }
@@ -201,7 +211,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
     doc_to_delete.forEach(idx => {
       Bokeh.documents.splice(idx, 1);
     });
-    this.heatmap_div_reset = true;
+    this.heatmap_div_reset[heatmap_name] = true;
   }
 
 }

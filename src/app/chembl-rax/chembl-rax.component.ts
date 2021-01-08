@@ -536,7 +536,7 @@ export class ChemblRaxComponent implements OnInit {
     });
     const subs = this.chembl.saveChemblDataMultiple(project,ra_type,compounds, data_list).subscribe(result => {
       this.chembl_running = false;
-      alert('Actvities saves succesfully.');
+      alert('Activities saved succesfully.');
     },
     error => {
       console.log('Error while saving ChEMBL data');

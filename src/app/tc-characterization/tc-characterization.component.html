@@ -10,6 +10,9 @@
     </div>
 </div>
 <div class="card">
+            <app-compound *ngIf="this.info.node_seq == 2" [info]="this.info"  [ra_type]="'tc'"></app-compound>
+</div>
+<div class="card">
     <h6 class="card-header bg-light p-1">ChEMBL data</h6>
     <app-chembl #chembl [ra_type]="'tc'" [info]="this.info"></app-chembl>
 </div>

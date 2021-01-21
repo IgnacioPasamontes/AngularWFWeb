@@ -55,6 +55,7 @@ import { ChemblRaxComponent } from './chembl-rax/chembl-rax.component';
 import { MoleculePickerComponent } from './molecule-picker/molecule-picker.component';
 import { ReportComponent } from './report/report.component';
 import { DatamatrixTabsComponent } from './datamatrix-tabs/datamatrix-tabs.component';
+import { Node4InitialRaxHypothesisComponent } from './node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.component';
 
 import { KeysPipe } from './keys.pipe';
 import { EscapeHtmlPipe } from './pipes/keep-html.pipe';
@@ -77,7 +78,7 @@ import { CompoundService } from './compound/compound.service';
 import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
 import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
 import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service';
-
+import { Node4InitialRaxHypothesisService } from './node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.service';
 
 
 
@@ -118,7 +119,8 @@ import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service
     ChemblRaxComponent,
     MoleculePickerComponent,
     ReportComponent,
-    DatamatrixTabsComponent
+    DatamatrixTabsComponent,
+    Node4InitialRaxHypothesisComponent
   ],
   imports: [
     BrowserModule,
@@ -171,6 +173,7 @@ import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service
     TcCompoundsService,
     ChemblRaxService,
     DatamatrixTabsService,
+    Node4InitialRaxHypothesisService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent, OverlayComponent, MoleculePickerComponent],

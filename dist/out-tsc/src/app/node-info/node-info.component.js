@@ -50,6 +50,7 @@ let NodeInfoComponent = class NodeInfoComponent {
     NodeCompleted(project_id, node_id) {
         this.service.saveNode(this.info.project, this.info.node_seq, this.info.outputs, this.info.outputs_comments, this.globals.node_csrf_token[project_id][node_id]).subscribe(result => {
             this.globals.change = !this.globals.change;
+            this.globals.change_datamatrix = !this.globals.change_datamatrix;
         });
         switch (node_id) {
             case 1: {

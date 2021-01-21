@@ -1,8 +1,42 @@
 
-        <div class="smiles-micromodal-container">
-                <app-smiles-micromodal [id]="this.ckeditor_id+'-smiles-micromodal'"></app-smiles-micromodal>
-        </div>
+        <h5 [ngbTooltip]="scope_h5_help" class="card-header bg-light p-1">Scope</h5>
+        <ng-template #scope_h5_help>
+                <p>e.g. human allowable exposures in health risk assesment, prioritzation, screening, classification and labelling</p>
+        </ng-template>
         <div class="upload-angular-container" class="card-body p-0">
-            <ckeditor [id]="this.ckeditor_id" [editor]="Editor" [config]="this.Editor_config" [(ngModel)]="problem_description" [disabled]="this.inline_problem_description"></ckeditor>
+            <ckeditor [id]="this.ckeditor_ids['scope']" [editor]="Editor" [config]="this.ckeditors['scope']" [(ngModel)]="problem_formulation.scope" [disabled]="this.inline_problem_description"></ckeditor>
+        </div>
+        <div class="smiles-micromodal-container">
+                <app-smiles-micromodal [id]="this.ckeditor_ids['scope']+'-smiles-micromodal'"></app-smiles-micromodal>
+        </div>
+
+        <h5 [ngbTooltip]="context_h5_help" class="card-header bg-light p-1">Decision context</h5>
+        <ng-template #context_h5_help>
+                <p>e.g. regulatory context</p>
+        </ng-template>
+        <div class="upload-angular-container" class="card-body p-0">
+            <ckeditor [id]="this.ckeditor_ids['decision_context']" [editor]="Editor" [config]="this.ckeditors['decision_context']" [(ngModel)]="problem_formulation.decision_context" [disabled]="this.inline_problem_description"></ckeditor>
+        </div>
+        <div class="smiles-micromodal-container">
+                <app-smiles-micromodal [id]="this.ckeditor_ids['decision_context']+'-smiles-micromodal'"></app-smiles-micromodal>
+        </div>
+
+        <h5 [ngbTooltip]="" class="card-header bg-light p-1">Endpoints</h5>
+        <div class="upload-angular-container" class="card-body p-0">
+            <ckeditor [id]="this.ckeditor_ids['endpoints']" [editor]="Editor" [config]="this.ckeditors['endpoints']" [(ngModel)]="problem_formulation.endpoints" [disabled]="this.inline_problem_description"></ckeditor>
+        </div>
+        <div class="smiles-micromodal-container">
+                <app-smiles-micromodal [id]="this.ckeditor_ids['endpoints']+'-smiles-micromodal'"></app-smiles-micromodal>
+        </div>
+
+        <h5 [ngbTooltip]="uncertainty_h5_help" class="card-header bg-light p-1">Tolerable uncertainty threshold</h5>
+        <ng-template #uncertainty_h5_help>
+                <p>Tolerable uncertainty threshold for Read-Across results</p>
+        </ng-template>
+        <div class="upload-angular-container" class="card-body p-0">
+            <ckeditor [id]="this.ckeditor_ids['uncertainty']" [editor]="Editor" [config]="this.ckeditors['uncertainty']" [(ngModel)]="problem_formulation.uncertainty" [disabled]="this.inline_problem_description"></ckeditor>
+        </div>
+        <div class="smiles-micromodal-container">
+                <app-smiles-micromodal [id]="this.ckeditor_ids['uncertainty']+'-smiles-micromodal'"></app-smiles-micromodal>
         </div>
 

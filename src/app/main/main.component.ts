@@ -50,6 +50,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   change() {
     this.globals.change = !this.globals.change;
+    this.globals.change_datamatrix = !this.globals.change_datamatrix;
   }
 
   getUserInfo(csrftoken?: string) {

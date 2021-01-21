@@ -6,12 +6,14 @@ import { NodeInfoService } from './node-info.service';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
+import { Node4InitialRaxHypothesisComponent } from '../node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.component';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { ResizeSensor } from 'css-element-queries';
 
 
 import MicroModal from 'micromodal';
+import { TcCharacterizationService } from '../tc-characterization/tc-characterization.service';
 
 
 //declare let jQuery: any;
@@ -49,6 +51,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   public Editor = ClassicEditor;  
   
   @ViewChild(Node1ProblemFormulationComponent,{ static: false }) node1: Node1ProblemFormulationComponent;
+  @ViewChild(  Node4InitialRaxHypothesisComponent,{ static: false }) node4: Node1ProblemFormulationComponent;
   // We use this trigger because fetching the list of persons can be quite long,
   // thus we ensure the data is fetched before rendering
 
@@ -56,8 +59,6 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
   
   constructor(private el: ElementRef, public globals: Globals,
-              public dialog: MatDialog,
-              public ngZone: NgZone,
               @Inject(NodeInfoService) public service,
               public dialogRef: MatDialogRef<NodeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Array<any>,
@@ -165,35 +166,49 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   }
 
   NodeCompleted() {
+    this.dialogRef.disableClose = true;
     const project_id = this.info.project;
     const node_seq = this.info.node_seq;
     this.service.setNodeAsBusy(project_id,node_seq,false);
 
     this.sub = this.service.saveNode(this.info.project, this.info.node_seq, this.info.inputs_comments,this.info.outputs,this.info.outputs_comments,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
+
+        switch(node_seq) { 
+          case 1: {
+            this.service.setNodeAsBusy(project_id,node_seq);
+            this.node1.NodeCompleted();
+            break; 
+          }
+          case 4: {
+            this.service.setNodeAsBusy(project_id,node_seq);
+            this.node4.NodeCompleted();
+            break; 
+          } 
+          default: {
+            this.globals.change_datamatrix = !this.globals.change_datamatrix;
+            //statements; 
+            break; 
+          } 
+        }
+
+
         this.service.setNodeAsBusy(project_id,node_seq,false);
         this.globals.change =  !this.globals.change;
+        this.dialogRef.disableClose = false;
+        this.dialogRef.close('OK');
       },
       error => {},
       () => {
         this.sub.unsubscribe;
       }
     );
-    switch(node_seq) { 
-      case 1: {
-        this.service.setNodeAsBusy(project_id,node_seq);
-        this.node1.NodeCompleted();
-        break; 
-      } 
-      default: { 
-        //statements; 
-        break; 
-      } 
-   } 
+ 
 
-   this.inline_input = true;
+    this.inline_input = true;
     this.inline_output = true;
     this.inline_comments = true;
+
 
     return false;
   }

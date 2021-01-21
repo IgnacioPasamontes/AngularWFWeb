@@ -220,6 +220,7 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
             const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
               width: '100%',
               data: result,
+              hasBackdrop: true,
             });
             dialogRef.afterOpened().subscribe(() => { node_loading_overlayRef.dispose(); });
             dialogRef.afterClosed().subscribe(result => {

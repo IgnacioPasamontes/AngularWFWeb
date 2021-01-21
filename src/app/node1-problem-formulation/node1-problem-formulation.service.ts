@@ -5,6 +5,14 @@ import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
 import { LoginService } from '../login/login.service';
 
+export class ProblemFormulation {
+  public scope: string = '';
+  public decision_context: string = '';
+  public endpoints: string = '';
+  public uncertainty: string = '';
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,10 +30,15 @@ export class Node1ProblemFormulationService {
   }
 
 
-  saveNode(project: number, description: string, csrftoken?: string): Observable<any> {
+
+
+  saveNode(project: number, problem_formulation: ProblemFormulation, csrftoken?: string): Observable<any> {
     const node = 1;
     const formData = new FormData();
-    formData.append('description', description);
+    Object.getOwnPropertyNames(problem_formulation).forEach(field => {
+      formData.append(field, problem_formulation[field]);
+    });
+    
     if (csrftoken !== null && csrftoken !== undefined) {
       formData.append(this.globals.csrftoken_form_input_name,csrftoken);
     }

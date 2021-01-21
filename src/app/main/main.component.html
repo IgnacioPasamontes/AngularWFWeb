@@ -49,7 +49,7 @@ mwlResizable
                 </div>
                 <div  id="app-datamatrix-container" *ngIf="this.globals.active_projects.length > 0" class="overflow-auto col">
                     <app-datamatrix-tabs></app-datamatrix-tabs>
-                    <app-datamatrix [datamatrix_tabs_active_tab_name]="this.datamatrix_tabs.active_tab_name" [workflow_scroll]="this.globals.workflow_scroll" [redraw]="datamatrixRedraw" [projectName]="this.globals.current_main_project" [change]="this.globals.change"></app-datamatrix>
+                    <app-datamatrix [datamatrix_tabs_active_tab_name]="this.datamatrix_tabs.active_tab_name" [workflow_scroll]="this.globals.workflow_scroll" [redraw]="datamatrixRedraw" [projectName]="this.globals.current_main_project" [change]="globals.change_datamatrix"></app-datamatrix>
                 </div>
             </div>  
                

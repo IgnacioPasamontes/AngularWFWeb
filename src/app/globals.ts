@@ -10,6 +10,7 @@ export class Globals {
   current_main_project = '';
   operatorId = '';
   change = false; // Tricki no realize WF change
+  change_datamatrix = false;
   workflow_scroll = false;
   csrftoken_cookie_name = 'csrftoken';
   csrftoken_header_name = 'X-CSRFToken';

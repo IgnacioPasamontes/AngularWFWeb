@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit } from '@angular/core';
 import { Node1ProblemFormulationService } from './node1-problem-formulation.service';
+import { ProblemFormulation } from './node1-problem-formulation.service';
 import { Globals } from '../globals';
 import { NodeInfoService } from '../node-info/node-info.service';
 import { environment } from '../../environments/environment';
@@ -20,12 +21,15 @@ export class Node1ProblemFormulationComponent implements OnInit {
   @Output() problem_description : string;
   inline_problem_description = false;
   show_inline = false;
-  smiles_drawer_size : number = 100;
+  smiles_drawer_size : number = 200;
   data: any;
   environment = environment;
   micromodal = MicroModal;
-  ckeditor_id: string;
+  ckeditor_id_base: string;
+  ckeditor_ids: Object = {};
+  ckeditors: Object = {};
   part = 1;
+  problem_formulation: ProblemFormulation = new ProblemFormulation();
 
   //public Editor = ClassicEditor;
 
@@ -36,21 +40,36 @@ export class Node1ProblemFormulationComponent implements OnInit {
   ngOnInit() {
     this.data = this.info;
     this.micromodal.init();
-    this.ckeditor_id = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_problem_formulation';
-    let i = 0;
-    this.Editor_config.CustomElement.items.forEach( (item) => {
-      this.Editor_config.CustomElement.items[i].ckeditor_id = this.ckeditor_id;
-      this.Editor_config.CustomElement.items[i].component = this;
-      i++;
+    this.ckeditor_id_base = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_problem_formulation';
+    let editor_config: any; 
+    Object.getOwnPropertyNames(this.problem_formulation).forEach(field => {
+      const ckeditor_id = this.ckeditor_id_base+'-'+field;
+      this.ckeditor_ids[field] = ckeditor_id;
+      editor_config = $.extend(true,{},this.Editor_config);
+      let i = 0;
+      editor_config.CustomElement.items.forEach( (item) => {
+        editor_config.CustomElement.items[i].ckeditor_id = ckeditor_id;
+        editor_config.CustomElement.items[i].component = this;
+        i++;
+      });
+      this.ckeditors[field] = editor_config;
     });
 
     this.service.getProblemDescription(this.info.project).subscribe(
       result => {
-        this.problem_description = result.description;
+        Object.getOwnPropertyNames(this.problem_formulation).forEach(field => {
+          if (result[field] === null || typeof result[field] === 'undefined') {
+            this.problem_formulation[field] = '';
+          } else {
+            this.problem_formulation[field] = result[field];
+          }
+          
+        });
+        
       },
       error => {
         if (error.status === 404) {
-          this.problem_description = '';
+          this.problem_formulation = new ProblemFormulation();
         } else {
           alert('Error getting problem description');
         }
@@ -63,10 +82,10 @@ export class Node1ProblemFormulationComponent implements OnInit {
   NodeCompleted() {
     const project_id = this.info.project;
     const node_seq = 1;
-    this.service.saveNode (project_id, this.problem_description,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
+    this.service.saveNode (project_id, this.problem_formulation,this.globals.node_csrf_token[project_id][node_seq]).subscribe(
       result => {
         this.globals.change =  !this.globals.change;
-        this.node.setNodeAsBusy(project_id,node_seq,false);
+        // this.node.setNodeAsBusy(project_id,node_seq,false);
       }
     );
      

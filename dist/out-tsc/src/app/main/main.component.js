@@ -21,6 +21,7 @@ let MainComponent = class MainComponent {
     }
     change() {
         this.globals.change = !this.globals.change;
+        this.globals.change_datamatrix = !this.globals.change_datamatrix;
     }
     getUserInfo(csrftoken) {
         let username; // = undefined

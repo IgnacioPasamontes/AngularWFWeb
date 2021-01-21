@@ -38,6 +38,8 @@
         
     <div class="card">
         <ng-container [ngSwitch]="this.info.node_seq">
+            <ng-container *ngSwitchCase="1">
+                <app-node1-problem-formulation [info]="this.info" [Editor]="Editor" [Editor_config]="this.Editor_config"></app-node1-problem-formulation></ng-container>
             <ng-container *ngSwitchCase="2">
                 <h5 [ngbTooltip]="tc_h5_help" class="card-header bg-light p-1">TC definition</h5>
                 <app-tc-characterization [info]="this.info"></app-tc-characterization>
@@ -45,8 +47,25 @@
             <ng-template #tc_h5_help>
                 <p>Target Compound definition</p>
             </ng-template>
+            <ng-container *ngSwitchCase="3">
+                <h5 class="card-header bg-light p-1">Metabolite Characterization</h5>
+                <div class="card" style="margin-bottom:0px">
+                    <h6 class="card-header bg-light p-1">Metabolite prediction</h6>
+                    <div class="card-body p-2">
+                        <p>Metabolite prediction tool in progress.</p>
+                    </div>
+                    <h6 class="card-header bg-light p-1">Metabolite definition</h6>
+                    <div class="card-body p-2">
+                        <p>Metabolite definition in progress.</p>
+                    </div>
+                </div>
+            </ng-container>
             <ng-container *ngSwitchCase="4">
-                <h5 class="card-header bg-light p-1">Resources</h5>
+                <h5 class="card-header bg-light p-1">Initial RAx strategy</h5>
+                <app-node4-initial-rax-hypothesis [info]="this.info" [Editor]="Editor" [Editor_config]="this.Editor_config"></app-node4-initial-rax-hypothesis>
+            </ng-container>
+            <ng-container *ngSwitchCase="5">
+                <h5 class="card-header bg-light p-1">Source Compound definition</h5>
                 <app-chembl-rax [info]="this.info"></app-chembl-rax>
             </ng-container>
             <ng-container *ngSwitchDefault>
@@ -55,7 +74,7 @@
         </ng-container>
         
         <div *ngIf="this.info.resources.length > 0" class="card" style="margin-bottom:0px">
-            <h6 class="card-header bg-light p-1">Links</h6>
+            <h6 class="card-header bg-light p-1">See also</h6>
             <div class="card-body p-2">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item p-1" *ngFor="let info of this.info.resources ;">
@@ -79,7 +98,7 @@
     </div>-->
            
     
-    <div class="card">
+<!--     <div class="card">
             <h5 class="card-header bg-light p-1">New knowledge</h5>
             <app-compound *ngIf="this.info.node_seq == 2" [info]="this.info"  [ra_type]="'tc'"></app-compound>
             <ng-container [ngSwitch]="this.info.node_seq">
@@ -93,7 +112,7 @@
                     </div>
                 </ng-container>
             </ng-container>
-    </div>
+    </div> -->
     <div class="card">
         <h5 class="card-header bg-light p-1">Comments</h5>
         <div class="smiles-micromodal-container">
@@ -109,5 +128,5 @@
       
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="'cancel'">Cancel</button>
-    <button mat-button (click)="NodeCompleted()" [mat-dialog-close]="'OK'">OK</button>
+    <button mat-button (click)="NodeCompleted()">OK</button>
 </div>

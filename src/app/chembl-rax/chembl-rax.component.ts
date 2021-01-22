@@ -74,7 +74,7 @@ export class ChemblRaxComponent implements OnInit {
         console.log('std_smiles: ' + std_smiles);
         this.chembl_substructure_search_smiles = std_smiles;
         let chembl_compounds: ChEMBLCompound[] = [];
-        const subscript2 = this.chEMBLGetSubstrutureSearchMolecules(std_smiles, undefined, undefined,
+        const subscript2 = this.chEMBLGetSubstrutureSearchMolecules(std_smiles, 30, undefined,
         this.chembl_substructure_search_page_size).subscribe(
           data => {
             data['molecules'].forEach(molecule => {

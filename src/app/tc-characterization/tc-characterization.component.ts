@@ -44,8 +44,8 @@ export class TcCharacterizationComponent implements OnInit {
     this.resources_compound.cas_rn = this.name2cas.cas.current_item['value'];
     this.resources_compound.smiles = this.name2cas.smiles.current_item['value'];
     const subs = this.compound_service.saveCompound(this.resources_compound).subscribe(result => {
-      this.tc_compound.getCompounds(this.info.project);
       alert('Compound saved');
+      this.tc_compound.getCompounds(this.info.project);
     },
     error => {
       alert('Error saving the compound.');

@@ -464,6 +464,7 @@ export class ChemblRaxComponent implements OnInit {
   getSavedCompoundsActivity() {
     this.chembl_running = true;
     let success_count: number = 0;
+    let done_count: number = 0;
     this.chembl_activity_rows_compound = {};
     let chembl_activity_downloaded$ = new AsyncSubject<string>();
   
@@ -471,7 +472,7 @@ export class ChemblRaxComponent implements OnInit {
 
     });
     let idx: number = 0;
-    this.saved_compounds.forEach(compound => {
+    this.saved_compounds.slice(0,30).forEach(compound => {
       this.chembl_activity_rows_compound[idx] = {};
       this.chembl_activity_rows_compound[idx]['compound'] = compound;
       this.chembl_activity_rows_compound[idx]['chembl_activity_rows'] = [];
@@ -491,11 +492,20 @@ export class ChemblRaxComponent implements OnInit {
             chembl_result2 => {
             chembl_activity_rows = chembl_activity_rows.concat(chembl_result2['activities']);          
             this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'] = chembl_activity_rows;
+            done_count++;
             success_count++;
-            this.chembl_running = false;
+            console.log(done_count.toString()+'/'+this.saved_compounds.slice(0,30).length.toString());
+            if (done_count >= this.saved_compounds.slice(0,30).length) {
+              this.chembl_running = false;
+            }
             },
             error => {
-              this.chembl_running = false;
+              done_count++;
+              console.log(done_count.toString()+'/'+this.saved_compounds.slice(0,30).length.toString());
+              if (done_count >= this.saved_compounds.slice(0,30).length) {
+                this.chembl_running = false;
+              }
+              
               chembl_subs2.unsubscribe();
               chembl_activity_downloaded$.next('error');
             },
@@ -510,7 +520,7 @@ export class ChemblRaxComponent implements OnInit {
           () => {
             chembl_subs.unsubscribe();
           }
-        );
+      );
       idx++;
     });
     

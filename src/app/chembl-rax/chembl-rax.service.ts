@@ -69,8 +69,9 @@ export class ChemblRaxService {
       const formData = new FormData();
       formData.append('smiles', smiles);
       formData.append('limit', limit.toString());
-      return this.http.post(url, formData, {withCredentials: false, headers: new HttpHeaders(
-        {'X-HTTP-Method-Override': 'GET'})});
+      let headers: HttpHeaders = new HttpHeaders(
+        {'X-HTTP-Method-Override': 'GET', 'ng_timeout': '0'});
+      return this.http.post(url, formData, {withCredentials: false, headers: headers});
     } else {
       if (url_get_check) {
         return true;

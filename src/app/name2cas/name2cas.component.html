@@ -14,14 +14,14 @@
         </tr>
         <tr>
             <td></td>
-            <td><br>
+            <td style="text-align: right"><br>
                 <div class="form-check">
                     <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeItemsShowCactvsData()" [(ngModel)]="show_cactvs_data">
                     <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
             </div><br></td>
             <td></td>
         </tr>
-        <tr>
+        <tr *ngIf="this.search_string_type==='cas_number'">
             <td style="width:9rem"><label style="display:inline; margin-bottom:0px" for="selected_compound_name" >Compound<br>name:</label>
                 <img [ngbTooltip]="name_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
                 <br><br></td>
@@ -122,7 +122,8 @@
     </label>
     <label *ngIf="this.smiles.selected_item_int_id_list.length === 1 && this.smiles.item_show_cactvs_data" [innerHTML]="this.smiles.current_item.html_rep"></label>
     <label *ngIf="this.smiles.selected_item_int_id_list.length > 1 || this.smiles.selected_item_int_id_list.length === 1 && !this.smiles.item_show_cactvs_data" >Selected {{this.smiles.selected_item_int_id_list.length}} SMILES.</label>
-
+    <br>
+    <label style="font-weight: bold;" *ngIf="this.smiles.selected_item_int_id_list.length === 1 && !this.smiles.item_show_cactvs_data" [innerText]="this.smiles.current_item.value"></label>
     </div>
 </div>
 

@@ -308,6 +308,7 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() info;
   search_string: string;
+  search_string_type: string;
   search_type: any = ['compound_name', 'cas_number'];
   show_cactvs_data: boolean = false;
   cas: FromNameCACTVSInteface = new FromNameCACTVSInteface("cas","name2cas_cas", this.service, this.show_cactvs_data);
@@ -372,6 +373,7 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
         const default_value = {int_id: 0, value: this.search_string, html_rep: this.search_string, string_rep: this.search_string};
         if (this.cactus_interfaces[interface_name].item_list.length > 0) {
           if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'CAS Registry Number') {
+            this.search_string_type = 'cas_number';
             this.compound_name_running = true;
             const  subs_synonyms = this.service.getFromName(this.search_string, 'names', 'cas', 120000).subscribe(
               result => {
@@ -403,12 +405,15 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.compound_name_running = false;
               },
               () => {
+                console.log('search_string_type:');
+                console.log(this.search_string_type);
                 this.compound_name_running = false;
                 subs_synonyms.unsubscribe();
               });
 
           } else if (this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'chemical name (CIR)' ||
                     this.cactus_interfaces[interface_name].item_list[0]['string_class'] === 'IUPAC name (OPSIN)') {
+            this.search_string_type = 'compound_name';          
             this.compound_name = this.search_string;
             this.compound_synonyms.push(default_value);
             this.compound_name_int_id = 0;

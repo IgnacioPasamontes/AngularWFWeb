@@ -58,3 +58,8 @@ body {
 .bk-tooltip {
     max-width: 20vw !important;
 }
+
+input[type=checkbox]
+{
+  -moz-transform: scale(0.9); /* FF */
+}

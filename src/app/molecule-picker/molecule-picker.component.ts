@@ -105,14 +105,15 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   ngOnChanges(change) {
-    this.drawSurvey();
+    
     if (change.hasOwnProperty('smiles')) {
+      this.drawSurvey();
       if (typeof this.smiles !== 'undefined') {
         this.smiles.forEach((mol) => {
           this.smiles_dict[mol['int_id']] = mol['value'];
         });
       }
-    }
+    } else if(change.hasOwnProperty('selection')) {} 
   }
 
   drawSurvey() {
@@ -153,22 +154,35 @@ export class MoleculePickerComponent implements OnInit, OnChanges, AfterViewInit
 
   generateMoleculeImage(smiles: string) {
     const canvas_id = this.canvas_id;
+    const canvas_id_2 = canvas_id+'_2';
+    const smiles_drawer_size = this.smiles_drawer_size;
     const $canvas_elem_const = $('<canvas id="'+canvas_id+'">');
+    const $canvas_elem_const2 = $('<canvas id="'+canvas_id_2+'">');
     let $elem = $('#' + this.parent_canvas_id);
     $elem.append($canvas_elem_const);
+    $elem.append($canvas_elem_const2);
     const canvas_elem: any = $elem.children("#"+canvas_id)[0];
-    const elem = document.getElementById(canvas_id);
+    const canvas_elem2: any = $elem.children("#"+canvas_id_2)[0];
+
 
     //draw molecules
-    const smiles_drawer_size = this.smiles_drawer_size;
     const options = {width: smiles_drawer_size, height: smiles_drawer_size};
     const smilesDrawer = new SmilesDrawer.Drawer(options);
     //const smiles = 'C1CCCCC1';
     SmilesDrawer.parse(smiles, function(tree) {
       smilesDrawer.draw(tree, canvas_id, 'light', false);
     });
-    const data = canvas_elem.toDataURL();
+    
+    const ctx = canvas_elem2.getContext('2d');
+    ctx.canvas.width = canvas_elem.width;
+    ctx.canvas.height = canvas_elem.height;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0,  canvas_elem.width, canvas_elem.height);
+    ctx.drawImage(canvas_elem, 0, 0);
+
+    const data = canvas_elem2.toDataURL();
     $(canvas_elem).remove();
+    $(canvas_elem2).remove();
     return data;
   }
 }

@@ -464,6 +464,7 @@ export class ChemblRaxComponent implements OnInit {
   getSavedCompoundsActivity() {
     this.chembl_running = true;
     let success_count: number = 0;
+    let done_count: number = 0;
     this.chembl_activity_rows_compound = {};
     let chembl_activity_downloaded$ = new AsyncSubject<string>();
   
@@ -489,13 +490,19 @@ export class ChemblRaxComponent implements OnInit {
             undefined, 'P');
           const chembl_subs2 = chembl_pc_rows$.subscribe(
             chembl_result2 => {
-            chembl_activity_rows = chembl_activity_rows.concat(chembl_result2['activities']);          
-            this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'] = chembl_activity_rows;
-            success_count++;
-            this.chembl_running = false;
+              chembl_activity_rows = chembl_activity_rows.concat(chembl_result2['activities']);          
+              this.chembl_activity_rows_compound[chembl_result['idx']]['chembl_activity_rows'] = chembl_activity_rows;
+              success_count++;
+              done_count++;
+              if (done_count >= this.saved_compounds.length) {
+                this.chembl_running = false;
+              }
             },
             error => {
-              this.chembl_running = false;
+              done_count++;
+              if (done_count >= this.saved_compounds.length) {
+                this.chembl_running = false;
+              }
               chembl_subs2.unsubscribe();
               chembl_activity_downloaded$.next('error');
             },

@@ -29,7 +29,7 @@ export class Compound {
   'project', 'int_id', 'ra_type', 'chembl_id'];
 
   public smiles: string;
-  public cas_rn: string;
+  public cas_rn: string[];
   public name: string;
   public project: number;
   public int_id: number;
@@ -111,7 +111,7 @@ export class CompoundService {
   }
 
   saveCompound(compound: Compound, create_new = true): Observable<any> {
-    const compound_obj = compound.getObject(false);
+    let compound_obj = compound.getObject(false);
     if ( !create_new && !compound_obj.hasOwnProperty('int_id') ) {
       throw new Error('"int_id" property undefined when updating a compound.');
     }
@@ -122,16 +122,27 @@ export class CompoundService {
     } else {
       url_suffix = compound.int_id.toString() + '/';
     }
-    const formData = new FormData();
+/*     const formData = new FormData();
     Object.keys(compound_obj).forEach( field => {
       formData.append(field, compound_obj[field]);
-    });
+    }); */
+
+    if (typeof compound.getObject === 'function') {
+      compound_obj = compound.getObject(false);
+    } else if (typeof compound === 'object') {
+      compound_obj = compound;
+    } else {
+      compound_obj = Compound.getObject(compound, false); 
+    }
+    const data = JSON.stringify(compound_obj);
+    const options = this.loginService.getPOSTHttpOptions();
+    options['headers'] = options['headers'].append('Content-Type', 'application/json');
     const url: string = environment.baseUrl  + 'project/' + compound.project + '/compound/' +
      Compound.ra_type_abbrev_to_value_dict[compound.ra_type] + '/' + url_suffix;
-    if (create_new) {
-      return this.http.post(url, formData, this.loginService.getPOSTHttpOptions());
+     if (create_new) {
+      return this.http.post(url, data, options);
     } else {
-      return this.http.put(url, formData, this.loginService.getPOSTHttpOptions());
+      return this.http.put(url, data, options);
     }
   }
 

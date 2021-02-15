@@ -15,10 +15,10 @@
         <tr>
             <td></td>
             <td style="text-align: right"><br>
-                <div class="form-check">
+                <!--  <div class="form-check">
                     <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeItemsShowCactvsData()" [(ngModel)]="show_cactvs_data">
                     <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
-            </div><br></td>
+            </div>--><br></td>
             <td></td>
         </tr>
         <tr *ngIf="this.search_string_type==='cas_number'">
@@ -40,22 +40,22 @@
 
                 <td style="width:9rem"><label style="margin-bottom:0px" for="name2cas_cas" >CAS registry number(s):</label></td>
                 <td style="width:auto">
-                        <select id="name2cas_cas" size=5 class="form-control" name="selected_cas" [(ngModel)]="this.cas.selected_item_int_id_list" multiple>
+                    <!--    <select id="name2cas_cas" size=5 class="form-control" name="selected_cas" [(ngModel)]="this.cas.selected_item_int_id_list" multiple>
                         <ng-container *ngIf="this.cas.item_show_cactvs_data"><option *ngFor="let item of this.cas.item_list" [ngValue]="item.int_id" [innerHTML]="item.html_rep"></option></ng-container>
                         <ng-container *ngIf="!this.cas.item_show_cactvs_data"><option *ngFor="let item of this.cas.item_set" [ngValue]="item.int_id">{{ item.value }}</option></ng-container>
-                        </select>
-                        
+                        </select> -->
+                        <label><ng-container *ngFor="let item of this.cas.item_set; let i = index"><b >{{ item.value }}</b><ng-container *ngIf="i + 1 < this.cas.item_set.length">, </ng-container></ng-container></label>
                 </td>
                 <td style="width:auto">
                 </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td><button class="btn" [disabled]="this.cas.item_list.length === 0 || !this.cas.item_show_cactvs_data" (click)="this.cas.removeItemValueDuplicates();">Remove duplicates</button><br></td>
             <td style="display:inline-block"><button style="display:inline-block" class="btn" [disabled]="this.cas.selected_item_int_id_list.length === 0" (click)="this.cas.deleteSelectedItems()">Delete</button>
             <button style="display:inline-block" class="btn" [disabled]="this.cas.selected_item_int_id_list.length === 0" (click)="openCopy(contentCAS,'cas',true)">Copy in clipboard</button>
             <button style="display:inline-block" class="btn" [disabled]="this.cas.item_list.length === 0" (click)="openCopy(contentCAS,'cas',false)">Copy all in clipboard</button></td>
 
-        </tr>
+        </tr> -->
     </table>
 </div>
 <br>

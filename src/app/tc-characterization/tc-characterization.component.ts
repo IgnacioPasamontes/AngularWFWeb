@@ -32,16 +32,20 @@ export class TcCharacterizationComponent implements OnInit {
       alert('Please select a name for the compound.');
       return;
     }
-    if (typeof this.name2cas.cas.current_item === 'undefined') {
+/*     if (typeof this.name2cas.cas.current_item === 'undefined') {
       alert('Please select a CAS registry number for the compound.');
       return;
-    }
+    } */
     if (typeof this.name2cas.smiles.current_item === 'undefined') {
       alert('Please select an struture for the compound.');
       return;
     }
     this.resources_compound.name = this.name2cas.compound_name;
-    this.resources_compound.cas_rn = this.name2cas.cas.current_item['value'];
+    const cas_rn_list: Array<string> = [];
+    this.name2cas.cas.item_set.forEach(item => {
+      cas_rn_list.push(item['value']);
+    });
+    this.resources_compound.cas_rn = cas_rn_list;
     this.resources_compound.smiles = this.name2cas.smiles.current_item['value'];
     const subs = this.compound_service.saveCompound(this.resources_compound).subscribe(result => {
       alert('Compound saved');

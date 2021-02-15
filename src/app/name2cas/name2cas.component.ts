@@ -251,6 +251,7 @@ export class FromNameCACTVSInteface {
           console.log(result);
         } else {
           this.setItemList(this._service.cactusXMLparsed(result));
+          
           this.from_name_executed = true;
           if (typeof termination_subject$ !== 'undefined' || termination_subject$ !== null) {
             if (!(termination_subject$.closed || termination_subject$.isStopped || termination_subject$.hasError)) {
@@ -311,7 +312,7 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
   search_string_type: string;
   search_type: any = ['compound_name', 'cas_number'];
   show_cactvs_data: boolean = false;
-  cas: FromNameCACTVSInteface = new FromNameCACTVSInteface("cas","name2cas_cas", this.service, this.show_cactvs_data);
+  cas: FromNameCACTVSInteface = new FromNameCACTVSInteface("cas","name2cas_cas", this.service, this.show_cactvs_data, true);
   smiles: FromNameCACTVSInteface = new FromNameCACTVSInteface("smiles","name2smiles_smiles", this.service, this.show_cactvs_data);
   compound_name: string;
   compound_name_int_id: number;

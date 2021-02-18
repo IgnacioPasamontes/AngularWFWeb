@@ -52,6 +52,20 @@ export class TcCharacterizationComponent implements OnInit {
       this.tc_compound.getCompounds(this.info.project);
     },
     error => {
+      if (Array.isArray(error.error)) {
+        if (error.error.length === 1) {
+          const myVar = error.error[0];
+          if (typeof myVar === 'string' || myVar instanceof String) {
+            alert('Error saving the compound: '+ myVar);
+            subs.unsubscribe();
+            return
+          }
+        }
+      } else if (error.error.hasOwnProperty('non_field_errors')) {
+        alert('Error saving the compound:'+"\r\n"+error.error['non_field_errors'].join(".\r\n")+'.');
+        subs.unsubscribe();
+        return
+      }
       alert('Error saving the compound.');
       subs.unsubscribe();
     },

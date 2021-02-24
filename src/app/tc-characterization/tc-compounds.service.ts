@@ -8,10 +8,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class TcCompoundsService {
 
   constructor(private compound_service: CompoundService) { }
-  compounds$: BehaviorSubject<Compound[]>;
+  compounds$: BehaviorSubject<Compound[]> = new BehaviorSubject<Compound[]>(undefined);
 
   getCompounds(project_id: number) {
-    this.compounds$ = this.compound_service.getCompounds(project_id,
-      Compound.TARGET_COMPOUND);
+    this.compound_service.getCompounds(project_id,
+      Compound.TARGET_COMPOUND, this.compounds$);
   }
 }

@@ -7,9 +7,8 @@
                         <label style="margin-bottom:0px" for="chembl_search_string" >SMILES:</label>
                     </td>
                     <td>
-                        <br>
+
                         <input id="chembl_search_string" class="form-control" name="search_string" [(ngModel)]="chembl_search_string" type="text">
-                        <br>
 
                     </td>
                     <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="chemblIdFromSmilesButton()">Search</button>
@@ -18,21 +17,31 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'compound'">
                     <td style="width:9rem">
-                        <br>
                         <label style="display:inline;margin-bottom:0px" for="selected_compound" >Compound:</label>
-                        <img [ngbTooltip]="compound_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
-                        <br><br>
+                        <ng-container *ngIf="(ra_compound_service.compounds$ | async) as compounds">
+                        <img *ngIf="compounds.length > 1" [ngbTooltip]="compound_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+                        </ng-container>
                     </td>
                     <td style="width:auto">
-                        <mat-form-field>
-                            <mat-select id="selected_compound" class="form-control" name="selected_compound_name" (selectionChange)="this.compoundChange($event)" [(ngModel)]="this.selected_compound_int_id">
-                                <mat-option *ngFor="let compound of (ra_compound_service.compounds$ | async)" [value]="compound.int_id" [innerHTML]="compound.int_id.toString()+': '+compound.name"></mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <br>
+                        <ng-container *ngIf="(ra_compound_service.compounds$ | async) as compounds">
+                            <ng-container *ngIf="compounds[0] as compound">
+                            <label *ngIf="compounds.length === 1" style="display:inline;margin-bottom:0px" id="selected_compound">{{ compound.name }}</label>
+                            </ng-container>
+                            <mat-form-field *ngIf="compounds.length > 1">
+                                <mat-select id="selected_compound" class="form-control" name="selected_compound_name" (selectionChange)="this.compoundChange($event)" [(ngModel)]="this.selected_compound_int_id">
+                                    <mat-option *ngFor="let compound of (ra_compound_service.compounds$ | async)" [value]="compound.int_id" [innerHTML]="compound.int_id.toString()+': '+compound.name"></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </ng-container>
                     </td>
-                    <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_running" (click)="chemblIdFromCompoundButton()">Search</button>
-                        <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                    
+                    <td style="width:8rem">
+                        <ng-container *ngIf="(ra_compound_service.compounds$ | async) as compounds">
+                            <ng-container *ngIf="compounds.length > 1 || true">
+                                <button class="btn btn-primary" [disabled]="chembl_running || typeof(this.selected_compound_int_id) === 'undefined' || this.selected_compound_int_id === null" (click)="chemblIdFromCompoundButton()">Search</button>
+                                <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                            </ng-container>
+                        </ng-container>
                     </td>
                 </ng-container>
             </ng-container>
@@ -49,13 +58,11 @@
                         <input type="radio" id="input_type_radio2" name="input_type_radio" ng-control="input_type_radio" class="custom-control-input" (change)="this.ra_compound_service.getCompounds(this.info.project)" [value]="'compound'" [(ngModel)]="input_type_radio_value">
                         <label class="custom-control-label" for="input_type_radio2">Saved compound</label>
                     </div>
-                    <br>
                 </ng-container>                  
             </td>
 
         </tr>
 
-        <tr><td><br></td><td><br></td><td><br></td></tr>
         <tr>
 
                     <td style="width:9rem"><label style="margin-bottom:0px" for="chembl_chembl_ids" >ChEMBL ID(s):</label></td>

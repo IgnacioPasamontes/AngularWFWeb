@@ -40,6 +40,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   public chembl_calculated_pc_row_chemblid: Object = {};
   public chembl_activity_fields: Array<string> = this.service.chembl_activity_fields;
   public chembl_displayed_activity_fields = this.service.chembl_displayed_activity_fields;
+  public auto_chembl: boolean = false;
   public chembl_activity_rows: Array<Object> = [];
   public ngb_modal_opt: Object = {
     ariaLabelledBy: 'chembl-copy-clipboard-basic-title',
@@ -70,6 +71,24 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       }
     }
     this.ra_compound_service.getCompounds(this.info.project);
+    const sub = this.ra_compound_service.compounds$.subscribe(
+      result => {
+        if (result) {
+          if (result.length === 1) {
+            this.selected_compound_int_id = result[0].int_id;
+            this.auto_chembl = true;
+            this.chemblIdFromCompoundButton();
+          } else {
+            this.selected_compound_int_id = undefined;
+          }
+        }
+        
+
+      },
+      error => {
+      }
+    );
+
   }
 
   ngAfterViewInit() {
@@ -310,7 +329,11 @@ export class ChemblComponent implements OnInit, AfterViewInit {
                     items.push({'int_id': item['int_id'], 'value': this.chembl_smiles[item['value']], label: item['value']});
                   });
                   this.chembl_smiles_items = items;
-
+                  if (chembl_ids.length === 1 && this.chembl_item_list.length === 1) {
+                    this.chembl_selected_item_int_id_list = [this.chembl_smiles_items[0]['int_id']];
+                    this.activity_chembl_ids = [this.chembl_smiles_items[0]['label']]
+                    this.retrieveActivityData(undefined);
+                  }
                 }
 
               },
@@ -346,13 +369,15 @@ export class ChemblComponent implements OnInit, AfterViewInit {
     );
   }
 
-  chemblIdFromCompoundButton() {
-    this.chembl_running = true;
-    const old_chembl_search_string: string = this.chembl_search_string;
-    let activity_compound: Compound;
+
+  chemblIdFromCompoundButtonRun(result:Compound[],old_chembl_search_string: string) {
     const BreakException = {};
+    let activity_compound: Compound;
     try {
-      this.ra_compound_service.compounds$.getValue().forEach(compound => {
+    
+      result.forEach(compound => {
+        console.log('compound:');
+        console.log(compound);
         if (compound.int_id === this.selected_compound_int_id) {
           activity_compound = compound;
           throw BreakException;
@@ -362,14 +387,41 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       if (e !== BreakException) { throw e; }
     }
     if (typeof activity_compound !== 'undefined') {
+      console.log('recurrent');
       this.chembl_search_string = activity_compound.smiles;
       this.activity_compound = activity_compound;
       this.chemblIdFromSmilesButton(false);
       this.chembl_search_string = old_chembl_search_string;
     } else {
-      alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
-      this.chembl_running = false;
+        alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
+        this.chembl_running = false;
     }
+  }
+
+  chemblIdFromCompoundButton() {
+    this.chembl_running = true;
+    console.log('this.selected_compound_int_id:');
+    console.log(this.selected_compound_int_id);
+    const old_chembl_search_string: string = this.chembl_search_string;
+    
+    const compounds = this.ra_compound_service.compounds$.getValue();
+    
+    if (typeof compounds !== 'undefined') {
+      this.chemblIdFromCompoundButtonRun(compounds, old_chembl_search_string)
+    }
+    const sub = this.ra_compound_service.compounds$.subscribe(
+      result => {
+        if (result && result.length > 0) {
+            this.chemblIdFromCompoundButtonRun(result, old_chembl_search_string);
+            try {
+              sub.unsubscribe();
+            } catch (e) {}
+        }
+
+      },
+      error => {
+        alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
+      });
 
   }
 

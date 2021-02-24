@@ -88,8 +88,10 @@ export class CompoundService {
     return compounds$;
   }
 
-  getCompounds(project: number, ra_type: number): BehaviorSubject<Compound[]> {
-    const compounds$ = new BehaviorSubject<Compound[]>([]);
+  getCompounds(project: number, ra_type: number, compounds$: BehaviorSubject<Compound[]> = undefined ): BehaviorSubject<Compound[]> {
+    if (typeof compounds$ === 'undefined') {
+      compounds$ = new BehaviorSubject<Compound[]>(undefined);
+    }
     const url: string = environment.baseUrl  + 'project/' + project + '/compound/' +
      Compound.ra_type_abbrev_to_value_dict[ra_type] + '/';
     const subs = this.http.get(url, {withCredentials: true}).subscribe(result => {
@@ -104,7 +106,7 @@ export class CompoundService {
       subs.unsubscribe();
     },
     () => {
-      compounds$.complete();
+      // compounds$.complete();
       subs.unsubscribe();
     });
     return compounds$;

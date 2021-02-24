@@ -14,25 +14,23 @@
         </tr>
         <tr>
             <td></td>
-            <td style="text-align: right"><br>
-                <!--  <div class="form-check">
+            <td style="text-align: right">
+                <div class="form-check">
                     <input class="form-check-input" id="show-name2cas-data" type="checkbox" (change)="changeItemsShowCactvsData()" [(ngModel)]="show_cactvs_data">
                     <label class="form-check-label" for="show-name2cas-data">Show CACTVS data</label>
-            </div>--><br></td>
+            </div></td>
             <td></td>
         </tr>
         <tr *ngIf="this.search_string_type==='cas_number'">
             <td style="width:9rem"><label style="display:inline; margin-bottom:0px" for="selected_compound_name" >Compound<br>name:</label>
                 <img [ngbTooltip]="name_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
-                <br><br></td>
+                </td>
             
             <td style="width:auto"><mat-form-field><mat-select id="selected_compound_name" class="form-control" name="selected_compound_name" (selectionChange)="this.compoundNameChange($event)" [(ngModel)]="this.compound_name_int_id">
                 <ng-container *ngIf="this.show_cactvs_data"><mat-option *ngFor="let item of this.compound_synonyms" [value]="item.int_id" [innerHTML]="item.html_rep"></mat-option></ng-container>
                 <ng-container *ngIf="!this.show_cactvs_data"><mat-option *ngFor="let item of this.compound_synonyms" [value]="item.int_id" [innerText]="item.value"></mat-option></ng-container>
             </mat-select>
             </mat-form-field>
-            <br>
-            <br>
             </td>
 
         </tr>
@@ -58,7 +56,6 @@
         </tr> -->
     </table>
 </div>
-<br>
 <div class="row m-5" style="margin-top:0px !important; margin-bottom:10px !important">
     <div *ngIf="this.cas.from_name_executed">
     <!--TODO: sentences about how many cas numbers have been found-->
@@ -112,7 +109,6 @@
         </tr>
     </table>
 </div>
-<br>
 <div class="row m-5" style="margin-top:0px !important; margin-bottom:10px !important">
     <div *ngIf="this.smiles.from_name_executed">
     <!--TODO: sentences about how many smiles numbers have been found-->
@@ -122,7 +118,6 @@
     </label>
     <label *ngIf="this.smiles.selected_item_int_id_list.length === 1 && this.smiles.item_show_cactvs_data" [innerHTML]="this.smiles.current_item.html_rep"></label>
     <label *ngIf="this.smiles.selected_item_int_id_list.length > 1 || this.smiles.selected_item_int_id_list.length === 1 && !this.smiles.item_show_cactvs_data" >Selected {{this.smiles.selected_item_int_id_list.length}} SMILES.</label>
-    <br>
     <label style="font-weight: bold;" *ngIf="this.smiles.selected_item_int_id_list.length === 1 && !this.smiles.item_show_cactvs_data" [innerText]="this.smiles.current_item.value"></label>
     </div>
 </div>

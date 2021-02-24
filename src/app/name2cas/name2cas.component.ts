@@ -251,6 +251,11 @@ export class FromNameCACTVSInteface {
           console.log(result);
         } else {
           this.setItemList(this._service.cactusXMLparsed(result));
+          if (this.item_set.length === 1) {
+            this.selected_item_int_id_list = [0];
+            this.setCurrentItemIntId();
+            this.updateMultiSelectSelection();
+          }
           
           this.from_name_executed = true;
           if (typeof termination_subject$ !== 'undefined' || termination_subject$ !== null) {

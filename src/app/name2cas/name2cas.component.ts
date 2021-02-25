@@ -104,10 +104,13 @@ export class FromNameCACTVSInteface {
         const int_id_2_val = this.getIntIdsFromMultiselect();
         this.selected_item_int_id_list.forEach((int_id) => {
           values.push(int_id_2_val[int_id]);
+
         });
+
       }
       setTimeout(function() {
         (<any>$(jquery_select)).multiSelect('deselect_all');
+
         if (selected_int_id_num > 0) {
           (<any>$(jquery_select)).multiSelect('select', values);
         }
@@ -251,11 +254,6 @@ export class FromNameCACTVSInteface {
           console.log(result);
         } else {
           this.setItemList(this._service.cactusXMLparsed(result));
-          if (this.item_set.length === 1) {
-            this.selected_item_int_id_list = [0];
-            this.setCurrentItemIntId();
-            this.updateMultiSelectSelection();
-          }
           
           this.from_name_executed = true;
           if (typeof termination_subject$ !== 'undefined' || termination_subject$ !== null) {
@@ -268,6 +266,17 @@ export class FromNameCACTVSInteface {
 
 
           }
+
+          if (this.item_set.length === 1) {
+            this.selected_item_int_id_list = [0];
+            this.setCurrentItemIntId();
+            this.updateMultiSelect();
+            setTimeout(function() {
+              this.updateMultiSelectSelection();
+            }.bind(this),0);
+            
+          }
+
         }
       }.bind(this));
     },
@@ -324,7 +333,7 @@ export class Name2casComponent implements OnInit, AfterViewInit, OnDestroy {
   compound_synonyms: Array<Object> = [];
   compound_name_executed: boolean = false;
   compound_name_running: boolean = false;
-  public show_smiles: Boolean;
+  public show_smiles: Boolean = false;
   cactus_interfaces: Object = {
       cas: this.cas,
       smiles: this.smiles

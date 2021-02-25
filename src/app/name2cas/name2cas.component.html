@@ -74,12 +74,18 @@
     <table style="width:100%;vertical-align:bottom">
         <tr>
 
-            <td style="width:9rem"></td>
+            <td style="width:9rem"><label class="form-check-label">Show:</label></td>
             <td style="width:auto">
-                <div class="form-check card-block mt4">
-                    <input class="form-check-input" id="show-smiles" type="checkbox" [(ngModel)]="this.show_smiles">
-                    <label class="form-check-label" for="show-smiles">Show SMILES.</label>
-                </div> 
+                <div class="form-check form-check-inline" style="display:inline">
+                    <input class="form-check-input" id="show-smiles" type="radio" name="show-smiles" [value]="false" [(ngModel)]="this.show_smiles">
+                    <label class="form-check-label" for="show-smiles">Structure</label>
+                </div>
+                <div class="form-check form-check-inline" style="display:inline">
+                    <input class="form-check-input" id="show-smiles" type="radio" name="show-smiles" [value]="true" [(ngModel)]="this.show_smiles">
+                    <label class="form-check-label" for="show-smiles">SMILES</label>
+                </div>
+
+
             </td>
             <td style="width:8rem">
             </td>

@@ -48,7 +48,7 @@ export class ChemblRaxService {
     }
   }
 
-  chEMBLSearchSubstructure(smiles: string, limit: number = null, url_get_check: boolean = false ) {
+  chEMBLSubstructureSearch(smiles: string, limit: number = null, url_get_check: boolean = false ) {
     const base_url: string = 'https://www.ebi.ac.uk/chembl/api/data/substructure/';
     let url: string = base_url + encodeURIComponent(smiles);
     let urlp = new UrlParse(url, {}, true);
@@ -68,6 +68,47 @@ export class ChemblRaxService {
       url = base_url;
       const formData = new FormData();
       formData.append('smiles', smiles);
+      formData.append('limit', limit.toString());
+      return this.http.post(url, formData, {withCredentials: false, headers: new HttpHeaders(
+        {'X-HTTP-Method-Override': 'GET'})});
+    } else {
+      if (url_get_check) {
+        return true;
+      }
+      if (limit === null) {
+        limit = this.GET_DEFAULT_LIMIT;
+      }
+      const params = new HttpParams().append('limit', limit.toString());
+      return this.http.get(url, {params: params, withCredentials: false,
+        headers: new HttpHeaders({})});
+    }
+
+  }
+
+  chEMBLSimilaritySearch(smiles: string, similarity:number, limit: number = null, url_get_check: boolean = false ) {
+    const base_url: string = 'https://www.ebi.ac.uk/chembl/api/data/similarity/';
+    if (similarity > 100 || similarity < 40) {
+      throw RangeError('Similarity must be between 40 and 100.')
+    }
+    let url: string = base_url + encodeURIComponent(smiles)+'/'+similarity.toString()+'/';
+    let urlp = new UrlParse(url, {}, true);
+
+    let tmp_limit: number = limit;
+    if (limit === null) {
+      tmp_limit = this.GET_DEFAULT_LIMIT;
+    }
+    urlp.set('query', {limit: tmp_limit});
+    if (urlp.href.length > this.MAX_URL_LENGTH) {
+      if (url_get_check) {
+        return false;
+      }
+      if (limit === null) {
+        limit = this.POST_DEFAULT_LIMIT;
+      }
+      url = base_url;
+      const formData = new FormData();
+      formData.append('smiles', smiles);
+      formData.append('similarity', similarity.toString());
       formData.append('limit', limit.toString());
       return this.http.post(url, formData, {withCredentials: false, headers: new HttpHeaders(
         {'X-HTTP-Method-Override': 'GET'})});

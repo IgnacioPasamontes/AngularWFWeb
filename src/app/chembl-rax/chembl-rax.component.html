@@ -1,7 +1,23 @@
 <div class="card">
-    <h6 class="card-header bg-light p-1">ChEMBL substructure search</h6>
+    <h6 class="card-header bg-light p-1">ChEMBL structural search</h6>
     <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
         <table style="width:100%;vertical-align:bottom">
+            <tr>
+                <td style="width:9rem"></td>
+                <td>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="chembl_search_type_radio1" name="chembl_search_type_radio" ng-control="chembl_search_type_radio" class="custom-control-input" [value]="'similarity'" (change)="this.chemblSearchTypeChange($event)" [(ngModel)]="chembl_search_type_radio_value" >
+                        <label class="custom-control-label" for="chembl_search_type_radio1">Similarity</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="chembl_search_type_radio2" name="chembl_search_type_radio" ng-control="chembl_search_type_radio" class="custom-control-input"  [value]="'substructure'" (change)="this.chemblSearchTypeChange($event)" [(ngModel)]="chembl_search_type_radio_value">
+                        <label class="custom-control-label" for="chembl_search_type_radio2">Substructure</label>
+                    </div>
+                    <img [ngbTooltip]="search_type_selector_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+                    <br>                  
+                </td>
+
+            </tr>
             <tr>
                 <ng-container [ngSwitch]="input_type_radio_value">
                     <ng-container *ngSwitchCase="'smiles'">
@@ -14,8 +30,8 @@
                             <br>
 
                         </td>
-                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || chembl_running || chembl_substructure_running" (click)="raxFromSmilesButton()">Search</button>
-                            <mat-spinner *ngIf="chembl_substructure_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || chembl_running || chembl_structural_search_running" (click)="raxFromSmilesButton()">Search</button>
+                            <mat-spinner *ngIf="chembl_structural_search_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                         </td>
                     </ng-container>
                     <ng-container *ngSwitchCase="'compound'">
@@ -31,13 +47,27 @@
                             </mat-form-field>
                             <br>
                         </td>
-                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_substructure_running" (click)="raxFromCompoundButton()">Search</button>
-                            <mat-spinner *ngIf="chembl_substructure_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
+                        <td style="width:8rem"><button class="btn btn-primary" [disabled]="chembl_structural_search_running" (click)="raxFromCompoundButton(chembl_search_type_radio_value)">Search</button>
+                            <mat-spinner *ngIf="chembl_structural_search_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                         </td>
                     </ng-container>
                 </ng-container>
+            </tr>
+            <tr *ngIf="chembl_search_type_radio_value==='similarity'">
+                <td style="width:9rem">
+                    <label style="margin-bottom: 0px; white-space: pre-wrap" for="chembl_search_string" >Similarity<br>cutoff (%):</label>
+                    <img [ngbTooltip]="similarity_search_cutoff_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
+
+                </td>
+                <td>
+                    <br>
+                    <input style="width:9rem" class="form-control" required min="40" max="100" name="chembl_similarity_cutoff" [(ngModel)]="chembl_similarity_cutoff" type="number">
+                    <br>
+
+                </td>
+                <td style="width:8rem"></td>
             </tr>    
-            <tr>
+            <tr *ngIf="chembl_search_type_radio_value==='substructure'">
                 <td style="width:9rem"></td>
                 <td>
                     <div class="custom-control custom-radio custom-control-inline">
@@ -62,26 +92,26 @@
                 </td>
                 <td>
                     <br>
-                    <input style="width:9rem" id="chembl_search_string" min="0" class="form-control" name="page_size" [(ngModel)]="chembl_substructure_search_page_size" type="number">
+                    <input style="width:9rem" id="chembl_search_string" min="0" class="form-control" name="page_size" [(ngModel)]="chembl_search_page_size" type="number">
                     <br>
 
                 </td>
                 <td></td>
 
             </tr>
-            <tr *ngIf="chembl_substructure_search_total_count !== null && typeof(chembl_substructure_search_total_count) !== 'undefined'">
+            <tr *ngIf="chembl_search_total_count !== null && typeof(chembl_search_total_count) !== 'undefined'">
 
 
                 <td style="width:9rem">
                 </td>
                 <td>
-                    <label *ngIf="chembl_substructure_search_count < chembl_substructure_search_total_count" style="margin-bottom:0px" >{{chembl_substructure_search_count}} compounds downloaded out of {{chembl_substructure_search_total_count}}.</label>
-                    <label *ngIf="chembl_substructure_search_count === chembl_substructure_search_total_count" style="margin-bottom:0px" >{{chembl_substructure_search_count}} compounds found.</label>
+                    <label *ngIf="chembl_search_count < chembl_search_total_count" style="margin-bottom:0px" >{{chembl_search_count}} compounds downloaded out of {{chembl_search_total_count}}.</label>
+                    <label *ngIf="chembl_search_count === chembl_search_total_count" style="margin-bottom:0px" >{{chembl_search_count}} compounds found.</label>
                 </td>
                 <td></td>
                 
             </tr>
-            <tr>
+            <tr *ngIf="chembl_search_type_radio_value==='substructure'">
                 <td style="width:9rem">
                     <label style="margin-bottom: 0px; white-space: pre-wrap" for="chembl_search_string" >Similarity<br>cutoff (%):</label>
                     <img [ngbTooltip]="similarity_cutoff_help" style="width: 1.5rem; height: 1.5rem; margin-left: 1rem" src="/assets/icons/help-browser.svg">
@@ -93,18 +123,18 @@
                     <br>
 
                 </td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || chembl_substructure_search_result_compounds.length === 0 || chembl_running" (click)="filterBySimilarityButton()">Filter</button>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || chembl_search_result_compounds.length === 0 || chembl_running" (click)="filterBySimilarityButton()">Filter</button>
                     <mat-spinner *ngIf="rdkit_similarity_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>
-            <ng-container  *ngIf="chembl_substructure_search_filtered_compounds.length > 0">
-            <tr>
+            <ng-container  *ngIf="chembl_search_filtered_compounds.length > 0 || (this.chembl_search_result_compounds.length > 0 && chembl_search_type_radio_value==='similarity')">
+            <tr *ngIf="chembl_search_type_radio_value==='substructure'">
 
 
                 <td style="width:9rem">
                 </td>
                 <td>
-                    <label style="margin-bottom:0px" >{{chembl_substructure_search_filtered_compounds.length}} compounds with similarity >= {{last_rdkit_similarity_cutoff}}%.</label>
+                    <label style="margin-bottom:0px" >{{chembl_search_filtered_compounds.length}} compounds with similarity >= {{last_rdkit_similarity_cutoff}}%.</label>
                 </td>
                 <td></td>
                 
@@ -115,7 +145,7 @@
                 <td>
 
                 </td>
-                <td style="width:8rem"><button class="btn btn-primary" [disabled]=" rdkit_similarity_running || save_running || chembl_substructure_search_filtered_compounds.length === 0 || chembl_running || chembl_substructure_running" (click)="saveButton()">Save</button>
+                <td style="width:8rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || chembl_search_filtered_compounds.length === 0 && this.chembl_search_type_radio_value==='substructure' || this.chembl_search_result_compounds.length === 0 && this.chembl_search_type_radio_value==='similarity' || chembl_running || chembl_structural_search_running" (click)="saveButton(this.chembl_search_type_radio_value)">Save</button>
                     <mat-spinner *ngIf="save_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>
@@ -125,7 +155,7 @@
                 <td>
 
                 </td>
-                <td style="width:10rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || object_keys(this.chembl_activity_rows_compound).length === 0 || chembl_running || chembl_substructure_running" (click)="saveActivities()">Save activities</button>
+                <td style="width:10rem"><button class="btn btn-primary" [disabled]="rdkit_similarity_running || save_running || this.chembl_running || object_keys(this.chembl_activity_rows_compound).length === 0 || chembl_running || chembl_structural_search_running" (click)="saveActivities()">Save activities</button>
                     <mat-spinner *ngIf="chembl_running" style="display:inline-block" ProgressSpinnerMode="indeterminate" diameter="14"></mat-spinner>
                 </td>
             </tr>
@@ -135,6 +165,9 @@
         <p [innerHTML]="chembl_activity_errors"></p>
     </div>
 </div>
+<ng-template #search_type_selector_help>
+    <p style="text-align: left;"><br>Tanimoto similarity or a substructural search in ChEMBL to retreive Source Compounds.</p>
+</ng-template>
 <ng-template #smiles_compound_selector_help>
     <p style="text-align: left;">Choose between perfoming a substructural search of the above specified SMILES or
          of a previously saved Target Compound.</p>
@@ -143,6 +176,9 @@
     <p style="text-align: left;"><b>Number of molecule entries per query page:</b> <br> Larger values might improve search speed, 
     but increase the probability of connection errors for exceeding request execution 
     time limit.</p>
+</ng-template>
+<ng-template #similarity_search_cutoff_help>
+    <p style="text-align: left;"><b>Similarity cutoff:</b> <br> cutoff percentage of ChEMBL similariry search. Accepted values are between 40 and 100.</p>
 </ng-template>
 <ng-template #similarity_cutoff_help>
     <p style="text-align: left;"><b>Similarity cutoff:</b> <br> cutoff percentage of similarity, between the results from substructural search and the above specified SMILES or

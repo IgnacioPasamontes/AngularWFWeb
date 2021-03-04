@@ -17,10 +17,12 @@ export class ChemblRaxComponent implements OnInit {
 
   @Input() info;
   public ra_compound_service: any;
-  public chembl_substructure_running: boolean = false;
+  public chembl_search_type_radio_value = 'similarity';
+  public chembl_structural_search_running: boolean = false;
   public chembl_running: boolean = false;
-  public input_type_radio_value: string = 'smiles';
+  public input_type_radio_value: string = 'compound';
   public chembl_search_string: string;
+  public chembl_similarity_cutoff: number = 80;
   public selected_compound_int_id: number;
   public rax_compounds_found: number = null;
   public tc_compound: Compound;
@@ -28,16 +30,16 @@ export class ChemblRaxComponent implements OnInit {
   public chembl_activity_fields: Array<string> = this.chembl.chembl_activity_fields;
   public chembl_displayed_activity_fields = this.chembl.chembl_displayed_activity_fields;
   public substructure_compound: Compound;
-  public chembl_substructure_search_smiles: string = 'O=C(O)c1ccccc1';
-  public chembl_substructure_search_page_size: number = 1000;
-  public chembl_substructure_search_count: number = 0;
-  public chembl_substructure_search_offset: number;
-  public chembl_substructure_search_total_count: number;
-  public chembl_substructure_search_result_compounds: Array<ChEMBLCompound> = [];
+  public chembl_search_smiles: string = 'O=C(O)c1ccccc1';
+  public chembl_search_page_size: number = 1000;
+  public chembl_search_count: number = 0;
+  public chembl_search_offset: number;
+  public chembl_search_total_count: number;
+  public chembl_search_result_compounds: Array<ChEMBLCompound> = [];
   public rdkit_similarity_cutoff: number;
   public rdkit_similarity_running: Boolean = false;
   public last_rdkit_similarity_cutoff: number;
-  public chembl_substructure_search_filtered_compounds: Array<ChEMBLCompound> = [];
+  public chembl_search_filtered_compounds: Array<ChEMBLCompound> = [];
   public save_running: boolean = false;
   public saved_compounds: Compound[] = [];
   public chembl_activity_rows_compound: Object = {};
@@ -58,31 +60,59 @@ export class ChemblRaxComponent implements OnInit {
       example_data[index]["compound"]["project"] = this.info.project;
     })
 
-    this.chembl_substructure_search_result_compounds = example_data;
-    this.chembl_calculated_pc_row_chemblid = example_pc_data;
+    // this.chembl_search_result_compounds = example_data;
+    // this.chembl_calculated_pc_row_chemblid = example_pc_data;
   }
 
-  raxFromSmilesButton(reset_activity_compound: boolean = true) {
-    this.chembl_substructure_running = true;
+
+  chemblSearchTypeChange($event) {
+    switch (this.chembl_search_type_radio_value) {
+      case 'similarity':
+        this.input_type_radio_value = 'compound';
+        break;
+      case 'substructure':
+        this.input_type_radio_value = 'smiles';
+        break;
+      default:
+        throw Error('Invalid ChEMBL search type "'+this.chembl_search_type_radio_value+'".')
+        break;
+    } 
+  }
+
+  raxFromSmilesButton(reset_activity_compound: boolean = true, type: string = 'substructure') {
+    this.chembl_structural_search_running = true;
     this.chembl_running = true;
-    this.chembl_substructure_search_total_count = null;
-    this.chembl_substructure_search_result_compounds = [];
+    this.chembl_search_total_count = null;
+    this.chembl_search_result_compounds = [];
     this.chembl_activity_errors = '';
     const subscript = this.service.chemblSmilesStandarize(this.chembl_search_string).subscribe(
       result => {
         const std_smiles = result.smiles;
         console.log('std_smiles: ' + std_smiles);
-        this.chembl_substructure_search_smiles = std_smiles;
+        this.chembl_search_smiles = std_smiles;
         let chembl_compounds: ChEMBLCompound[] = [];
-        const subscript2 = this.chEMBLGetSubstrutureSearchMolecules(std_smiles, undefined, undefined,
-        this.chembl_substructure_search_page_size).subscribe(
+        let chembl_search: AsyncSubject<Object>;
+        switch (type) {
+          case 'similarity':
+            chembl_search = this.chEMBLGetSimilaritySearchMolecules(std_smiles,this.chembl_similarity_cutoff, undefined, undefined,
+              this.chembl_search_page_size);
+            break;
+          case 'substructure':
+            chembl_search = this.chEMBLGetSubstrutureSearchMolecules(std_smiles, undefined, undefined,
+              this.chembl_search_page_size);
+            break;
+          default:
+            throw Error('Invalid ChEMBL search type "'+type+'".')
+            break;
+        } 
+        const subscript2 = chembl_search.subscribe(
           data => {
             data['molecules'].forEach(molecule => {
 
               let chembl_id: string = molecule.molecule_chembl_id;
               let compound_obj: Object = {};
               compound_obj['smiles'] = molecule.molecule_structures.canonical_smiles;
-              if (typeof molecule.pref_name === 'undefined') {
+              if (typeof molecule.pref_name === 'undefined'|| molecule.pref_name===null || molecule.pref_name.trim()==='') {
                 compound_obj['name'] = chembl_id;
               } else {
                 compound_obj['name'] = molecule.pref_name;
@@ -97,10 +127,10 @@ export class ChemblRaxComponent implements OnInit {
               chembl_compounds.push(chembl_compound);
             });
             console.log(chembl_compounds);
-            this.chembl_substructure_search_result_compounds = chembl_compounds;
+            this.chembl_search_result_compounds = chembl_compounds;
 
-/*             console.log(this.chembl_substructure_search_result_compounds);
-            let blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+/*             console.log(this.chembl_search_result_compounds);
+            let blob = new Blob([JSON.stringify(this.chembl_search_result_compounds)], {type: "octet/stream"});
             let url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
@@ -118,16 +148,16 @@ export class ChemblRaxComponent implements OnInit {
             window.URL.revokeObjectURL(url); */
 
             this.chembl_running = false;
-            this.chembl_substructure_running = false;
+            this.chembl_structural_search_running = false;
           },
           error => {
             alert('Error retrieving ChEMBL substructures.');
             console.log('Error retrieving ChEMBL substructures:');
             console.log(error);
-            this.chembl_substructure_search_result_compounds = chembl_compounds;
+            this.chembl_search_result_compounds = chembl_compounds;
 
-/*             console.log(this.chembl_substructure_search_result_compounds);
-            let blob = new Blob([JSON.stringify(this.chembl_substructure_search_result_compounds)], {type: "octet/stream"});
+/*             console.log(this.chembl_search_result_compounds);
+            let blob = new Blob([JSON.stringify(this.chembl_search_result_compounds)], {type: "octet/stream"});
             let url = window.URL.createObjectURL(blob);
             let hiddenElement = document.createElement('a');
             hiddenElement.href = url;
@@ -145,7 +175,7 @@ export class ChemblRaxComponent implements OnInit {
             window.URL.revokeObjectURL(url); */
 
             this.chembl_running = false;
-            this.chembl_substructure_running = false;
+            this.chembl_structural_search_running = false;
           },
           () => {
             subscript2.unsubscribe();
@@ -155,17 +185,16 @@ export class ChemblRaxComponent implements OnInit {
       error => {
         alert('Error standardizing or converting SMILES to InChiKey');
         this.chembl_running = false;
-        this.chembl_substructure_running = false;
+        this.chembl_structural_search_running = false;
       },
       () => {
         subscript.unsubscribe();
       }
     );
-    this.service.chEMBLSearchSubstructure(this.chembl_search_string);
   }
 
-  raxFromCompoundButton() {
-    this.chembl_substructure_running = true;
+  raxFromCompoundButton(type: string = 'substructure') {
+    this.chembl_structural_search_running = true;
     this.chembl_running = true;
     const old_chembl_search_string: string = this.chembl_search_string;
     const tc_compound: Compound = this.substructure_compound;
@@ -173,20 +202,20 @@ export class ChemblRaxComponent implements OnInit {
     if (typeof tc_compound !== 'undefined') {
       this.chembl_search_string = tc_compound.smiles;
       this.tc_compound = tc_compound;
-      this.raxFromSmilesButton(false);
+      this.raxFromSmilesButton(false, type);
       this.chembl_search_string = old_chembl_search_string;
     } else {
       alert('Compound #' + this.selected_compound_int_id.toString() + 'not found.');
-      this.chembl_substructure_running = false;
+      this.chembl_structural_search_running = false;
       this.chembl_running = false;
     }
   }
 
   chemblSearchStringChange($event) {
-    if (this.service.chEMBLSearchSubstructure(this.chembl_search_string, undefined, true)) {
-      this.chembl_substructure_search_page_size = this.service.GET_DEFAULT_LIMIT;
+    if (this.service.chEMBLSubstructureSearch(this.chembl_search_string, undefined, true)) {
+      this.chembl_search_page_size = this.service.GET_DEFAULT_LIMIT;
     } else {
-      this.chembl_substructure_search_page_size = this.service.POST_DEFAULT_LIMIT;
+      this.chembl_search_page_size = this.service.POST_DEFAULT_LIMIT;
     }
   }
 
@@ -203,10 +232,10 @@ export class ChemblRaxComponent implements OnInit {
       if (e !== BreakException) { throw e; }
     }
 
-    if (this.service.chEMBLSearchSubstructure(this.substructure_compound.smiles, undefined, true)) {
-      this.chembl_substructure_search_page_size = this.service.GET_DEFAULT_LIMIT;
+    if (this.service.chEMBLSubstructureSearch(this.substructure_compound.smiles, undefined, true)) {
+      this.chembl_search_page_size = this.service.GET_DEFAULT_LIMIT;
     } else {
-      this.chembl_substructure_search_page_size = this.service.POST_DEFAULT_LIMIT;
+      this.chembl_search_page_size = this.service.POST_DEFAULT_LIMIT;
     }
   }
 
@@ -226,9 +255,9 @@ export class ChemblRaxComponent implements OnInit {
     }
     chembl_result['molecules'].forEach(molecule => {
       if (count > limit) {
-        this.chembl_substructure_search_count = count;
-        this.chembl_substructure_search_offset = offset;
-        this.chembl_substructure_search_total_count = total_count;
+        this.chembl_search_count = count;
+        this.chembl_search_offset = offset;
+        this.chembl_search_total_count = total_count;
         return [offset, total_count, count];
       }
       let molecule_row: Object = {
@@ -283,9 +312,9 @@ export class ChemblRaxComponent implements OnInit {
     } else {
       chembl_molecule_rows$.complete();
     }
-    this.chembl_substructure_search_count = count;
-    this.chembl_substructure_search_offset = offset;
-    this.chembl_substructure_search_total_count = total_count;
+    this.chembl_search_count = count;
+    this.chembl_search_offset = offset;
+    this.chembl_search_total_count = total_count;
     return [offset, total_count, count];
   }
 
@@ -294,7 +323,28 @@ export class ChemblRaxComponent implements OnInit {
     let chembl_molecule_rows$ = new AsyncSubject<Object>();
     let molecule_rows: Object[] = [];
     this.chembl_calculated_pc_row_chemblid = {};
-    const subs = (<Observable<Object>>this.service.chEMBLSearchSubstructure(smiles, page_size)).subscribe(
+    const subs = (<Observable<Object>>this.service.chEMBLSubstructureSearch(smiles, page_size)).subscribe(
+      chembl_result => {
+        this.parseChEMBLMoleculeData(chembl_result, molecule_rows, chembl_molecule_rows$, _count, limit);
+        subs.unsubscribe();
+      },
+      error => {
+        alert('Error retrieving data from ChEMBL. Try again or decrease page size.');
+        console.log('Error retrieving data from ChEMBL:');
+        console.log(error);
+        chembl_molecule_rows$.error(error);
+        subs.unsubscribe();
+      }
+    );
+    return chembl_molecule_rows$;
+  }
+
+  chEMBLGetSimilaritySearchMolecules(smiles: string, similarity:number,limit: number = 1000000, _count: number = 0, page_size: number  = null) {
+
+    let chembl_molecule_rows$ = new AsyncSubject<Object>();
+    let molecule_rows: Object[] = [];
+    this.chembl_calculated_pc_row_chemblid = {};
+    const subs = (<Observable<Object>>this.service.chEMBLSimilaritySearch(smiles,similarity,page_size)).subscribe(
       chembl_result => {
         this.parseChEMBLMoleculeData(chembl_result, molecule_rows, chembl_molecule_rows$, _count, limit);
         subs.unsubscribe();
@@ -391,28 +441,28 @@ export class ChemblRaxComponent implements OnInit {
     this.rdkit_similarity_running = true;
     if (typeof this.rdkit_similarity_cutoff === 'undefined' || this.rdkit_similarity_cutoff === null ||
       this.rdkit_similarity_cutoff === 0) {
-        this.chembl_substructure_search_filtered_compounds = this.chembl_substructure_search_result_compounds;
+        this.chembl_search_filtered_compounds = this.chembl_search_result_compounds;
         this.rdkit_similarity_running = false;
         this.rdkit_similarity_cutoff = 0;
         this.last_rdkit_similarity_cutoff = this.rdkit_similarity_cutoff;
         return;
     }
-    this.chembl_substructure_search_filtered_compounds = [];
+    this.chembl_search_filtered_compounds = [];
     let smiles_array: string[] = [];
-    this.chembl_substructure_search_result_compounds.forEach(
+    this.chembl_search_result_compounds.forEach(
       chembl_compound => {
         smiles_array.push(chembl_compound.compound.smiles);
       }
     );
-    const subs = this.service.setFingerPrintSimilarityFromSmiles(this.chembl_substructure_search_smiles).subscribe(
+    const subs = this.service.setFingerPrintSimilarityFromSmiles(this.chembl_search_smiles).subscribe(
       result => {
         const subs2 = this.service.similarityFromSmiles(smiles_array, this.rdkit_similarity_cutoff).subscribe(
           result2 => {
             let compounds: Array<ChEMBLCompound> = [];
             result2['molecules'].forEach(element => {
-              compounds.push(this.chembl_substructure_search_result_compounds[element.index]);
+              compounds.push(this.chembl_search_result_compounds[element.index]);
             });
-            this.chembl_substructure_search_filtered_compounds = compounds;
+            this.chembl_search_filtered_compounds = compounds;
             this.last_rdkit_similarity_cutoff = this.rdkit_similarity_cutoff;
             this.rdkit_similarity_running = false;
             subs2.unsubscribe();
@@ -434,14 +484,35 @@ export class ChemblRaxComponent implements OnInit {
     );
   }
 
-  saveButton() {
+  saveButton(type: string = 'substructure') {
     this.save_running = true;
     const compounds: Compound[] = [];
     this.saved_compounds = [];
     this.chembl_activity_errors = '';
-    this.chembl_substructure_search_filtered_compounds.forEach(chembl_compound => {
+    let chembl_search_compounds: ChEMBLCompound[];
+    console.log('type:');
+    console.log(type);
+    console.log('this.chembl_search_result_compounds:');
+    console.log(this.chembl_search_result_compounds);
+    console.log('this.chembl_search_filtered_compounds:');
+    console.log(this.chembl_search_filtered_compounds);
+    switch (type) {
+      case 'similarity':
+        chembl_search_compounds = this.chembl_search_result_compounds;
+        break;
+      case 'substructure':
+        chembl_search_compounds = this.chembl_search_filtered_compounds;
+        break;
+      default:
+        throw Error('Invalid ChEMBL search type "'+type+'".')
+        break;
+    }
+    chembl_search_compounds.forEach(chembl_compound => {
       compounds.push(chembl_compound.compound);
     });
+    console.log('compounds');
+    console.log(compounds);
+
     const subs = this.compound.saveCompounds(compounds, Compound.SOURCE_COMPOUND, this.info.project).subscribe(
       compounds_obj => {
         alert('Compounds saved successfully.');
@@ -472,6 +543,8 @@ export class ChemblRaxComponent implements OnInit {
 
     });
     let idx: number = 0;
+    console.log('saved_compounds');
+    console.log(this.saved_compounds);
     this.saved_compounds.forEach(compound => {
       this.chembl_activity_rows_compound[idx] = {};
       this.chembl_activity_rows_compound[idx]['compound'] = compound;

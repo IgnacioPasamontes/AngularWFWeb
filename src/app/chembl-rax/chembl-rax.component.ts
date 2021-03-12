@@ -7,6 +7,9 @@ import { ChemblRaxService, ChEMBLCompound } from './chembl-rax.service';
 import { AsyncSubject, Observable } from 'rxjs';
 import { data as example_data } from './example.js';
 import { data as example_pc_data } from './example_pc.js';
+
+declare let SmilesDrawer: any;
+
 @Component({
   selector: 'app-chembl-rax',
   templateUrl: './chembl-rax.component.html',
@@ -23,7 +26,7 @@ export class ChemblRaxComponent implements OnInit {
   public input_type_radio_value: string = 'compound';
   public chembl_search_string: string;
   public chembl_similarity_cutoff: number = 80;
-  public selected_compound_int_id: number;
+  public selected_compound_int_id: number = 0;
   public rax_compounds_found: number = null;
   public tc_compound: Compound;
   public chembl_calculated_pc_row_chemblid: Object = {};
@@ -44,6 +47,11 @@ export class ChemblRaxComponent implements OnInit {
   public saved_compounds: Compound[] = [];
   public chembl_activity_rows_compound: Object = {};
   public chembl_activity_errors: string = '';
+  public canvas_id: string = "tmp_sc_similarity_chembl_search";
+  public parent_canvas_id: string = "sc_similarity_chembl_search_parent";
+  public smiles_drawer_size: number = 200;
+  public chembl_search_result_compounds_image_data: Array<any> = [];
+  public chembl_search_filtered_compounds_image_data: Array<any> = [];
 
 
   constructor(private modalService: NgbModal,
@@ -149,6 +157,9 @@ export class ChemblRaxComponent implements OnInit {
 
             this.chembl_running = false;
             this.chembl_structural_search_running = false;
+            if (this.chembl_search_type_radio_value == 'similarity') {
+              this.drawResults();
+            }
           },
           error => {
             alert('Error retrieving ChEMBL substructures.');
@@ -209,6 +220,69 @@ export class ChemblRaxComponent implements OnInit {
       this.chembl_structural_search_running = false;
       this.chembl_running = false;
     }
+  }
+
+  generateMoleculeImage(smiles: string) {
+    const canvas_id = this.canvas_id;
+    const canvas_id_2 = canvas_id+'_2';
+    const smiles_drawer_size = this.smiles_drawer_size;
+    const $canvas_elem_const = $('<canvas id="'+canvas_id+'">');
+    const $canvas_elem_const2 = $('<canvas id="'+canvas_id_2+'">');
+    let $elem = $('#' + this.parent_canvas_id);
+    $elem.append($canvas_elem_const);
+    $elem.append($canvas_elem_const2);
+    const canvas_elem: any = $elem.children("#"+canvas_id)[0];
+    const canvas_elem2: any = $elem.children("#"+canvas_id_2)[0];
+
+
+    //draw molecules
+    const options = {width: smiles_drawer_size, height: smiles_drawer_size};
+    const smilesDrawer = new SmilesDrawer.Drawer(options);
+    //const smiles = 'C1CCCCC1';
+    SmilesDrawer.parse(smiles, function(tree) {
+      smilesDrawer.draw(tree, canvas_id, 'light', false);
+    });
+    
+    const ctx = canvas_elem2.getContext('2d');
+    ctx.canvas.width = canvas_elem.width;
+    ctx.canvas.height = canvas_elem.height;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0,  canvas_elem.width, canvas_elem.height);
+    ctx.drawImage(canvas_elem, 0, 0);
+
+    const data = canvas_elem2.toDataURL();
+    $(canvas_elem).remove();
+    $(canvas_elem2).remove();
+    return data;
+  }
+
+
+  drawResults() {
+    const type = this.chembl_search_type_radio_value;
+    switch (type) {
+      case 'similarity':
+        setTimeout(()=>{
+          this.chembl_search_result_compounds.forEach((ccompound,index) => {
+            
+            this.chembl_search_result_compounds_image_data.push(this.generateMoleculeImage(ccompound.compound.smiles));
+          });
+    
+        },0);
+        break;
+      case 'substructure':
+        setTimeout(()=>{
+          this.chembl_search_result_compounds.forEach((ccompound,index) => {
+            
+            this.chembl_search_filtered_compounds_image_data.push(this.generateMoleculeImage(ccompound.compound.smiles));
+          });
+    
+        },0);
+        break;
+      default:
+        throw Error('Invalid ChEMBL search type "'+type+'".')
+        break;
+    } 
+
   }
 
   chemblSearchStringChange($event) {
@@ -465,6 +539,9 @@ export class ChemblRaxComponent implements OnInit {
             this.chembl_search_filtered_compounds = compounds;
             this.last_rdkit_similarity_cutoff = this.rdkit_similarity_cutoff;
             this.rdkit_similarity_running = false;
+            if (this.chembl_search_type_radio_value == 'substructure') {
+              this.drawResults();
+            }
             subs2.unsubscribe();
           },
           error => {

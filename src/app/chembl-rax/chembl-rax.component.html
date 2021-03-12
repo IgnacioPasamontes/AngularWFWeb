@@ -164,6 +164,31 @@
         </table>
         <p [innerHTML]="chembl_activity_errors"></p>
     </div>
+    <div class="card">
+        <h6 class="card-header bg-light p-1">Search results</h6>
+        <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+        <table class="table">
+            <tr>
+                <th>Compound #</th><th>Name</th><th>Strucuture</th>
+            </tr>
+            <ng-container *ngIf="chembl_search_type_radio_value==='similarity'">
+            <tr *ngFor="let compound of this.chembl_search_result_compounds; index as i;">
+                <td>{{i+1}}</td>
+                <td>{{compound.compound.name}}</td>
+                <td><img [src]="this.chembl_search_result_compounds_image_data[i]"></td>
+            </tr>
+            </ng-container>
+            <ng-container *ngIf="chembl_search_type_radio_value==='substructure'">
+                <tr *ngFor="let compound of this.chembl_search_filtered_compounds; index as i;">
+                    <td>{{i+1}}</td>
+                    <td>{{compound.compound.name}}</td>
+                    <td><img [src]="this.chembl_search_filtered_compounds_image_data[i]"></td>
+                </tr>
+            </ng-container>
+        </table>
+        </div>
+    </div>
+    <div [id]="parent_canvas_id"></div>
 </div>
 <ng-template #search_type_selector_help>
     <p style="text-align: left;"><br>Tanimoto similarity or a substructural search in ChEMBL to retreive Source Compounds.</p>

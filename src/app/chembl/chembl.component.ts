@@ -354,6 +354,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
       const chembl_smiles_sub = this.service.chEMBLGetMoleculeFromCompoundId(chembl_id).subscribe(molecule_result => {
         this.chembl_smiles[chembl_id] = this.service.getChEMBLSMILESFromMoleculeData(molecule_result);
         this.chembl_calculated_pc_row_chemblid[chembl_id] = this.service.getChEMBLCalculatedPCFromMoleculeData(molecule_result);
+        console.log(this.chembl_calculated_pc_row_chemblid);
         if (Object.keys(this.chembl_smiles).length === this.chembl_item_list.length) {
           const items: Object[] = [];
           this.chembl_item_list.forEach( item => {

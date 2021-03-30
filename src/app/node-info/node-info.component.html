@@ -58,10 +58,19 @@
                     <div class="card-body p-2">
                         <p>Metabolite definition in progress.</p>
                     </div>
+                    <div class="card">
+                        <h6 class="card-header bg-light p-1">Metabolite relevance justification</h6>
+                        <div class="smiles-micromodal-container">
+                            <app-smiles-micromodal [id]="this.ckeditor_id_comments+'_metabolite_'+'-smiles-micromodal'"></app-smiles-micromodal>
+                        </div>
+                        <div class="upload-angular-container" class="card-body p-0">
+                           <!--<textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="this.info.outputs_comments" rows="10"></textarea>-->
+                            <ckeditor #ckeditor_dynamic_comments [id]="this.ckeditor_id_comments+'_metabolite'" [editor]="Editor" [config]="this.Editor_config_comments"  [disabled]="inline_comments"></ckeditor>
+                        </div>
+                    </div>
                 </div>
             </ng-container>
             <ng-container *ngSwitchCase="4">
-                <h5 class="card-header bg-light p-1">Initial RAx strategy</h5>
                 <app-node4-initial-rax-hypothesis [info]="this.info" [Editor]="Editor" [Editor_config]="this.Editor_config"></app-node4-initial-rax-hypothesis>
             </ng-container>
             <ng-container *ngSwitchCase="5">

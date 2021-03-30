@@ -45,7 +45,9 @@ body {
     -webkit-box-sizing: content-box !important;
 }
 
-
+.p0_5 {
+    padding: 0.5rem;
+}
 
 .invisible_textarea {
     opacity: .01;

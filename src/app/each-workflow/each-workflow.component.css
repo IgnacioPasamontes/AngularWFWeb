@@ -34,6 +34,31 @@ tr.parent {
 tr.parent2 {
     background-color:#7030A0;
 }
+
+.rotate {
+
+    transform: rotate(-90deg);
+  
+  
+    /* Legacy vendor prefixes that you probably don't need... */
+  
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+  
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+  
+    /* IE */
+    -ms-transform: rotate(-90deg);
+  
+    /* Opera */
+    -o-transform: rotate(-90deg);
+  
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  
+}
+
 .backdrop{ 
 
 background-color:rgba(0,0,0,0.6);
@@ -49,4 +74,10 @@ table {
     width: 100%;
   }
     
-    
+.narrow {
+    width: 1rem;
+}
+
+td {
+    min-width:0px;
+}

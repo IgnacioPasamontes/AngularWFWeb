@@ -1,35 +1,37 @@
 
-        <h5 [ngbTooltip]="analoge_category_h5_help" class="card-header bg-light p-1">Analogue/Category approach</h5>
-        <ng-template #analoge_category_h5_help>
-                <p>Justify the analogue/category approach</p>
-        </ng-template>
-        <div class="upload-angular-container" class="card-body p-0">
-            <ckeditor [id]="this.ckeditor_ids['analogue_category']" [editor]="Editor" [config]="this.ckeditors['analogue_category']" [(ngModel)]="initial_rax_hypothesis_data.analogue_category" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
-        </div>
-        <div class="smiles-micromodal-container">
-                <app-smiles-micromodal [id]="this.ckeditor_ids['analogue_category']+'-smiles-micromodal'"></app-smiles-micromodal>
-        </div>
-        
-        <h5 [ngbTooltip]="metabolism_h5_help" class="card-header bg-light p-1">Metabolism role in Read-Across</h5>
-        <ng-template #metabolism_h5_help>
-                <p>Describe relevance of metabolism of the target compound (TC), its metabolites and similarities between TC and source compound metabolites.</p>
-        </ng-template>
-        <div class="upload-angular-container" class="card-body p-0">
-            <ckeditor [id]="this.ckeditor_ids['metabolism']" [editor]="Editor" [config]="this.ckeditors['metabolism']" [(ngModel)]="initial_rax_hypothesis_data.metabolism" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
-        </div>
-        <div class="smiles-micromodal-container">
-                <app-smiles-micromodal [id]="this.ckeditor_ids['metabolism']+'-smiles-micromodal'"></app-smiles-micromodal>
+        <h5 class="card-header bg-light p-1">Analogue/Category approach</h5>
+        <div  class="card-body p-0">
+                <div class="card-body p0_5">Justify the analogue/category approach.</div>
+                <div class="upload-angular-container" class="p0_5">
+                        <ckeditor [id]="this.ckeditor_ids['analogue_category']" [editor]="Editor" [config]="this.ckeditors['analogue_category']" [(ngModel)]="initial_rax_hypothesis_data.analogue_category" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
+                </div>
+                <div class="smiles-micromodal-container">
+                        <app-smiles-micromodal [id]="this.ckeditor_ids['analogue_category']+'-smiles-micromodal'"></app-smiles-micromodal>
+                </div>
         </div>
 
-        <h5 [ngbTooltip]="quantitative_h5_help" class="card-header bg-light p-1">Property quantitative variation approach</h5>
-        <ng-template #quantitative_h5_help>
-                <p>e.g. similarity, regular pattern or worst-case relationship between TC and analogues or categories.</p>
-        </ng-template>
-        <div class="upload-angular-container" class="card-body p-0">
-            <ckeditor [id]="this.ckeditor_ids['quantitative']" [editor]="Editor" [config]="this.ckeditors['quantitative']" [(ngModel)]="initial_rax_hypothesis_data.quantitative" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
+        
+        <h5 class="card-header bg-light p-1">Metabolism role in Read-Across</h5>
+        <div  class="card-body p-0">
+                <div class="card-body p0_5">Describe relevance of metabolism of the target compound (TC), its metabolites and similarities between TC and source compound metabolites.
+                </div>
+                <div class="upload-angular-container" class="p0_5">
+                        <ckeditor [id]="this.ckeditor_ids['metabolism']" [editor]="Editor" [config]="this.ckeditors['metabolism']" [(ngModel)]="initial_rax_hypothesis_data.metabolism" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
+                </div>
+                <div class="smiles-micromodal-container">
+                        <app-smiles-micromodal [id]="this.ckeditor_ids['metabolism']+'-smiles-micromodal'"></app-smiles-micromodal>
+                </div>
         </div>
-        <div class="smiles-micromodal-container">
-                <app-smiles-micromodal [id]="this.ckeditor_ids['quantitative']+'-smiles-micromodal'"></app-smiles-micromodal>
+        <h5  class="card-header bg-light p-1">Approach justification</h5>
+        <div  class="card-body p-0">
+                <div class="card-body p0_5">e.g. similarity, regular pattern or worst-case relationship between TC and analogues or categories. Justify the approach taken.
+                </div>
+                <div class="upload-angular-container" class="p0_5">
+                        <ckeditor [id]="this.ckeditor_ids['quantitative']" [editor]="Editor" [config]="this.ckeditors['quantitative']" [(ngModel)]="initial_rax_hypothesis_data.quantitative" [disabled]="this.inline_initial_rax_hypothesis"></ckeditor>
+                </div>
+                <div class="smiles-micromodal-container">
+                        <app-smiles-micromodal [id]="this.ckeditor_ids['quantitative']+'-smiles-micromodal'"></app-smiles-micromodal>
+                </div>
         </div>
 
 

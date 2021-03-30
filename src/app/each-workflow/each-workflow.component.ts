@@ -55,7 +55,8 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     'node9': false,
     'node10': false,
     'node11': false,
-    'node12': false
+    'node12': false,
+    'node13': false,
   };
 
 
@@ -186,6 +187,10 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
         class: 'fast',
         within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
       });
+      (<any>$(jquery_selector_prefix).find('#' + this.projectName + '_id_12, #' + this.projectName + '_id_13')).connections({
+        class: 'fast',
+        within: jquery_selector_prefix + '#' + this.projectName + '_workflow',
+      });
     }, 0);
   }
 
@@ -221,6 +226,42 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   }
 
 
+  launchNode(project_id:any, result: any, node_seq: number, node_loading_overlayRef: any) {
+    result['node_seq'] = node_seq;
+    if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
+      this.globals.node_csrf_token[project_id] = {} ;
+    }
+    if (result.hasOwnProperty('CSRF_TOKEN')) {
+      this.globals.node_csrf_token[project_id][node_seq] = result.CSRF_TOKEN;
+    } else {
+      this.globals.node_csrf_token[project_id][node_seq] = null;
+    }
+    const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
+    const subs2 = this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
+      result_file_text => {
+        result['add_molecule_icon'] = result_file_text;
+        const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
+          width: '100%',
+          data: result,
+          hasBackdrop: true,
+        });
+        dialogRef.afterOpened().subscribe(() => { node_loading_overlayRef.dispose(); });
+        dialogRef.afterClosed().subscribe(result => {
+          if (result === 'cancel' || result == undefined) {
+            this.node.setNodeAsBusy(project_id, node_seq,false);
+          } else if (result === 'OK') {
+            this.node.setNodeAsBusy(project_id, node_seq);
+          }
+        });
+        subs2.unsubscribe();
+      },
+      error => {
+        node_loading_overlayRef.dispose();
+        alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
+        subs2.unsubscribe();
+      }
+    );
+  }
 
   nodeInfo_selected(project: string, node_seq: number) {
     let node_loading_overlayRef = this.overlay.create({
@@ -238,45 +279,19 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
     
     const subs = this.service.getNodeInfo(project_id, node_seq).subscribe(
       result => {
-        result['node_seq'] = node_seq;
-        if (!this.globals.node_csrf_token.hasOwnProperty(project_id)) {
-          this.globals.node_csrf_token[project_id] = {} ;
-        }
-        if (result.hasOwnProperty('CSRF_TOKEN')) {
-          this.globals.node_csrf_token[project_id][node_seq] = result.CSRF_TOKEN;
-        } else {
-          this.globals.node_csrf_token[project_id][node_seq] = null;
-        }
-        const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
-        const subs2 = this.service.getAssetFileAsText(add_molecule_icon_path).subscribe(
-          result_file_text => {
-            result['add_molecule_icon'] = result_file_text;
-            const dialogRef: MatDialogRef<any> = this.dialog.open( NodeInfoComponent, {
-              width: '100%',
-              data: result,
-              hasBackdrop: true,
-            });
-            dialogRef.afterOpened().subscribe(() => { node_loading_overlayRef.dispose(); });
-            dialogRef.afterClosed().subscribe(result => {
-              if (result === 'cancel' || result == undefined) {
-                this.node.setNodeAsBusy(project_id, node_seq,false);
-              } else if (result === 'OK') {
-                this.node.setNodeAsBusy(project_id, node_seq);
-              }
-            });
-            subs2.unsubscribe();
-          },
-          error => {
-            node_loading_overlayRef.dispose();
-            alert('Error: file "/assets/'+add_molecule_icon_path+'" not found.');
-            subs2.unsubscribe();
-          }
-        );
+        this.launchNode(project_id,result,node_seq,node_loading_overlayRef);
         subs.unsubscribe();
       },
       error => {
-        node_loading_overlayRef.dispose();
-        alert('Error getting node');
+        console.log(error);
+        if (error.status === 404 && error.error['Reason'] === 'Node not found.') {
+          const result = error.error;
+          delete result['Reason'];
+          this.launchNode(project_id,result,node_seq,node_loading_overlayRef);
+        } else {
+          node_loading_overlayRef.dispose();
+          alert('Error getting node');
+        }
         subs.unsubscribe();
       }
     );

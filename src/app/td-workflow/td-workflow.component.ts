@@ -36,7 +36,7 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
 
 
   checked = {
-    'node13': false,
+    'node33': false,
     'node14': false,
     'node15': false,
     'node16': false,
@@ -132,7 +132,7 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
 
     (<any>$(jquery_selector_prefix).find('.' + this.projectClass)).connections('remove');
 
-    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_13, #' + this.projectClass + '_id_16').connections({
+    $(jquery_selector_prefix).find('#' + this.projectClass + '_id_33, #' + this.projectClass + '_id_16').connections({
       class: 'fast',
       within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });
@@ -162,7 +162,7 @@ export class TdWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
     });
 
     
-    /*$(jquery_selector_prefix).find('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_13').connections({
+    /*$(jquery_selector_prefix).find('#' + this.projectClass + '_id_20, #' + this.projectClass + '_id_33').connections({
       class: 'fast',
       within: jquery_selector_prefix + '#' + this.projectClass + '_workflow',
     });

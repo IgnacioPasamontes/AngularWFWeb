@@ -19,7 +19,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   objectKeys = Object.keys;
   public style: object = {};
-  public workflowStyleInit: object = {'overflow-x': 'auto', 'max-width': '90%'};
+  public workflowStyleInit: object = {'overflow-x': 'auto','min-width':'225px','width':'12%', 'max-width': '20%'};
   public workflowStyle: object = {};
   public workflowRedraw: boolean = false;
   public datamatrixRedraw: boolean = false;

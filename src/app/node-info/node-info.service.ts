@@ -21,9 +21,15 @@ export class NodeInfoService {
     csrftoken?: string): Observable<any> {
     
     const formData = new FormData();
-    formData.append('inputs_comments', input);
-    formData.append('outputs', output);
-    formData.append('outputs_comments', comments);
+    if (typeof input !== 'undefined' && input !== null) {
+      formData.append('inputs_comments', input);
+    }
+    if (typeof output !== 'undefined' && output !== null) {
+      formData.append('inputs_comments', output);
+    }
+    if (typeof comments !== 'undefined' && comments !== null) {
+      formData.append('outputs_comments', comments);
+    }
     if (csrftoken !== null && csrftoken !== undefined) {
       formData.append(this.globals.csrftoken_form_input_name,csrftoken);
     }

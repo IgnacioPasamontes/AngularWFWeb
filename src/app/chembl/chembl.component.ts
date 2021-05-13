@@ -522,12 +522,13 @@ export class ChemblComponent implements OnInit, AfterViewInit {
   }
 
   retrieveActivityData($event) {
-
+    
     const chembl_ids = this.activity_chembl_ids;
     const chembl_activity_rows_obj: Object = {};
     let index: number = 0;
     const chembl_activity$ = new AsyncSubject<string[]>();
     const chembl_act_subs = chembl_activity$.subscribe(result => {
+      this.chembl_activity_rows = [];
       let activity_rows: string = '';
       Object.keys(chembl_activity_rows_obj).sort((a, b) => Number(a) - Number(b)).forEach(idx => {
         this.chembl_activity_rows = this.chembl_activity_rows.concat(chembl_activity_rows_obj[idx]);
@@ -570,9 +571,10 @@ export class ChemblComponent implements OnInit, AfterViewInit {
               activ_rows = activ_rows.concat(chembl_result2['activities']);
               console.log(activ_rows);
               chembl_activity_rows_obj[index] = activ_rows;
-              chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
+             
               success_count++;
-              if (chembl_ids_length >= success_count) {
+              if (chembl_ids_length <= success_count) {
+                chembl_activity$.next(Object.keys(chembl_activity_rows_obj));
                 chembl_activity$.complete();
               }
             },
@@ -653,6 +655,7 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         chembl_ids.push(this.chembl_item_list[int_id]['value']);
       });
     }
+    console.log(this.chembl_activity_rows);
     const subs = this.service.saveChemblData(this.activity_compound, this.chembl_activity_rows, chembl_ids)
     .subscribe(result => {
       alert('ChEMBL data saved.');

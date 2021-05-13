@@ -26,7 +26,7 @@ export class Compound {
   public static SOURCE_COMPOUND: number = 1;
   public static ra_type_abbrev_to_value_dict: Object = {0: 'tc', 1: 'sc'};
   public static data_fields: Array<string> = ['smiles', 'cas_rn', 'name',
-  'project', 'int_id', 'ra_type', 'chembl_id'];
+  'project', 'int_id', 'ra_type', 'chembl_id','id'];
 
   public smiles: string;
   public cas_rn: string[];
@@ -35,6 +35,7 @@ export class Compound {
   public int_id: number;
   public ra_type: number;
   public chembl_id: string = null;
+  public id: number;
 
   static getObject( compound: Compound, undef = false) {
     const obj: Object = {};

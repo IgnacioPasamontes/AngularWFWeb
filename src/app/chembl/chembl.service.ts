@@ -21,7 +21,7 @@ export class ChemblService {
   public chembl_activity_fields: Array<string> = ['standard_type', 'standard_value', 'standard_units',
   'assay_description', 'value', 'units', 'assay_chembl_id', 'text_value', 'activity_comment', 'pchembl_value'];
   public chembl_displayed_activity_fields = ['standard_type', 'standard_value', 'standard_units',
-  'assay_description'];
+  'assay_description', 'assay_chembl_id'];
   public chembl_calculated_pc_dict = {
     'mw_freebase':                   {'standard_type': "MW",                            'assay_description': "Molecular Weight", 'standard_units':"g/mol", 'units':"g/mol"},                                                                            
     'rtb':                           {'standard_type': "#Rot. Bonds",                   'assay_description': "Number of Rotatable Bonds", 'standard_units': null, 'units': null},                                                        

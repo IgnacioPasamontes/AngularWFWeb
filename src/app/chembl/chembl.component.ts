@@ -537,13 +537,18 @@ export class ChemblComponent implements OnInit, AfterViewInit {
         chembl_activity_rows_obj[idx].forEach(activity => {
           activity_rows += '<tr>';
           this.chembl_displayed_activity_fields.forEach(field => {
-            activity_rows += '<td>' + activity[field] + '</td>';
+            if (field === 'assay_chembl_id' && activity[field].slice(0,6) === 'CHEMBL') {
+              activity_rows += '<td><a href="https://www.ebi.ac.uk/chembl/assay_report_card/'+activity[field]+'/" target="_blank">' + activity[field] + '</a></td>';
+            } else {
+              activity_rows += '<td>' + activity[field] + '</td>';
+            }
+            
           });
           activity_rows += '<td>' + activity['assay_type'] + '</td>';
           activity_rows += '</tr>';
         });
       });
-      this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th><th>Assay type</th></tr>'
+      this.activity = '<table><tr><th>Property</th><th>Value</th><th>Units</th><th>Description</th><th>Assay type</th><th>Assay ID</th></tr>'
        + activity_rows + '</table>';
     },
     error => {

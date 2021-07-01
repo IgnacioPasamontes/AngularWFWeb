@@ -1,0 +1,46 @@
+.card{
+    margin-bottom: 10px;
+}
+
+/*.node-info{
+    padding-top: 10px;
+    padding-left: 10px;
+
+}*/
+
+.input{
+    overflow-x: auto;
+    overflow-y: auto;
+    display: block;
+    max-height: 400px;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    
+}
+
+.bmd-btn-fab-sm{
+    margin-right: 0px;
+    font-size: 15px;
+}
+
+.form-inline{
+  margin:0px;  
+}
+.btn.btn-success.bmd-btn-fab.bmd-btn-fab-sm {
+    width: 1rem;
+    min-width: 1rem;
+    height: 1rem;
+}
+.btn.btn-danger.bmd-btn-fab.bmd-btn-fab-sm {
+    width: 1rem;
+    min-width: 1rem;
+    height: 1rem;
+}
+i { 
+    cursor: pointer; 
+}
+.card-header .btn {
+    text-transform: none;
+}
+table {
+ width: 100%;   
+}

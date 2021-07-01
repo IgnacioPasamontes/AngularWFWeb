@@ -54,6 +54,8 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() redraw;
   @Input() workflow_scroll;
   @Input() change;
+  @Input() changeAnything;
+  
   public project_number: number;
   public ra_type_2_abbrev: Object = {};
   public displayedColumns: string[];

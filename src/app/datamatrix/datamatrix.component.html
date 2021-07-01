@@ -34,7 +34,7 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
 
         <!-- <div [style.display]="this.datamatrix_tabs.active_tab_name === 'TEST' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto">Test</div> -->
-        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Report' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><app-report></app-report></div>
+        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Report' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><app-report [tabChange]="this.datamatrix_tabs.active_tab_name" [change]="this.changeAnything" [projectName]="this.projectName"></app-report></div>
 
     <!-- </ng-container> -->
 </div>

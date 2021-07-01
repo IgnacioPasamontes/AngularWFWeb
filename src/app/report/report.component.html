@@ -1,1 +1,75 @@
-<p>report works!</p>
+<ng-container *ngFor="let section of report_sections">
+    <ng-container *ngIf="(typeof(section.name) !== 'undefined' && section.name !== null)">
+            <h1 *ngIf="typeof(section.step) !== 'undefined' && section.step !== null" style="margin-bottom: 0px;" class="card-body" >{{section.step.toString()+'.'+section.name}}</h1>
+            <h1 *ngIf="typeof(section.step) === 'undefined' || section.step === null" style="margin-bottom: 0px;" class="card-body" >{{section.name}}</h1>
+    </ng-container>
+    <div *ngIf="typeof(section.description) !== 'undefined' || section.description !== null" style="padding-top: 0px;" class="card-body" [innerText]="section.description"></div>
+    <div class="card">
+        <ng-container *ngFor="let subsection of section.subsections">
+            <ng-container *ngIf="(typeof(subsection.name) !== 'undefined' || subsection.name !== null)">
+                <h5 *ngIf="typeof(subsection.step) !== 'undefined' && subsection.step !== null" class="card-header bg-light p-1">{{subsection.step.toString()+'.'+subsection.name}}</h5>
+                <h5 *ngIf="typeof(subsection.step) === 'undefined' || subsection.step === null" class="card-header bg-light p-1">{{subsection.name}}</h5>
+
+            </ng-container>
+            <div  class="card-body p-0">
+                    <div class="card-body p0_5">{{subsection.description}}</div>
+                    <div *ngIf="subsection.type === 'free-text'" class="p0_5">
+                        <ckeditor *ngIf="subsection.type === 'free-text'" [id]="'ckeditor_report_'+subsection.int_id" [editor]="Editor" [config]="this.Editor_config" [data]="section.data[subsection.field]" [disabled]="'true'"></ckeditor>
+                    </div>
+                    <div *ngIf="subsection.type === 'compound'" class="card">
+                        <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+                        <table class="table">
+                            <tr>
+                                <th>Compound #</th><th>CAS RN</th><th>Name</th><th>Strucuture</th>
+                            </tr>
+                            <tr *ngFor="let compound of section.data[subsection.field]; index as i;">
+                                <td>{{compound.int_id}}</td>
+                                <td>{{compound.cas_rn.join(', ')}}</td>
+                                <td>{{compound.name}}</td>
+                                <td><img [src]="this.compounds_image_data[subsection['int_id']][i]"></td>
+                            </tr>
+                        </table>
+                        </div>
+                    </div>
+                    <div  *ngIf="subsection.type === 'datatable'" class="card">
+                        <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+                        <table class="table">
+                            <tr>
+                                <th *ngFor="let key of headerFirstAndSort('Compound', object_keys(section.data[subsection.field]))" [innerText]="key"></th>
+                            </tr>
+                            <tr *ngFor="let row of section.data[subsection.field][object_keys(section.data[subsection.field])[0]]; index as i;">
+                                <td *ngFor="let key of headerFirstAndSort('Compound', object_keys(section.data[subsection.field]))">{{section.data[subsection.field][key][i]}}</td>
+                            </tr>
+                        </table>
+                        </div>
+                    </div>
+                    <div  *ngIf="subsection.type === 'datamatrix_single'" class="card">
+                        <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">
+                        <table class="table">
+                            <tr>
+                                <th *ngFor="let key of datamatrix_single_headers" [innerText]="key"></th>
+                            </tr>
+                            <tr *ngFor="let row of section.data[subsection.field]">
+                                <ng-container *ngFor="let key of datamatrix_single_fields">
+                                    <td *ngIf="key !== 'assay_id'">{{row[key]}}</td>
+                                    <ng-container *ngIf="key === 'assay_id'">
+                                        <td *ngIf="row[key].slice(0,6) === 'CHEMBL'"><a [href]="'https://www.ebi.ac.uk/chembl/assay_report_card/'+row[key]+'/'" target="_blank">{{row[key]}}</a></td>
+                                        <td *ngIf="row[key].slice(0,6) !== 'CHEMBL'">{{row[key]}}</td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                        </table>
+                        </div>
+                    </div>
+                    <div [id]="parent_canvas_id"></div>
+            </div>
+        </ng-container>
+    </div>
+    <!-- <div class="card">
+            <h5 class="card-header bg-light p-1">Comments</h5>
+            <div class="card-body p-0">
+
+                <ckeditor *ngIf="this.Editor_config" [id]="'ckeditor_report_comments_'+section.int_id" [editor]="Editor" [config]="this.Editor_config" [data]="'<p>Hello world</p>'" [disabled]="'true'"></ckeditor>
+            </div>
+    </div> -->
+</ng-container>

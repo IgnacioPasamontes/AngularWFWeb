@@ -243,7 +243,7 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
         } else {
           this.globals.node_csrf_token[project_id][node_seq] = null;
         }
-        const add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg'; 
+        const add_molecule_icon_path = this.globals.add_molecule_icon_path; 
         this.eachworkflowservice.getAssetFileAsText(add_molecule_icon_path).subscribe(
           result_file_text => {
             result['add_molecule_icon'] = result_file_text;

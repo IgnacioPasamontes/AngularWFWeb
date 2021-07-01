@@ -79,6 +79,7 @@ import { TcCompoundsService } from './tc-characterization/tc-compounds.service';
 import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
 import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service';
 import { Node4InitialRaxHypothesisService } from './node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.service';
+import { ReportService } from './report/report.service';
 
 
 
@@ -174,6 +175,7 @@ import { Node4InitialRaxHypothesisService } from './node4-initial-rax-hypothesis
     ChemblRaxService,
     DatamatrixTabsService,
     Node4InitialRaxHypothesisService,
+    ReportService,
     {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
   ],
   entryComponents: [NodeInfoComponent, OverlayComponent, MoleculePickerComponent],

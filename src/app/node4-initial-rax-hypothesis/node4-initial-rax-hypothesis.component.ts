@@ -47,7 +47,12 @@ export class Node4InitialRaxHypothesisComponent implements OnInit {
         let i = 0;
         editor_config.CustomElement.items.forEach( (item) => {
           editor_config.CustomElement.items[i].ckeditor_id = ckeditor_id;
-          editor_config.CustomElement.items[i].component = this;
+          editor_config.CustomElement.items[i].component = {
+            smiles_drawer_size: this.smiles_drawer_size,
+            micromodal: this.micromodal,
+            environment: this.environment,
+            data: this.data,
+          };
           i++;
         });
         this.ckeditors[field] = editor_config;

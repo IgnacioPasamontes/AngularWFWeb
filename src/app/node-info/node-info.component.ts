@@ -90,7 +90,12 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
             label: 'Add molecule', 
             inline: false,
             editable: false,
-            component: this,
+            component: {
+              smiles_drawer_size: this.smiles_drawer_size,
+              micromodal: this.micromodal,
+              environment: this.environment,
+              data: this.info,
+            },
             exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
               alert(url);
               

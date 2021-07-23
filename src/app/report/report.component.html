@@ -14,7 +14,7 @@
             <div  class="card-body p-0">
                     <div class="card-body p0_5">{{subsection.description}}</div>
                     <div *ngIf="subsection.type === 'free-text'" class="p0_5">
-                        <ckeditor *ngIf="subsection.type === 'free-text'" [id]="'ckeditor_report_'+subsection.int_id" [editor]="Editor" [config]="this.Editor_config" [data]="section.data[subsection.field]" [disabled]="'true'"></ckeditor>
+                        <ckeditor *ngIf="subsection.type === 'free-text'" [id]="'ckeditor_report_'+subsection.int_id" [editor]="Editor" [config]="this.Editor_config" [data]="section.data[subsection.field]" [disabled]="true"></ckeditor>
                     </div>
                     <div *ngIf="subsection.type === 'compound'" class="card">
                         <div class="row m-5 form-group" style="margin-bottom:0px !important;margin-top:10px !important">

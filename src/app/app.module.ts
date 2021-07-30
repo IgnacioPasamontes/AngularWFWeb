@@ -29,6 +29,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule, OverlayContainer, FullscreenOverlayContainer } from '@angular/cdk/overlay';
 
 import { Globals } from './globals';
+import { CkEditor } from './ckeditor';
 
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
@@ -161,6 +162,7 @@ import { ReportService } from './report/report.service';
   providers: [
     httpInterceptorProviders,
     Globals,
+    CkEditor,
     LoginService,
     CookieService,
     TabsService,

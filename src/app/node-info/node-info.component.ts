@@ -3,7 +3,7 @@ import { IModalDialog, IModalDialogOptions, IModalDialogButton } from 'ngx-modal
 import { Globals } from '../globals';
 import { Subject } from 'rxjs';
 import { NodeInfoService } from './node-info.service';
-import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
+import { CkEditor } from '../ckeditor';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/node1-problem-formulation.component';
 import { Node4InitialRaxHypothesisComponent } from '../node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.component';
@@ -48,7 +48,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
   sub: Subscription;
 
 
-  public Editor = ClassicEditor;  
+  public Editor: any;  
   
   @ViewChild(Node1ProblemFormulationComponent,{ static: false }) node1: Node1ProblemFormulationComponent;
   @ViewChild(  Node4InitialRaxHypothesisComponent,{ static: false }) node4: Node1ProblemFormulationComponent;
@@ -58,7 +58,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   
-  constructor(private el: ElementRef, public globals: Globals,
+  constructor(private el: ElementRef, public globals: Globals, public ckeditor: CkEditor,
               @Inject(NodeInfoService) public service,
               public dialogRef: MatDialogRef<NodeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Array<any>,
@@ -67,7 +67,7 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    
+    this.Editor = this.ckeditor.ClassicEditor;
     this.micromodal.init();
     this.info = this.data;
 
@@ -110,7 +110,12 @@ export class NodeInfoComponent implements OnInit, AfterViewInit {
             label: 'Add table from CSV', 
             inline: false,
             editable: false,
-            component: this,
+            component: {
+              smiles_drawer_size: this.smiles_drawer_size,
+              micromodal: this.micromodal,
+              environment: this.environment,
+              data: this.info,
+            },
             exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
               alert(url);
               

@@ -39,7 +39,7 @@
     <div class="card">
         <ng-container [ngSwitch]="this.info.node_seq">
             <ng-container *ngSwitchCase="1">
-                <app-node1-problem-formulation [info]="this.info" [Editor]="Editor" [Editor_config]="this.Editor_config"></app-node1-problem-formulation></ng-container>
+                <app-node1-problem-formulation [info]="this.info" [Editor_config]="this.Editor_config"></app-node1-problem-formulation></ng-container>
             <ng-container *ngSwitchCase="2">
                 <h5 [ngbTooltip]="tc_h5_help" class="card-header bg-light p-1">TC definition</h5>
                 <app-tc-characterization [info]="this.info"></app-tc-characterization>
@@ -71,7 +71,7 @@
                 </div>
             </ng-container>
             <ng-container *ngSwitchCase="4">
-                <app-node4-initial-rax-hypothesis [info]="this.info" [Editor]="Editor" [Editor_config]="this.Editor_config"></app-node4-initial-rax-hypothesis>
+                <app-node4-initial-rax-hypothesis [info]="this.info" [Editor_config]="this.Editor_config"></app-node4-initial-rax-hypothesis>
             </ng-container>
             <ng-container *ngSwitchCase="5">
                 <h5 class="card-header bg-light p-1">Source Compound definition</h5>

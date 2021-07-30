@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, AfterViewInit } from '@angular/core';
 import { ReportService } from './report.service';
 import { Globals } from '../globals';
+import { CkEditor } from '../ckeditor';
 import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { EachWorkflowService } from '../each-workflow/each-workflow.service';
 
@@ -29,16 +30,16 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
   public smiles_drawer_size: number = 200;
   public datamatrix_single_headers = ['Property','Value','Units','Description','Assay type','Assay ID']
   public datamatrix_single_fields = ['name', 'std_value', 'std_unit','description', 'assay_type','assay_id']
-  public Editor = ClassicEditor; 
+  public Editor: any; 
 
   constructor(private service: ReportService,
-    public globals: Globals,
+    public globals: Globals, public ckeditor: CkEditor,
     private eachworkflowservice: EachWorkflowService) { }
 
   ngOnInit() {
     // this.ckeditor_id_comments = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_outputs_comments';
     /*'custom-element-upload-table'*/
-    
+    this.Editor = this.ckeditor.ClassicEditor;
     const add_molecule_icon_path = this.globals.add_molecule_icon_path;
     const subs = this.eachworkflowservice.getAssetFileAsText(add_molecule_icon_path).subscribe(
       result_file_text => {

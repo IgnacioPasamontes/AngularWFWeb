@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit } from '@angular/core';
 import { Node1ProblemFormulationService } from './node1-problem-formulation.service';
 import { ProblemFormulation } from './node1-problem-formulation.service';
 import { Globals } from '../globals';
+import { CkEditor } from '../ckeditor';
 import { NodeInfoService } from '../node-info/node-info.service';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
@@ -16,7 +17,6 @@ import MicroModal from 'micromodal';
 })
 export class Node1ProblemFormulationComponent implements OnInit {
   @Input() info;
-  @Input() Editor;
   @Input() Editor_config;
   @Output() problem_description : string;
   inline_problem_description = false;
@@ -31,13 +31,14 @@ export class Node1ProblemFormulationComponent implements OnInit {
   part = 1;
   problem_formulation: ProblemFormulation = new ProblemFormulation();
 
-  //public Editor = ClassicEditor;
+  public Editor: any;
 
   constructor(private service: Node1ProblemFormulationService,
-              public globals: Globals,
+              public globals: Globals, private ckeditor: CkEditor,
               private node: NodeInfoService) { }
 
   ngOnInit() {
+    this.Editor = this.ckeditor.ClassicEditor;
     this.data = this.info;
     this.micromodal.init();
     this.ckeditor_id_base = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_problem_formulation';

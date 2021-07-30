@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit } from '@angular/core';
 import { Node4InitialRaxHypothesisService } from './node4-initial-rax-hypothesis.service';
 import { InitialRAxHypothesis } from './node4-initial-rax-hypothesis.service';
 import { Globals } from '../globals';
+import { CkEditor } from '../ckeditor';
 import { NodeInfoService } from '../node-info/node-info.service';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
@@ -16,7 +17,6 @@ import MicroModal from 'micromodal';
 export class Node4InitialRaxHypothesisComponent implements OnInit {
 
   @Input() info;
-  @Input() Editor;
   @Input() Editor_config;
   @Output() initial_rax_hypothesis : string;
   inline_initial_rax_hypothesis = false;
@@ -30,12 +30,14 @@ export class Node4InitialRaxHypothesisComponent implements OnInit {
   ckeditors: Object = {};
   part = 1;
   initial_rax_hypothesis_data: InitialRAxHypothesis = new InitialRAxHypothesis(); 
+  public Editor: any; 
 
   constructor(private service: Node4InitialRaxHypothesisService,
-              public globals: Globals,
+              public globals: Globals, private ckeditor: CkEditor,
               private node: NodeInfoService) { }
 
     ngOnInit() {
+      this.Editor = this.ckeditor.ClassicEditor;
       this.data = this.info;
       this.micromodal.init();
       this.ckeditor_id_base = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_initial_rax_hypothesis';

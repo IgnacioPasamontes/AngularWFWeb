@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Globals } from '../globals';
 import { LoginService } from '../login/login.service';
-import { CKEditorComponent } from '../ckeditor/ckeditor.component';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,8 @@
 <div class="container-fluid tab-content shadow bg-white rounded" id="datamatrix-tabs-tabContent">
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Bioactivities' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['bioactivity']" [id]="heatmap_id['bioactivity']">
+            <!-- <div *ngIf="response['bioactivity'] || heatmap['bioactivity']" class="container datamatrix-header">
+                <h3>Min-max normalized activity</h3>
+            </div> -->
             <p [innerText]="response['bioactivity']"></p>
             <div *ngIf="!response['bioactivity'] && !heatmap['bioactivity']" class="container h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -10,6 +13,9 @@
             </div>
         </div>    
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'PC properties' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['pc']" [id]="heatmap_id['pc']">
+            <!-- <div *ngIf="response['bioactivity'] || heatmap['bioactivity']" class="container datamatrix-header">
+                <h3>Min-max normalized Physicochemical property</h3>
+            </div> -->
             <p [innerText]="response['pc']"></p>
             <div *ngIf="!response['pc'] && !heatmap['pc']" class="container h-100">
                 <div class="row justify-content-center align-items-center h-100">

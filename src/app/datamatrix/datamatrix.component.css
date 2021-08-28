@@ -1,3 +1,12 @@
+.datamatrix-header {
+  padding-top: 45px;
+  padding-left: 290px;
+}
+.datamatrix-header h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+
 .mat-elevation-z8 {    
     overflow-y: auto;
     max-height: 80vh;

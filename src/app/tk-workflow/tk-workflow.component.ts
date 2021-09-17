@@ -7,7 +7,8 @@ import { NodeInfoService } from '../node-info/node-info.service';
 import { OverlayComponent } from '../overlay/overlay.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
+import { CkEditor } from '../ckeditor';
+//import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { ResizeSensor } from 'css-element-queries';
 import { EachWorkflowService } from '../each-workflow/each-workflow.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -34,7 +35,7 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   mainProjectName: string;
   overlayPortal: ComponentPortal<any> = new ComponentPortal(OverlayComponent); 
 
-  public Editor = ClassicEditor;
+  public Editor: any;
 
   checked = {
     'node22': false,
@@ -51,12 +52,14 @@ export class TkWorkflowComponent implements OnInit, OnChanges, OnDestroy, AfterV
   };
 
   constructor(public globals: Globals,
+              private ckeditor: CkEditor,
               private dialog: MatDialog,
               private node: NodeInfoService,
               public overlay: Overlay,
               private eachworkflowservice: EachWorkflowService) { }
 
   ngOnInit() {
+    this.Editor = this.ckeditor.ClassicEditor;
     this.mainProjectName = this.projectName.replace(
       new RegExp(this.globals.subproject_suffix_separator+'.*$'),
       ''

@@ -11,7 +11,8 @@ import { Node1ProblemFormulationComponent } from '../node1-problem-formulation/n
 import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { EachWorkflowService } from './each-workflow.service';
 import { TabsService } from '../tabs/tabs.service';
-import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
+import { CkEditor } from '../ckeditor';
+//import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { ResizeSensor } from 'css-element-queries';
 
 declare var $: JQueryStatic;
@@ -41,7 +42,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
   
   
 
-  public Editor = ClassicEditor;
+  public Editor: any;
 
   checked = {
     'node1': false,
@@ -61,6 +62,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   constructor(public globals: Globals,
+    private ckeditor: CkEditor,
     private dialog: MatDialog,
     private node: NodeInfoService,
     private tabs: TabsService,
@@ -69,6 +71,7 @@ export class EachWorkflowComponent implements OnInit, AfterViewInit, OnDestroy, 
 
 
   ngOnInit() {
+    this.Editor = this.ckeditor.ClassicEditor;
     this.updateCheckedNodes();
   }
 

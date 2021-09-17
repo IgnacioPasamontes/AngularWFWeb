@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, AfterViewInit } from '@angular/cor
 import { ReportService } from './report.service';
 import { Globals } from '../globals';
 import { CkEditor } from '../ckeditor';
-import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
+//import * as ClassicEditor from '../../assets/js/ckeditor5/ckeditor.js';
 import { EachWorkflowService } from '../each-workflow/each-workflow.service';
 
 declare let SmilesDrawer: any;

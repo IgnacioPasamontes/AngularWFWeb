@@ -7,3 +7,6 @@
 [submodule "multi-select"]
 	path = multi-select
 	url = git@github.com:lou/multi-select.git
+[submodule "ckeditor5-build-inline-custom"]
+	path = ckeditor5-build-inline-custom
+	url = git@github.com:phi-grib/ckeditor5-build-inline-custom.git

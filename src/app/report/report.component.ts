@@ -39,7 +39,7 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnInit() {
     // this.ckeditor_id_comments = 'ckeditor_'+this.info.project+'_'+this.info.node_seq+'_outputs_comments';
     /*'custom-element-upload-table'*/
-    this.Editor = this.ckeditor.ClassicEditor;
+    this.Editor = this.ckeditor.InlineEditor;
     const add_molecule_icon_path = this.globals.add_molecule_icon_path;
     const subs = this.eachworkflowservice.getAssetFileAsText(add_molecule_icon_path).subscribe(
       result_file_text => {

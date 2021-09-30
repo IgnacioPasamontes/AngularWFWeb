@@ -21,5 +21,6 @@ export class Globals {
   td_project_suffix = this.subproject_suffix_separator+' TD';
   tk_class_suffix = '_TK';
   td_class_suffix = '_TD';
-  add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene-147550.svg';
+  add_molecule_icon_path = 'icons/ckeditor5-custom-element-molecule/benzene.svg';
+ 
 }

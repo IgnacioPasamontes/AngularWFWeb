@@ -45,7 +45,8 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
       result_file_text => {
         this.add_molecule_icon = result_file_text;
         this.Editor_config = {
-          toolbar:[],
+          toolbar:['heading','bold','italic','link','bulletedList','numberedList',
+          'blockQuote','insertTable','undo','redo','custom-element-insert-molecule','|',],
           removePlugins: ['oEmbed'],
           CustomElement: {
             items:[
@@ -138,6 +139,8 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
     this.processCompoundSections(this.report_sections);
+
+   
     
   }
   processCompoundSections(sections: Object[]){

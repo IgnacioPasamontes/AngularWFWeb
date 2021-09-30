@@ -45,8 +45,7 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
       result_file_text => {
         this.add_molecule_icon = result_file_text;
         this.Editor_config = {
-          toolbar:['heading','bold','italic','link','bulletedList','numberedList',
-                    'blockQuote','insertTable','undo','redo','custom-element-insert-molecule','|',],
+          toolbar:[],
           removePlugins: ['oEmbed'],
           CustomElement: {
             items:[
@@ -60,7 +59,7 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
                 label: 'Add molecule', 
                 inline: false,
                 editable: false,
-                component: this,
+                component: {},
                 exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
                   alert(url);
                   
@@ -75,7 +74,7 @@ export class ReportComponent implements OnInit, OnChanges, AfterViewInit {
                 label: 'Add table from CSV', 
                 inline: false,
                 editable: false,
-                component: this,
+                component: {},
                 exec_function: (component: any, custom_elem_command: any, create_element_func: any, url: string, editor_elem: any, smiles: string) => {
                   alert(url);
                   

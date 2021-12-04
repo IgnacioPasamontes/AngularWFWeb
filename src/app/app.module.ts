@@ -81,6 +81,7 @@ import { ChemblRaxService } from './chembl-rax/chembl-rax.service';
 import { DatamatrixTabsService } from './datamatrix-tabs/datamatrix-tabs.service';
 import { Node4InitialRaxHypothesisService } from './node4-initial-rax-hypothesis/node4-initial-rax-hypothesis.service';
 import { ReportService } from './report/report.service';
+import { OverviewComponent } from './overview/overview.component';
 
 
 
@@ -122,7 +123,8 @@ import { ReportService } from './report/report.service';
     MoleculePickerComponent,
     ReportComponent,
     DatamatrixTabsComponent,
-    Node4InitialRaxHypothesisComponent
+    Node4InitialRaxHypothesisComponent,
+    OverviewComponent
   ],
   imports: [
     BrowserModule,

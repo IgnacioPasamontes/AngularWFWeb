@@ -38,7 +38,7 @@
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
-        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Overview' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><p>---Work in progress---</p></div>
+        <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Overview' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><app-overview [tabChange]="this.datamatrix_tabs.active_tab_name" [change]="this.changeAnything" [projectName]="this.projectName"></app-overview></div>
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Structural similarity' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><p>---Work in progress---</p></div>
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'NAM' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><p>---Work in progress---</p></div>
 

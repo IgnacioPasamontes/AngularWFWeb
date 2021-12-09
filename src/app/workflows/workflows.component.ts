@@ -56,7 +56,8 @@ export class WorkflowsComponent implements OnInit, OnChanges {
       if (typeof compounds_tc === 'undefined' && !once_tc) {
         once_tc = true;
         console.log('once_tc');
-        return;
+        const url: string = environment.baseUrl + 'project/'+project_number.toString()+'/report/docx';
+        return window.location.href = url;
       } else if (typeof compounds_tc === 'undefined' && once_tc) {
         compounds_tc = [];
       }
@@ -64,7 +65,8 @@ export class WorkflowsComponent implements OnInit, OnChanges {
         if (typeof compounds_sc === 'undefined' && !once_sc) {
           once_tc = true;
           console.log('once_sc');
-          return;
+          const url: string = environment.baseUrl + 'project/'+project_number.toString()+'/report/docx';
+          return window.location.href = url;
         } else if (typeof compounds_sc === 'undefined' && once_sc) {
           compounds_sc = [];
         }
@@ -92,9 +94,14 @@ export class WorkflowsComponent implements OnInit, OnChanges {
           () => {
             subs2.unsubscribe();
           });
+        } else {
+          subj_sc.complete();
+          const url: string = environment.baseUrl + 'project/'+project_number.toString()+'/report/docx';
+          return window.location.href = url;
         }
         subj_sc.complete();
-
+        const url: string = environment.baseUrl + 'project/'+project_number.toString()+'/report/docx';
+        return window.location.href = url;
 
       },
       error => {

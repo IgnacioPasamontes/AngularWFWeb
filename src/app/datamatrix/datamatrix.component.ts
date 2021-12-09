@@ -61,7 +61,7 @@ export class DatamatrixComponent implements OnInit, OnChanges, AfterViewInit {
   public displayedColumns: string[];
   public dataSource: MatTableDataSource<Object>;
   public columnsToDisplay: string[];
-  public heatmaps: string[] = ['bioactivity','pc'];
+  public heatmaps: string[] = ['bioactivity','pc','similarity'];
   public heatmap: Object = {};
   public heatmap_bkp: Object = {};  
   //public heatmap_scripts: string[] = [];

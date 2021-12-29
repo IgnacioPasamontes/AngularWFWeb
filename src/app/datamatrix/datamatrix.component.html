@@ -1,8 +1,6 @@
 <div class="container-fluid tab-content shadow bg-white rounded" id="datamatrix-tabs-tabContent">
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Bioactivities' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['bioactivity']" [id]="heatmap_id['bioactivity']">
-            <!-- <div *ngIf="response['bioactivity'] || heatmap['bioactivity']" class="container datamatrix-header">
-                <h3>Min-max normalized activity</h3>
-            </div> -->
+
             <p [innerText]="response['bioactivity']"></p>
             <div *ngIf="!response['bioactivity'] && !heatmap['bioactivity']" class="container h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -13,9 +11,7 @@
             </div>
         </div>    
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'PC properties' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['pc']" [id]="heatmap_id['pc']">
-            <!-- <div *ngIf="response['bioactivity'] || heatmap['bioactivity']" class="container datamatrix-header">
-                <h3>Min-max normalized Physicochemical property</h3>
-            </div> -->
+
             <p [innerText]="response['pc']"></p>
             <div *ngIf="!response['pc'] && !heatmap['pc']" class="container h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -26,9 +22,7 @@
             </div>
         </div>
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Structural similarity' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto" *ngIf="heatmap_div_reset['similarity']" [id]="heatmap_id['similarity']">
-            <!-- <div *ngIf="response['bioactivity'] || heatmap['bioactivity']" class="container datamatrix-header">
-                <h3>Min-max normalized Physicochemical property</h3>
-            </div> -->
+
             <p [innerText]="response['pc']"></p>
             <div *ngIf="!response['pc'] && !heatmap['pc']" class="container h-100">
                 <div class="row justify-content-center align-items-center h-100">
@@ -52,10 +46,9 @@
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Overview' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><app-overview [tabChange]="this.datamatrix_tabs.active_tab_name" [change]="this.changeAnything" [projectName]="this.projectName"></app-overview></div>
-        <!-- <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Structural similarity' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><p>---Work in progress---</p></div>-->
+
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'NAM' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><p>---Work in progress---</p></div>
 
         <div [style.display]="this.datamatrix_tabs.active_tab_name === 'Report' ? 'block' : 'none'" style="height: 80vh; overflow-y:auto"><app-report [tabChange]="this.datamatrix_tabs.active_tab_name" [change]="this.changeAnything" [projectName]="this.projectName"></app-report></div>
 
-    <!-- </ng-container> -->
 </div>

@@ -1,3 +1,5 @@
+//This component is unused
+
 import { Component, Input, OnInit, OnChanges, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Globals } from '../globals';
 import { Overlay } from '@angular/cdk/overlay';

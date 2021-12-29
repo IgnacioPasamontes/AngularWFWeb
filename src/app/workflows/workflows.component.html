@@ -13,8 +13,8 @@
         </div>
         <div (scroll)="triggerWorkflowRedraw()" style="max-height: 70vh; overflow-y: auto" *ngFor="let project of this.globals.active_projects.slice().reverse(); let i = index" class="tab-pane fade" [ngClass]="{'active show': project===this.globals.visible_project}" id="pills-{{project}}" role="tabpanel">
             <ng-container  [ngSwitch]="project.replace(this.subproject_suffix_separator_pattern, this.globals.subproject_suffix_separator)">
-                <app-tk-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.tk_project_suffix"></app-tk-workflow>
-                <app-td-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.td_project_suffix"></app-td-workflow>
+                <!--<app-tk-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.tk_project_suffix"></app-tk-workflow>
+                <app-td-workflow [projectName]=project [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [redraw]="redraw_workflow" [visibleProject]=globals.visible_project [change]=globals.change *ngSwitchCase="this.globals.td_project_suffix"></app-td-workflow>-->
                 <app-each-workflow *ngSwitchDefault [workflow_resize_start]="workflow_resize_start" [resize_redraw]="resize_redraw" [workflow_resize_update]="workflow_resize_update" [redraw]="redraw_workflow" [projectName]=project [visibleProject]=globals.visible_project [change]=globals.change></app-each-workflow>
             </ng-container>
                 

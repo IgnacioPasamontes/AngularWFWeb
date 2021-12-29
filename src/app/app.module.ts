@@ -44,8 +44,8 @@ import { SmilesMicromodalComponent } from './smiles-micromodal/smiles-micromodal
 import { NodeInfoComponent } from './node-info/node-info.component';
 import { EditableComponent } from './editable/editable.component';
 import { Node1ProblemFormulationComponent } from './node1-problem-formulation/node1-problem-formulation.component';
-import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
-import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
+//import { TkWorkflowComponent } from './tk-workflow/tk-workflow.component';
+//import { TdWorkflowComponent } from './td-workflow/td-workflow.component';
 import { TcCharacterizationComponent } from './tc-characterization/tc-characterization.component';
 import { OverlayComponent } from './overlay/overlay.component';
 import { Name2casComponent } from './name2cas/name2cas.component';
@@ -110,8 +110,6 @@ import { OverviewComponent } from './overview/overview.component';
     Node1ProblemFormulationComponent,
     WelcomeComponent,
     SmilesMicromodalComponent,
-    TkWorkflowComponent,
-    TdWorkflowComponent,
     TcCharacterizationComponent,
     OverlayComponent,
     Name2casComponent,
